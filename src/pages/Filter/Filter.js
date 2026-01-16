@@ -1,0 +1,740 @@
+import { useEffect, useState } from "react";
+import { Link, useNavigate , useLocation } from "react-router-dom";
+import "./Css/Filter.css";
+import "./Css/FilterResponsive.css";
+import http from "../../http";
+import { useAuth } from "../../context/AuthContext";
+import { ToastContainer } from "react-toastify";
+import { useCart } from "../../context/CartContext";
+import { useWishlist } from "../../context/WishlistContext";
+import FilterSection from "./FilterSection";
+import { useFilter } from "../../context/FilterContext";
+import { useCurrency } from "../../context/CurrencyContext";
+import { PageNotFound } from "../PageNotFound/PageNotFound";
+import Loader from "../../components/Loader/Loader";
+
+export const Filter = () => {
+
+  const { formatPrice } = useCurrency();
+  const { user } = useAuth();
+  const location = useLocation();
+    // eslint-disable-next-line
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
+  const { products, initialProductList, sortBy, setSortBy, setNewArrival, setReadyToShip, setCstmFit, setOnSale, resetFilter, onSale, newIn, readyToShip, cstmFit } = useFilter();
+  // eslint-disable-next-line
+  const [viewType, setViewType] = useState(false);
+  const [resFltrMenu, setResFltrMenu] = useState(false);
+  const [resSrtByOptions, setResSrtByOptions] = useState(false);
+  // eslint-disable-next-line
+  const [allProductdata, SetallProduct] = useState([]);
+  const [filterdetails, Setfilterdetails] = useState(null);
+  const [allFilterData, SetallFilterData] = useState(null);
+  const [allFilterMappingdata, SetallFilterMappingdata] = useState([]);
+  const [filterCategories, setFilterCategories] = useState([]);  
+
+  const [loading, setLoading] = useState(true);
+  const [productsLoaded, setProductsLoaded] = useState(false);
+  const [filtersLoaded, setFiltersLoaded] = useState(false);
+
+  const [mainCatgry, setMainCatgry] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const productsPerPage = 24;
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProduct = products?.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(products?.length / productsPerPage);
+
+  let pages = [];
+
+  for (let i = 0; i < totalPages; i++) {
+    pages.push(i + 1);
+  }
+
+  
+  const handlePrev = () => {
+    (currentPage > 1) && setCurrentPage(currentPage - 1); 
+  };
+
+
+  const handleNext = () => {
+    (currentPage < totalPages) && setCurrentPage(currentPage + 1); 
+  };
+
+  const search = useLocation().search;
+  const searchTerm = new URLSearchParams(search).get("search")?.trim() || "";
+
+
+  useEffect(() => {
+      const fetchMainCategory = async () => {
+          try {
+              const getresponse = await http.get("/product-category");
+              const allresponse = getresponse.data;
+              setMainCatgry(allresponse.data); 
+          } catch (error) {
+              console.error("Error fetching main category:", error);
+          }
+      };
+
+      fetchMainCategory();
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    setProductsLoaded(false);
+    setFiltersLoaded(false);
+  }, [location.pathname]);
+
+  const toTitleCase = (s = "") =>
+  s
+    .toString()
+    .replace(/[-_]/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase())
+    .trim();
+
+  //Res Filter Page No-scroll
+  useEffect(() => {
+    const body = document.querySelector("html");
+
+    resFltrMenu
+      ? body.classList.add("overflow-hidden")
+      : body.classList.remove("overflow-hidden");
+  }, [resFltrMenu]);
+
+  // const handleFilterChange = (value) => {
+  //   navigate(`/${value}`);
+  // };
+
+
+    const segments = location.pathname.split("/").filter(Boolean);
+    let category = null;
+    let subcategory = null;
+
+    if (segments.length === 1) {
+      category = segments[0];
+    } else if (segments.length >= 2) {
+      category = segments[0];
+      subcategory = segments[1];
+    }
+
+
+  useEffect(() => {
+    const fetchAllProduct = async () => {
+      try {
+        const response = await http.post("/fetch-product", { category, subcategory });
+
+        const allData = response.data?.data;
+        const allProducts = response.data?.data?.all_product ?? [];
+        const allfilterDetails = response.data?.data?.filter_banner ?? "";
+
+        SetallFilterData(allData);
+        Setfilterdetails(allfilterDetails);
+        
+        const normalizedSearch = searchTerm.toLowerCase();
+
+        const filteredProducts = searchTerm 
+          ? allProducts.filter(product => {
+            const name = product.product_name?.toLowerCase() || "";
+
+            return normalizedSearch.split(/\s+/).every(term => name.includes(term));
+          })
+          : allProducts;
+
+        initialProductList(filteredProducts);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setProductsLoaded(true); // important
+      }
+    };
+    fetchAllProduct();
+    // eslint-disable-next-line
+  }, [location.pathname, category, subcategory, searchTerm]);
+
+
+  const { wishlistIds, addToWishlist, removeFromWishlist } = useWishlist(); // ✅ from context
+
+  const toggleWishlist = (productId) => {
+      if (wishlistIds.includes(productId)) {
+      removeFromWishlist(productId);
+      } else {
+      addToWishlist(productId);
+      }
+  };
+
+  useEffect(() => {
+    const fetchFilterMapping = async () => {
+      setLoading(true);
+      try {
+        // Send to API
+        const response = await http.post("/fetch-filter-details", {
+          category,
+          subcategory,
+        });
+
+        setFilterCategories(response.data?.categoryData ?? []);
+        SetallFilterMappingdata(response.data?.data ?? []);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setFiltersLoaded(true); // important
+      }
+    };
+
+    fetchFilterMapping();
+  }, [location.pathname, category, subcategory]);
+
+
+  const handleResSortByToggle = () => {
+    const html = document.querySelector("html");
+
+    html.classList.add("overflow-hidden");
+
+    setResSrtByOptions(!resSrtByOptions);
+  };
+
+
+  const handleResSortByClose = () => {
+    const html = document.querySelector("html");
+
+    html.classList.remove("overflow-hidden");
+
+    setResSrtByOptions(false);
+  };
+
+
+  useEffect(() => {
+    if (productsLoaded && filtersLoaded) {
+      setLoading(false);
+    }
+  }, [productsLoaded, filtersLoaded]);
+
+  if (loading) {
+    return <Loader />;
+  }
+
+  if (!loading && filterCategories.length === 0) {
+    return <PageNotFound />;
+  }
+
+  const filterTopBannerHide = mainCatgry.map(mnctgySlug => mnctgySlug.mainCategory_slug);
+
+
+  return (
+    <div className="filter-wrapper pt-2">
+      <div className="container-fluid">
+        <div className={`doiejwoijrwer ${filterTopBannerHide.includes(category) && !subcategory ? "row" : ""}`}>
+          <div className={`dieihirweir ${filterTopBannerHide.includes(category) && !subcategory ? "col-lg-3" : ""}`}>
+            <div className="breadcrumb">
+              <ul className="ps-0 mb-0">
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
+                {category && (
+                  <>
+                    <li className="mx-2">/</li>
+                    <li>
+                      <Link to={`/${category}`}>
+                        {category.charAt(0).toUpperCase() + category.slice(1)}
+                      </Link>
+                    </li>
+                  </>
+                )}
+
+                {subcategory && (
+                  <>
+                    <li className="mx-2">/</li>
+                    <li>
+                      <Link to={`/${category}/${subcategory}`}>
+                        {subcategory.charAt(0).toUpperCase() + subcategory.slice(1)}
+                      </Link>
+                    </li>
+                  </>
+                )}
+              </ul>
+            </div>
+
+            <div className="alosjdjkhrjfse">
+              <h4 className="mb-0">
+                {category === "all-products"
+                ? "All Products"
+                : subcategory
+                  ? `${toTitleCase(subcategory)} For ${toTitleCase(category)}`
+                  : `All Products For ${toTitleCase(category)}`}
+              <span> - Showing {products?.length ?? 0} Results</span>
+              </h4>
+            </div>
+          </div>
+
+          {filterTopBannerHide.includes(category) && !subcategory && (
+            <div className={filterTopBannerHide.includes(category) && !subcategory ? "col-lg-9" : ""}>
+              <div
+                className="advtsmnt-bnnr overflow-hidden"
+                style={{ borderRadius: "1rem" }}
+              >
+                {filterdetails
+                  ? (
+                      <img
+                        src={`${allFilterData?.banner_image_url}/${filterdetails?.image}`}
+                        className="img-fluid w-100"
+                        alt=""
+                      />
+                    )
+                  : (
+                      <img
+                        src="images/fltrdbnnr.png"
+                        className="img-fluid w-100"
+                        alt=""
+                      />
+                    )}
+              </div>
+            </div>            
+          )}
+        </div>
+
+        {category && subcategory && (
+          <div
+            className="advtsmnt-bnnr my-4 overflow-hidden"
+            style={{ borderRadius: "1rem" }}
+          >
+            {filterdetails
+              ? (
+                  <img
+                    src={`${allFilterData?.banner_image_url}/${filterdetails?.image}`}
+                    className="img-fluid w-100"
+                    alt=""
+                  />
+                )
+              : (
+                  <img
+                    src="../images/fltrdbnnr.png"
+                    className="img-fluid w-100"
+                    alt=""
+                  />
+                )}
+          </div>
+        )}
+
+        {resFltrMenu && (
+          <div
+            className="res-fltr-bckdrp position-fixed w-100 h-100"
+            onClick={() => setResFltrMenu(false)}
+          ></div>
+        )}
+
+        <div className="row mt-5 dffedfgwetttt">
+          <div className="col-lg-3">
+            <div className="filter-options">
+              <div className="oidenjwihrwer mb-4 d-flex align-items-center justify-content-between">
+                <h5
+                  className="mb-0"
+                  id="res-filtr-btn"
+                  onClick={() => setResFltrMenu(true)}
+                >
+                  <i class="fa-solid me-1 fa-filter"></i> Refine
+                </h5>
+
+                <h6 onClick={() => resetFilter()} className="mb-0">Clear All</h6>
+              </div>
+
+              <div
+                className={`saojdkjierwerwer ${
+                  resFltrMenu ? "" : "res-filtr-nav-hide"
+                }`}
+                id="res-filtr-nav"
+              >
+              <FilterSection category={category} subcategory={subcategory} setResFltrMenu={setResFltrMenu} allFilterMappingdata={allFilterMappingdata} filterCategories={filterCategories} />
+              </div>
+            </div>
+          </div>
+
+          <div className="col-lg-9">
+            <div className="filtered-products">
+              <div className="iduhweihriweurwerwer row align-items-center pb-3">
+                <div className="col-lg-9">
+                  <div className="idasijhdmsiejr d-flex align-items-center">
+                    {/* <div className="view-options d-none me-3 align-items-center">
+                      <div
+                        className={`grid-view me-1 ${!viewType ? "active" : ""}`} onClick={() => setViewType(!viewType)}
+                      >
+                        <i class="bi bi-grid-3x3-gap"></i>
+                      </div>
+
+                      <div
+                        className={`list-view ${viewType ? "active" : ""}`}
+                        onClick={() => setViewType(!viewType)}
+                      >
+                        <i class="bi bi-card-list"></i>
+                      </div>
+                    </div> */}
+                    <div className="doewnkrhwer">
+                      <input type="checkbox" className="d-none" id="huidweujr" name="djikeiewr" checked={newIn} onChange={(e) => setNewArrival(e.target.checked)} />
+
+                      <label htmlFor="huidweujr" className="btn btn-main me-1">
+                        <i className="bi me-1 bi-plus-circle-dotted"></i> New In
+                      </label>
+                    </div>
+
+                    <div className="doewnkrhwer">
+                      <input type="checkbox" className="d-none" id="daedfweweer" name="djikeiewr" value="READY TO SHIP" checked={readyToShip} onChange={(e) => setReadyToShip(e.target.checked ? e.target.value : null)}/>
+
+                      <label htmlFor="daedfweweer" className="btn btn-main me-1">
+                        <i className="bi me-1 bi-lightning-charge"></i> Ready to Ship
+                      </label>
+                    </div>
+
+                    <div className="doewnkrhwer">
+                      <input type="checkbox" name="djikeiewr" className="d-none" id="gfdewerwr" checked={onSale} onChange={(e) => setOnSale(e.target.checked)}/>
+                      
+                      <label
+                        htmlFor="gfdewerwr"
+                        className="btn btn-main me-1"
+                      >
+                        <i class="bi me-1 bi-receipt"></i> On Sale
+                      </label>
+                    </div>
+
+                    <div className="doewnkrhwer">
+                      <input type="checkbox" name="djikeiewr" className="d-none" id="asddettt" checked={cstmFit} onChange={(e) => setCstmFit(e.target.checked)}/>
+
+                      <label htmlFor="asddettt" className="btn btn-main me-1">
+                        <i class="bi me-1 bi-vignette"></i>  Custom-fit
+                      </label>
+                    </div>                    
+                  </div>
+                </div>
+
+                <div className="col-lg-3">
+                  <div className="podwejorjwierwer">
+                    <select name="" className="form-select" id="" onChange={(e) => setSortBy(e.target.value)}>                      
+                      <option selected value="RECOMMENDED">Sort By: Recommended</option>
+
+                      <option value="NEW_ARRIVALS">New Arrivals</option>
+
+                      <option value="BEST_SELLER">Best Seller</option>
+
+                      <option value="LOW_TO_HIGH">Price Low to High</option>
+
+                      <option value="HIGH_TO_LOW">Price High to Low</option>
+
+                      <option value="DISCOUNT_HIGH_TO_LOW">Discount High to Low</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div className="products-wrapper filtr-wrppr pt-3">
+                <div className="row">
+                  {products?.length > 0 ? (
+                    currentProduct?.map((product) => (
+                      <div className={`smdflcsdlpfkselkrpr ${!viewType ? "col-lg-4 col-md-6 col-sm-6 col-6" : "col-lg-12"} mb-4`}>
+                        <div className="dfgjhbdfg">
+                          <div className="images">
+                            <div className="image position-relative">
+                              {onSale && product?.discount && (
+                                <div className="dscnt-prce px-0">
+                                  <span className="price">{product?.discount}% <br/> OFF</span>
+                                </div>
+                              )}
+
+                              {newIn && (product?.new_arrival === "1" || product?.new_arrival === true) && (
+                                <div className="nw-arrvl px-0">
+                                  <span className="price"><i>NEW IN</i></span>
+                                </div>
+                              )}
+
+                              <div className={`doiewjkrniuwewer position-relative overflow-hidden ${!viewType ? "col-lg-12" : "col-lg-3"}`}>
+                                <Link to={`/products/${product.slug}`}>
+                                  <img
+                                    src={product?.encoded_image_url_1 || "/images/no-preview.jpg"}
+                                    alt={product?.product_name || "Product image"}
+                                  />
+                                </Link>
+
+                                <div className="doikwenirnwekhrwer d-flex position-absolute" style={{top: onSale && product?.discount ? "17%" : "3%"}}>
+                                  {user ? (
+                                    <>
+                                      <button
+                                        className="btn-cart mb-1"
+                                        type="button"
+                                        onClick={() => addToCart(product.id)}
+                                      >
+                                        <i class="fa-solid fa-cart-arrow-down"></i>
+                                      </button>
+                                      <button
+                                        onClick={() => toggleWishlist(product.id)}
+                                      >
+                                        <i
+                                          className={
+                                            wishlistIds.includes(product.id)
+                                              ? "fa-solid fa-heart"
+                                              : "fa-regular fa-heart"
+                                          }
+                                        ></i>
+                                      </button>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Link to="/login">
+                                        <button
+                                          className="btn-cart mb-1"
+                                          type="button"
+                                        >
+                                          <i class="fa-solid fa-cart-arrow-down"></i>
+                                        </button>
+                                      </Link>
+                                      <Link to="/login">
+                                        <button
+                                          className="btn-wishlist"
+                                          type="button"
+                                        >
+                                          <i class="fa-regular fa-heart"></i>
+                                          <i class="fa-solid d-none fa-heart"></i>
+                                        </button>
+                                      </Link>
+                                    </>
+                                  )}
+                                </div>
+
+                                <div className="dbgdfhgv">
+                                  <button className="btn btn-main w-100">
+                                    QUICK ADD
+                                  </button>
+                                </div>
+                              </div>
+
+                              <div className={`fdbdfgdfgdf ${ !viewType ? "col-lg-12 px-1" : "col-lg-9"}`}>
+                                <h6><i class="bi me-1 bi-truck"></i> Ships in {product.shipping_time}</h6>
+
+                                {/* {product.product_category === "READY TO SHIP" && (
+                                  <h6><i class="bi me-1 bi-rocket-takeoff"></i> Ready to ship</h6>
+                                )} */}
+                                {product.rts_quantity > '0' && (
+                                  <h6><i class="bi me-1 bi-rocket-takeoff"></i> Ready to ship</h6>
+                                )}
+
+                                {(product.best_seller === '1' || product.best_seller === true) && (
+                                  <h6><i class="bi bi-lightning-charge"></i> Best Seller</h6>
+                                )}                             
+
+                                <h4>{product.product_name}</h4>
+
+                                <div className="d-flex flex-wrap align-items-center">
+                                  <h5 className="mb-0">
+                                    {formatPrice(product.selling_price)}
+                                  </h5>
+
+                                  <span class="gdfg55 d-flex align-items-center ms-2">
+                                    {/* <i class="bi bi-currency-rupee"></i>  */}
+                                    {formatPrice(product.mrp_price)}
+                                  </span>
+
+                                  <span class="fghfgg114 d-flex align-items-center ms-2">{product?.discount}%OFF</span>
+                                </div>
+
+                                <div className="dlksfskjrewrwere d-flex align-items-center justify-content-between mt-5" style={{top: onSale && product?.discount ? "17%" : "3%"}}>
+                                  <div className="doikwenirnwekhrwer position-relative">
+                                    {user ? (
+                                      <>
+                                        <button
+                                          className="btn-cart mb-1 me-1"
+                                          type="button"
+                                          onClick={() => addToCart(product.id)}
+                                        >
+                                          <i class="fa-solid fa-cart-arrow-down"></i>
+                                        </button>
+                                        <button
+                                          onClick={() =>
+                                            toggleWishlist(product.id)
+                                          }
+                                        >
+                                          <i
+                                            className={
+                                              wishlistIds.includes(product.id)
+                                                ? "fa-solid fa-heart"
+                                                : "fa-regular fa-heart"
+                                            }
+                                          ></i>
+                                        </button>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Link to="/login">
+                                          <button
+                                            className="btn-cart mb-1"
+                                            type="button"
+                                          >
+                                            <i class="fa-solid fa-cart-arrow-down"></i>
+                                          </button>
+                                        </Link>
+                                        <Link to="/login">
+                                          <button
+                                            className="btn-wishlist"
+                                            type="button"
+                                          >
+                                            <i class="fa-regular fa-heart"></i>
+                                            <i class="fa-solid d-none fa-heart"></i>
+                                          </button>
+                                        </Link>
+                                      </>
+                                    )}
+                                  </div>
+
+                                  <div className="dbgdfhgv">
+                                    <button className="btn btn-main w-100">
+                                      QUICK ADD
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="col-12 text-center py-5">
+                      <h5>No products found for your search.</h5>
+                      
+                      <p>Try changing your search or browse other categories.</p>
+                    </div>
+                  ) }
+                </div>
+                {products?.length > 0 && (
+                  <div className="dfgsfsfsfsdf d-flex justify-content-center align-items-center">
+                    <button className="btn btn-main" onClick={handlePrev}>Prev</button>
+
+                    <div className="pagination_ff d-flex align-items-center">
+                      {pages.map(page => (
+                        <button key={page} className={(currentPage === page) ? "btn btn-main active" : "btn btn-main"} onClick={() => setCurrentPage(page)}>{page}</button>
+                      ))}
+                    </div>
+
+                    <button className="btn btn-main" onClick={handleNext}>Next</button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="idwejrhewres pb-5 mt-5">
+          <div
+            className="pt-4"
+            dangerouslySetInnerHTML={{
+              __html: allFilterData?.filter_content?.description && (allFilterData?.filter_content.description),
+            }}
+          />
+        </div>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          style={{ zIndex: 9999999999 }}
+        />
+      </div> 
+
+      <div className="odjweoijrwer">
+        <div onClick={handleResSortByClose} className={`${resSrtByOptions ? "srt-by-backdrop" : "srt-by-backdrop srt-by-backdrop-hidden"} position-fixed w-100 h-100`}></div>
+
+        <div className={`${resSrtByOptions ? "srt-by" : "srt-by srt-by-hide"} position-fixed bg-white`}>
+          <div className="deiwhriwehrwe">
+            <label className="srt-by-options p-2" disabled>
+              <p className="mb-0">Sort By: Recommended</p>
+            </label>
+          </div>
+
+          <div className="deiwhriwehrwe">
+            <input
+              type="radio"
+              name="djikeiewr"
+              className="d-none"
+              id="na"
+              checked={sortBy === "NEW_ARRIVALS"}
+              onChange={() => {setSortBy("NEW_ARRIVALS"); handleResSortByClose()}}
+            />
+
+            <label htmlFor="na" className="srt-by-options w-100 p-2">
+              <p className="mb-0">New Arrivals</p>
+            </label>
+          </div>
+
+          <div className="deiwhriwehrwe">
+            <input
+              type="radio"
+              name="djikeiewr"
+              className="d-none"
+              id="plth"
+              checked={sortBy === "LOW_TO_HIGH"}
+              onChange={() => {setSortBy("LOW_TO_HIGH"); handleResSortByClose()}}
+            />
+
+            <label htmlFor="plth" className="srt-by-options w-100 p-2">
+              <p className="mb-0">Price Low to High</p>
+            </label>
+          </div>
+
+          <div className="deiwhriwehrwe">
+            <input
+              type="radio"
+              name="djikeiewr"
+              className="d-none"
+              id="phtl"
+              checked={sortBy === "HIGH_TO_LOW"}
+              onChange={() => {setSortBy("HIGH_TO_LOW"); handleResSortByClose()}}
+            />
+
+            <label htmlFor="phtl" className="srt-by-options w-100 p-2">
+              <p className="mb-0">Price High to Low</p>
+            </label>
+          </div>
+
+          <div className="deiwhriwehrwe">
+            <input
+              type="radio"
+              name="djikeiewr"
+              className="d-none"
+              id="dlth"
+              checked={sortBy === "DISCOUNT_LOW_TO_HIGH"}
+              onChange={() => {setSortBy("DISCOUNT_LOW_TO_HIGH"); handleResSortByClose()}}
+            />
+
+            <label htmlFor="dlth" className="srt-by-options w-100 p-2">
+              <p className="mb-0">Discount Low to High</p>
+            </label>
+          </div>
+        </div>
+      </div>  
+
+      <div className="filter-bottom-fixed d-none py-3 bg-white w-100">
+        <div className="d-flex justify-content-around">
+          <div className="asdaedweewrr" onClick={handleResSortByToggle}>
+            <div className="dowhijhwerr d-flex align-items-center">
+              <i className="bi me-2 fa-2x bi-arrow-down-up"></i>
+
+              <div className="doiwejiwejr">
+                <h4 className="mb-1">SORT BY</h4>
+
+                <p className="mb-0">Relevance</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="asdaedweewrr" onClick={() => setResFltrMenu(true)}>
+            <div className="dowhijhwerr d-flex align-items-center">
+              <i class="bi me-2 fa-2x bi-sliders"></i>
+
+              <div className="doiwejiwejr">
+                <h4 className="mb-1">FILTER</h4>
+
+                <p className="mb-0">Filter Apply</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>   
+    </div>
+  );
+};

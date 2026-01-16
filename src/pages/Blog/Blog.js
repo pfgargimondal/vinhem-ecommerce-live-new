@@ -1,0 +1,312 @@
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+
+import { BlogItem } from "./Components/BlogItem";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
+import http from "../../http";
+
+import "./Css/Blog.css";
+import { FooterBlog, HeaderBlog } from "../../components";
+import Loader from "../../components/Loader/Loader";
+
+
+export const Blog = () => {
+
+    const [loading, setLoading] = useState(false);
+    const [blogs, setBlogs] = useState([]);
+    const [popularblogs, setPopularBlogs] = useState([]);
+    const [imageBaseUrl, setImageBaseUrl] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [blogCategories, setBlogCategories] = useState([]);
+    const [blogTags, setBlogTags] = useState([]);
+
+    const pathName = useLocation().pathname;
+
+    let urlLastSegment = "";
+    let urlTagLastSegment = "";
+    
+    if (pathName.includes("/category")) {
+        urlLastSegment = pathName.split("/").filter(Boolean).pop();
+    }
+
+    if (pathName.includes("/tag")) {
+        urlTagLastSegment = pathName.split("/").filter(Boolean).pop();
+    }
+
+    const blogsPerPage = 2;
+
+
+    useEffect(() => {
+    const fetchBlogs = async () => {
+
+        setLoading(true);
+        try {
+        const getresponse = await http.get("/blogs");
+        const dataBlogs = getresponse.data;
+
+        const decodedCategory = decodeURIComponent(urlLastSegment || "");
+        const decodedTag = decodeURIComponent(urlTagLastSegment || "").replace(/-/g, " ");
+
+        const categoryBlogs = dataBlogs.data.filter(
+            datablog => datablog.category_name?.toLowerCase() === decodedCategory.toLowerCase()
+        );
+
+        const tagBlogs = dataBlogs.data.filter(dtBl => {
+            let tags = [];
+            try {
+                tags = JSON.parse(dtBl.tags || "[]");
+            } catch (e) {
+                console.warn("Invalid tags JSON:", dtBl.tags);
+            }
+
+            return tags.some(
+                (tag) => tag.toLowerCase() === decodedTag.toLowerCase()
+            );
+        });
+
+        if (urlLastSegment) {
+            setBlogs(categoryBlogs);
+        } else if (urlTagLastSegment) {
+            setBlogs(tagBlogs);
+        } else {
+            setBlogs(dataBlogs.data);
+        }
+
+            setPopularBlogs(dataBlogs.popularblog);
+            setImageBaseUrl(dataBlogs.image_url);
+        } catch (error) {
+            console.error("Error fetching blogs:", error);
+        } finally{
+            setLoading(false);
+        }
+    };
+
+    fetchBlogs();
+    }, [pathName, urlLastSegment, urlTagLastSegment]);
+
+
+
+    useEffect(() => {
+        const fetchBlogs = async () => {
+             setLoading(true);
+            try {
+                const getresponse = await http.get("/fetch-blog-tags");
+                const dataCategoriesTags = getresponse.data;
+
+                setBlogCategories(dataCategoriesTags.blog_category);
+                setBlogTags(dataCategoriesTags.data);
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchBlogs();
+    }, []);
+
+
+
+    const indexOfLastBlog = currentPage * blogsPerPage;
+    const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
+    const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
+    const totalPages = Math.ceil(blogs.length / blogsPerPage);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const handlePrevPage = () => {
+        (currentPage > 1) && setCurrentPage(prev => prev - 1);
+    };
+
+    const handleNextPage = () => {
+        (currentPage < totalPages) && setCurrentPage(prev => prev + 1);
+    };
+
+
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+    }
+
+
+    // const UseFormattedDate = (dateString) => {
+    //     if (!dateString) return "";
+    //     const date = new Date(dateString);
+    //     return date.toLocaleDateString("en-US", {
+    //         day: "2-digit",
+    //         month: "short",
+    //         year: "numeric",
+    //     });
+    // };
+
+    if (loading) {
+        return <Loader />;
+    }
+
+    return (
+        <>
+            <HeaderBlog />
+            
+            <section className="dsgbtgfewfrrr container-fluid mb-4">
+                <Swiper
+                    modules={[Navigation, Pagination, Autoplay]}
+                    spaceBetween={5}
+                    slidesPerView={1}
+                    navigation
+                    pagination={{ clickable: true }}
+                    autoplay={{ delay: 4000, disableOnInteraction: false }}
+                    className="featured-swiper"
+                >
+                    {popularblogs.map(popularblog => (
+                        <SwiperSlide key={popularblog?.id}>
+                            <div className="lklklkdssdd-slider">
+                                <img
+                                    src={`${imageBaseUrl}/${popularblog?.blog_image}`}
+                                    alt={popularblog?.title}
+                                    className="img-fluid w-100"
+                                />
+
+                                {/* <div className="dasdesrweedewr d-none position-absolute w-100 p-3 pb-5 d-none d-md-block">
+                                    <h3 className="lmlmlmlkjlmee mb-2 text-light">{popularblog?.title}</h3>
+
+                                    <div className="idenjwirwer">
+                                        <p dangerouslySetInnerHTML={{
+                                            __html: popularblog.blog_description ? popularblog.blog_description.replace(/<[^>]+>/g, "").slice(0, 120) + "..." : ""
+                                        }} className="text-light"></p>
+                                        
+                                        <Link to={`/blog/${popularblog.slug}`} className="text-light">CONTINUE READING</Link>
+                                    </div>
+                                </div> */}
+                            </div>
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+            </section>
+
+            <div className="container-fluid my-5">
+                <div className="row">
+                    <main className="col-lg-8">
+                        {currentBlogs.map(blog => (
+                            <BlogItem blog={blog} imageBaseUrl={imageBaseUrl} key={blog.id} />
+                        ))}
+
+                        {blogs.length > blogsPerPage && (
+                            <div className="fvgsdsedwewew d-flex justify-content-center align-items-center my-4 flex-wrap">
+                                <button className="btn btn-outline-dark mx-1" onClick={handlePrevPage} disabled={currentPage === 1}>Prev</button>
+
+                                {pageNumbers.map((number) => (
+                                    <button key={number} className={`btn mx-1 ${currentPage === number ? "btn-main" : "btn-outline-main"}`} onClick={() => handlePageChange(number)}>{number}</button>
+                                ))}
+                                
+                                <button className="btn btn-outline-dark mx-1" onClick={handleNextPage} disabled={currentPage === totalPages}>Next</button>
+                            </div>
+                        )}
+                    </main>
+
+                    <aside className="col-lg-4 sidebar ps-lg-5">
+                        <div className="sidebar-right">
+                            <div className="mb-5">
+                                <h5 className="olkdflmroij py-3 px-4 mb-0 text-light section-title">Popular Posts</h5>
+
+                                <ul className="asdcdfgwedfseee list-unstyled">
+                                    {popularblogs.slice(0, 3).map(popularBlog => {
+                                        // const blogDate = UseFormattedDate(blog.blog_date);
+                                    
+                                        return(
+                                            <li className="row py-3">
+                                                <div className="col-3">
+                                                    <div className="doejwojrwer overflow-hidden rounded-pill">
+                                                        <img src={`${imageBaseUrl}/${popularBlog?.blog_image}`} className="img-fluid" alt={popularBlog?.title} />
+                                                    </div>
+                                                </div>
+
+                                                <div className="col-9 ps-0">
+                                                    <div className="saldmasdsd">
+                                                        <p className="mb-1 lmlmlmlkjlmee">{popularBlog?.title}</p>
+
+                                                        {/* <h6>{blogDate}</h6> */}
+
+                                                        <Link to={`/blog/${popularBlog.slug}`}>VIEW POST</Link>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
+                            </div>
+
+                            <div className="mb-5">
+                                <h5 className="olkdflmroij py-3 px-4 mb-0 text-light section-title">Categories</h5>
+
+                                <ul className="efwcegqwedae d-flex flex-wrap list-unstyled py-3">
+                                    {blogCategories.map(blogCategory => (
+                                        <li className="px-4 mb-2">
+                                            <Link to={`/blog/category/${blogCategory?.category.toLowerCase()}`}>{blogCategory?.category.toLowerCase()} ({blogCategory.count})</Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            <div className="mb-5">
+                                <h5 className="olkdflmroij py-3 px-4 mb-0 text-light section-title">Tags</h5>
+
+                                <ul className="efwcegqwedae d-flex flex-wrap list-unstyled py-3">
+                                    {blogTags.map(blogTag => (
+                                        <li className="px-3 mb-2">
+                                            <Link to={`/blog/tag/${blogTag.toLowerCase().replace(/\s+/g, "-")}`}>{blogTag}</Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            <div className="mb-5">
+                                <h5 className="olkdflmroij py-3 px-4 mb-0 text-light section-title">Follow Us On</h5>
+
+                                <ul className="dgfbfdscswsxddas follow-card list-inline py-3 mx-4">
+                                    <li className="list-inline-item mb-3">
+                                        <a href="/" className="d-flex w-100 align-items-center">
+                                            <i class="fa-brands p-2 text-light fa-facebook-f"></i> <span>Facebook</span>
+                                        </a>
+                                    </li>
+
+                                    <li className="list-inline-item mb-3">
+                                        <a href="/" className="d-flex align-items-center">
+                                            <i class="fa-brands p-2 text-light fa-x"></i> <span>Twitter</span>
+                                        </a>
+                                    </li>
+
+                                    <li className="list-inline-item mb-3">
+                                        <a href="/" className="d-flex align-items-center">
+                                            <i class="fa-brands p-2 text-light fa-instagram"></i> <span>Instagram</span>
+                                        </a>
+                                    </li>
+
+                                    <li className="list-inline-item mb-3">
+                                        <a href="/" className="d-flex align-items-center">
+                                            <i class="fa-brands p-2 text-light fa-linkedin-in"></i> <span>Linked In</span>
+                                        </a>
+                                    </li>
+
+                                    <li className="list-inline-item">
+                                        <a href="/" className="d-flex align-items-center">
+                                            <i class="fa-brands p-2 text-light fa-youtube"></i> <span>Youtube</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>                         
+                        </div>
+                    </aside>
+                </div>
+            </div>
+
+            <FooterBlog />
+        </>
+    )
+}

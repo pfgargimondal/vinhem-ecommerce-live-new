@@ -1,0 +1,201 @@
+/*start  profile settings  css   */
+
+.ffhfdf {
+  width: 100%;
+  background-color: #fff;
+}
+
+.fbghdfg{
+  width: 87%;
+  margin-inline: auto;
+}
+
+.fbhdfs{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fgcbdfgdf {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 15px;  
+  overflow-y: scroll;
+}
+
+.dfbdf h4,
+.fbhdfs h4,
+.dfjhdsbfsdf h4 {
+  text-transform: uppercase;
+  color: var(--text-main-color);
+}
+
+.dfjhdsbfsdf {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dfjhdsbfsdf p{
+  font-weight: 500;
+}
+
+.dfjhdsbfsdf p i:global(.fa-house){
+  color: var(--pink-main-color);
+}
+
+.sdfjhsdfs img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50px;
+  object-fit: cover;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px;
+  border: 2px solid var(--pink-main-color);
+}
+
+.indiwerwer{
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--pink-main-color);
+  top: -0.2rem;
+  right: -1.2rem;
+  border: 2px solid #fff;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.indiwerwer:hover{
+  transform: scale(1.1);
+  transition: 0.2s ease-in-out;
+}
+
+.indiwerwer i{
+  font-size: 1.2rem;
+  color: var(--pink-main-color);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.dfghdfgdf {
+  display: flex;
+  align-items: center;  
+}
+
+.dfghdfgdf {
+  margin-top: 15px;
+}
+
+.dfbghdfg {
+  margin-left: 15px;
+  margin-top: 5px;
+}
+
+.fbhdfs h5{
+  color: var(--pink-main-color);
+}
+
+
+.fbhdfs button{
+  display: inline-block !important;
+  padding: 0 !important;
+  font-weight: 600;
+}
+
+.fbhdfs button i{
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--pink-main-color);
+  color: #fff;
+  text-align: center;
+  line-height: 1.8;
+  border: 2px dotted #fff;
+  transition: 0.2s ease-in-out;
+}
+
+.fbhdfs button:hover i{
+  transform: scale(1.1) rotate(360deg);
+  transition: 0.2s ease-in-out;
+}
+
+.dfbghdfg p {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+form input:global(.form-control){
+  border: 1px solid var(--text-gray-color);
+  border-radius: 3px;
+}
+
+.dhfsdfd .form-control {
+  padding: 8px !important;
+  background-color: #fff !important;
+}
+
+.dhfsdfd .form-control::-moz-placeholder {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.dhfsdfd .form-control::placeholder {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.dhfsdfd label {
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 7px;
+}
+
+.acdfvdscvdrtefr {
+  color: var(--pink-main-color);
+  padding: 5px 10px;
+  font-size: 1.1rem;
+  border-radius: 3px;
+  background: rgba(133, 13, 85, 0.15);
+  display: inline-block;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+}
+
+.dienwrhwerwer{
+  text-align: right;
+}
+
+.dnjhsddsfsd button {
+  padding: 12px 30px;
+  background-color: rgb(132, 4, 4);
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-family: 500;
+  margin-top: 20px;
+}
+
+.dfndf label {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.dfndf .form-control {
+  padding: 10px;
+}
+
+@media only screen and (max-width: 991px) {
+  .dfjhdsbfsdf p{
+    display: none;
+  }
+
+  .fbghdfg{
+    width: 100%;
+  }
+}
+
+
+/*end  profile settings  css   */

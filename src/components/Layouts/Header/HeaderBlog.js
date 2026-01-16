@@ -1,0 +1,93 @@
+import { useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+import Logo from "../../../assets/images/logo.png";
+
+import "./Css/HeaderBlog.css";
+
+export const HeaderBlog = () => {
+    const [hbModal, setHbModal] = useState(false);
+    const searchRef = useRef(null);
+    const navigate = useNavigate();
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        const searchValue = searchRef.current?.value?.trim();
+
+        searchValue && navigate(`/all-products?search=${encodeURIComponent(searchValue)}`);
+        
+        searchRef.current.value = "";
+    }
+
+    const handleHbModalToggle = () => {
+        const html = document.querySelector("html");
+
+        html.classList.add("overflow-hidden");
+
+        setHbModal(!hbModal);
+    };
+
+
+    const handleHbModalClose = () => {
+        const html = document.querySelector("html");
+
+        html.classList.remove("overflow-hidden");
+
+        setHbModal(false);
+    };
+
+
+  return (
+    <>
+        <div id="header-blog" className="pt-3 pb-4">
+            <div className="container-flud">
+                <div className="doiwejuirjweoirwept position-relative">
+                    <div className="deowjrkjweirew text-center">
+                        <Link to="/"><img src={Logo} alt="" /></Link>
+                    </div>
+
+                    <div className="dasfsreer position-absolute">
+                        <i className="fa-solid fa-magnifying-glass" onClick={handleHbModalToggle}></i>
+                    </div>
+                </div>
+
+                <div className="dwejnrkhweijrwer mt-4">
+                    <ul className="mb-0 ps-0">
+                        <li className="mx-3">
+                            <Link to="/">HOME</Link>
+                        </li>
+
+                        <li className="mx-3">
+                            <Link to="/about-us">ABOUT US</Link>
+                        </li>
+
+                        <li className="mx-3">
+                            <Link to="">STYLE COUNCIL - MAGAZINE</Link>
+                        </li>
+
+                        <li className="mx-3">
+                            <Link to="">LATEST TRENDZ</Link>
+                        </li>
+
+                        <li className="mx-3">
+                            <Link to="">SHOP NOW</Link>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div onClick={handleHbModalClose} className={`${hbModal ? "hb-modal-backdrop" : "hb-modal-backdrop hb-modal-backdrop-hide"} position-fixed w-100 h-100`}></div>
+
+        <div className={`${hbModal ? "hb-modal" : "hb-modal hb-modal-hide"} position-fixed`}>
+            <form onSubmit={handleSearch}>
+                <div className="diewhirjwer position-realtive">
+                    <input ref={searchRef} type="text" className="form-control" placeholder="Search for products" />
+
+                    <button className="btn position-absolute px-3 btn-main"><i class="bi bi-search"></i></button>
+                </div>
+            </form>            
+        </div>
+    </>
+  )
+}

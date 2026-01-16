@@ -1,0 +1,25 @@
+.dropdown-loggedin {
+  border-radius: 5px;
+  top: 80%;
+  right: 0;
+  width: 12rem;
+  border: 1px solid var(--light-background-color);
+  z-index: 99999;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.dropdown-loggedin ul li {
+  color: var(--text-main-color) !important;
+  border-bottom: 1px solid var(--light-background-color);
+  display: block !important;
+  padding: 0.5rem !important;
+}
+.dropdown-loggedin ul li:last-child {
+  border-bottom: 0;
+}
+
+@media only screen and (max-width: 991px) {
+  .dropdown-loggedin{
+    left: 0;
+    right: initial;
+  }
+}

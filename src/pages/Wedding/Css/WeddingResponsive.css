@@ -1,0 +1,86 @@
+@media only screen and (min-width: 3001px){
+  .dfbhhfgdf,
+  .dfgdfg255,
+  .jdfkdf,
+  .dfbhhfgdf55 {
+    height: auto;
+  }
+}
+
+
+
+
+
+@media only screen and (max-width: 3000px){
+  .dfbhhfgdf,
+  .dfgdfg255,
+  .jdfkdf,
+  .dfbhhfgdf55 {
+    height: auto;
+  }
+}
+
+
+
+
+
+
+@media only screen and (max-width: 1366px){
+  .dfbhhfgdf {
+    height: 490px;
+  }
+
+  .dfgdfg255{
+    height: 25.9vw;
+  }
+
+  .dfbhhfgdf55 {
+    height: 23vw;
+  }
+
+  .jdfkdf{
+    height: 359px;
+  }
+}
+
+
+
+
+
+@media only screen and (max-width: 991px){
+    .fvgndfjhgdfg,
+    .ffdgf548{
+        height: auto;
+    }
+
+    .fgjhdfgf{
+        grid-template-columns: 33% 33% 33%;
+    }
+
+    .dfgdfg255,
+    .jdfkdf,
+    .dfbhhfgdf,
+    .dfbhhfgdf55 {
+        background-size: cover;
+        background-position: center;
+    }
+}
+
+
+
+
+@media only screen and (max-width: 600px){
+    .fgjhdfgf{
+        grid-template-columns: 48% 48%;
+    }
+}
+
+
+
+
+
+@media only screen and (max-width: 456px){
+    .fgjhdfgf{
+        grid-template-columns: 100%;
+    }
+}

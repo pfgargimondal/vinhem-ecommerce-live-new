@@ -1,0 +1,10 @@
+.write{
+    padding: 150px 20px 150px 0;
+}
+.write p{
+    margin: 50px;
+    font-size: 18px;
+}
+.write h2{
+    color: var(--pink-main-color);
+}

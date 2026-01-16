@@ -1,0 +1,30 @@
+#footer-blog{
+    background: var(--black-background-color);
+}
+
+.doiwqjejir_inner{
+    border-right: 1px solid var(--grey-border-color);
+}
+
+.doiwqjejir_inner img{
+    width: 14rem;
+    filter: brightness(0) invert(1);
+}
+
+.doiwqjejir_inner h5{
+    font-weight: 400;
+}
+
+.doiwqjejir_inner p,
+.doiwqjejir_inner a{
+    color: var(--text-lighter-gray-color);
+}
+
+.doiwqjejir_inner a{
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    font-weight: 400;
+    display: block;
+    margin-bottom: 0.8rem;
+    user-select: none;
+}
