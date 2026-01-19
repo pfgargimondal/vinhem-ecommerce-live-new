@@ -40,7 +40,7 @@ export const OnSale = () => {
 
   return (
     <div>
-      <div class="dfgjhdfgdf container-fluid">
+      <div className="dfgjhdfgdf container-fluid">
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
           spaceBetween={30}
@@ -71,345 +71,276 @@ export const OnSale = () => {
         </Swiper>
       </div>
 
-      <div class="dfgnhidfjugd">
-        <div class="container-fluid">
-          <div class="dfjvdgd">
+      <div className="dfgnhidfjugd">
+        <div className="container-fluid">
+          <div className="dfjvdgd">
              <h2>{OnSaleDetails?.data?.section2_title}</h2>
           </div>
-          <div class="dffgydfdf mt-4">
-            <div class="row">
+          <div className="dffgydfdf mt-4">
+            <div className="row">
 
-              <div class="col-lg-3">
+              <div className="col-lg-3">
                  <Link to={OnSaleDetails?.data?.section2_url1}>
-                <div
-                  class="fhgdfg"
-                  style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image1})`,
-                  }}
-                >
-                  
-                  <div class="overlay-sales">
-                    <div class="cvbjhdfdf">
-                      <h4>{OnSaleDetails?.data?.section2_text1}</h4>
+                <div className="fhgdfg position-relative overflow-hidden">
+                  <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image1}`} alt="" />
+
+                  <div className="overlay-sales position-absolute w-100 h-100">
+                    <div className="cvbjhdfdf">
+                      <h4 className="mb-0">{OnSaleDetails?.data?.section2_text1}</h4>
                     </div>
                   </div>
                 </div>
                 </Link>
               </div>
 
-              <div class="col-lg-3">
+              <div className="col-lg-3">
                  <Link to={OnSaleDetails?.data?.section2_url2}>
-                <div
-                  class="fhgdfg"
-                  style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image2})`,
-                  }}
-                >
+                <div className="fhgdfg position-relative overflow-hidden">
+                  <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image2}`} alt="" />
                   
-                  <div class="overlay-sales">
-                    <div class="cvbjhdfdf">
-                      <h4>{OnSaleDetails?.data?.section2_text2}</h4>
+                  <div className="overlay-sales position-absolute w-100 h-100">
+                    <div className="cvbjhdfdf">
+                      <h4 className="mb-0">{OnSaleDetails?.data?.section2_text2}</h4>
                     </div>
                   </div>
                 </div>
                 </Link>
               </div>
 
-              <div class="col-lg-3">
+              <div className="col-lg-3">
                  <Link to={OnSaleDetails?.data?.section2_url3}>
-                <div
-                  class="fhgdfg"
-                  style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image3})`,
-                  }}
-                >
+                <div className="fhgdfg position-relative overflow-hidden">
+                  <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image3}`} alt="" />
                   
-                  <div class="overlay-sales">
-                    <div class="cvbjhdfdf">
-                      <h4>{OnSaleDetails?.data?.section2_text3}</h4>
+                  <div className="overlay-sales position-absolute w-100 h-100">
+                    <div className="cvbjhdfdf">
+                      <h4 className="mb-0">{OnSaleDetails?.data?.section2_text3}</h4>
                     </div>
                   </div>
                 </div>
                 </Link>
               </div>
 
-              <div class="col-lg-3">
+              <div className="col-lg-3">
                  <Link to={OnSaleDetails?.data?.section2_url4}>
-                <div
-                  class="fhgdfg"
-                  style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image4})`,
-                  }}
-                >
+                <div className="fhgdfg position-relative overflow-hidden">
+                  <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image4}`} alt="" />
                   
-                  <div class="overlay-sales">
-                    <div class="cvbjhdfdf">
-                      <h4>{OnSaleDetails?.data?.section2_text4}</h4>
+                  <div className="overlay-sales position-absolute w-100 h-100">
+                    <div className="cvbjhdfdf">
+                      <h4 className="mb-0">{OnSaleDetails?.data?.section2_text4}</h4>
                     </div>
                   </div>
                 </div>
                 </Link>
               </div>
 
-              <div class="col-lg-3">
+              <div className="col-lg-3">
                  <Link to={OnSaleDetails?.data?.section2_url5}>
-                <div
-                  class="fhgdfg"
-                  style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image5})`,
-                  }}
-                >
+                <div className="fhgdfg position-relative overflow-hidden">
+                  <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image5}`} alt="" />
                   
-                  <div class="overlay-sales">
-                    <div class="cvbjhdfdf">
-                      <h4>{OnSaleDetails?.data?.section2_text5}</h4>
+                  <div className="overlay-sales position-absolute w-100 h-100">
+                    <div className="cvbjhdfdf">
+                      <h4 className="mb-0">{OnSaleDetails?.data?.section2_text5}</h4>
                     </div>
                   </div>
                 </div>
                 </Link>
               </div>
 
-              <div class="col-lg-3">
+              <div className="col-lg-3">
                  <Link to={OnSaleDetails?.data?.section2_url6}>
-                <div
-                  class="fhgdfg"
-                  style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image6})`,
-                  }}
-                >
+                <div className="fhgdfg position-relative overflow-hidden">
+                  <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image6}`} alt="" />
                   
-                  <div class="overlay-sales">
-                    <div class="cvbjhdfdf">
-                      <h4>{OnSaleDetails?.data?.section2_text6}</h4>
+                  <div className="overlay-sales position-absolute w-100 h-100">
+                    <div className="cvbjhdfdf">
+                      <h4 className="mb-0">{OnSaleDetails?.data?.section2_text6}</h4>
                     </div>
                   </div>
                 </div>
                 </Link>
               </div>
 
-              <div class="col-lg-3">
+              <div className="col-lg-3">
                  <Link to={OnSaleDetails?.data?.section2_url7}>
-                <div
-                  class="fhgdfg"
-                  style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image7})`,
-                  }}
-                >
+                <div className="fhgdfg position-relative overflow-hidden">
+                  <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image7}`} alt="" />
                   
-                  <div class="overlay-sales">
-                    <div class="cvbjhdfdf">
-                      <h4>{OnSaleDetails?.data?.section2_text7}</h4>
+                  <div className="overlay-sales position-absolute w-100 h-100">
+                    <div className="cvbjhdfdf">
+                      <h4 className="mb-0">{OnSaleDetails?.data?.section2_text7}</h4>
                     </div>
                   </div>
                 </div>
                 </Link>
               </div>
 
-              <div class="col-lg-3">
+              <div className="col-lg-3">
                  <Link to={OnSaleDetails?.data?.section2_url8}>
-                <div
-                  class="fhgdfg"
-                  style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image8})`,
-                  }}
-                >
+                <div className="fhgdfg position-relative overflow-hidden">
+                  <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image8}`} alt="" />
                   
-                  <div class="overlay-sales">
-                    <div class="cvbjhdfdf">
-                      <h4>{OnSaleDetails?.data?.section2_text8}</h4>
+                  <div className="overlay-sales position-absolute w-100 h-100">
+                    <div className="cvbjhdfdf">
+                      <h4 className="mb-0">{OnSaleDetails?.data?.section2_text8}</h4>
                     </div>
                   </div>
                 </div>
                 </Link>
               </div>
 
-              <div class="col-lg-3">
+              <div className="col-lg-3">
                  <Link to={OnSaleDetails?.data?.section2_url9}>
-                <div
-                  class="fhgdfg"
-                  style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image9})`,
-                  }}
-                >
+                <div className="fhgdfg position-relative overflow-hidden">
+                  <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image9}`} alt="" />
                   
-                  <div class="overlay-sales">
-                    <div class="cvbjhdfdf">
-                      <h4>{OnSaleDetails?.data?.section2_text9}</h4>
+                  <div className="overlay-sales position-absolute w-100 h-100">
+                    <div className="cvbjhdfdf">
+                      <h4 className="mb-0">{OnSaleDetails?.data?.section2_text9}</h4>
                     </div>
                   </div>
                 </div>
                 </Link>
               </div>
 
-              <div class="col-lg-3">
+              <div className="col-lg-3">
                  <Link to={OnSaleDetails?.data?.section2_url10}>
-                <div
-                  class="fhgdfg"
-                  style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image10})`,
-                  }}
-                >
+                <div className="fhgdfg position-relative overflow-hidden">
+                  <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image10}`} alt="" />
                   
-                  <div class="overlay-sales">
-                    <div class="cvbjhdfdf">
-                      <h4>{OnSaleDetails?.data?.section2_text10}</h4>
+                  <div className="overlay-sales position-absolute w-100 h-100">
+                    <div className="cvbjhdfdf">
+                      <h4 className="mb-0">{OnSaleDetails?.data?.section2_text10}</h4>
                     </div>
                   </div>
                 </div>
                 </Link>
               </div>
 
-              <div class="col-lg-3">
+              <div className="col-lg-3">
                  <Link to={OnSaleDetails?.data?.section2_url11}>
-                <div
-                  class="fhgdfg"
-                  style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image11})`,
-                  }}
-                >
+                <div className="fhgdfg position-relative overflow-hidden">
+                  <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image11}`} alt="" />
                   
-                  <div class="overlay-sales">
-                    <div class="cvbjhdfdf">
-                      <h4>{OnSaleDetails?.data?.section2_text11}</h4>
+                  <div className="overlay-sales position-absolute w-100 h-100">
+                    <div className="cvbjhdfdf">
+                      <h4 className="mb-0">{OnSaleDetails?.data?.section2_text11}</h4>
                     </div>
                   </div>
                 </div>
                 </Link>
               </div>
 
-              <div class="col-lg-3">
+              <div className="col-lg-3">
                  <Link to={OnSaleDetails?.data?.section2_url12}>
-                <div
-                  class="fhgdfg"
-                  style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image12})`,
-                  }}
-                >
+                <div className="fhgdfg position-relative overflow-hidden">
+                  <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image12}`} alt="" />
                   
-                  <div class="overlay-sales">
-                    <div class="cvbjhdfdf">
-                      <h4>{OnSaleDetails?.data?.section2_text12}</h4>
+                  <div className="overlay-sales position-absolute w-100 h-100">
+                    <div className="cvbjhdfdf">
+                      <h4 className="mb-0">{OnSaleDetails?.data?.section2_text12}</h4>
                     </div>
                   </div>
                 </div>
                 </Link>
-              </div>
- 
+              </div> 
             </div>
           </div>
         </div>
       </div>
 
-      <div class="fkvbhjhdfgdfg pt-5">
-        <div class="container-fluid">
-          <div class="dfjvdgd">
+      <div className="fkvbhjhdfgdfg pt-5">
+        <div className="container-fluid">
+          <div className="dfjvdgd">
             <h2>{OnSaleDetails?.data?.section3_title}</h2>
           </div>
-          <div class="fghdfg mt-4">
-            <div class="row">
-
-              
-              <div class="col-lg-4 mb-4">
+          <div className="fghdfg mt-4">
+            <div className="row">
+              <div className="col-lg-4 mb-4">
                 <Link to={OnSaleDetails?.data?.section3_url1}></Link>
-                <div
-                  class="dfgfdg7853"
-                  style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section3_image1})`,
-                  }}
-                >
-                  <div class="hdfbjh554">
+                <div className="dfgfdg7853 position-relative overflow-hidden">
+                  <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section3_image1}`} alt="" />
+
+                  <div className="hdfbjh554 position-absolute w-100">
                     <h5>STYLIES UNDER</h5>
                     <h5>
-                      <i class="fa-solid fa-indian-rupee-sign"></i>{OnSaleDetails?.data?.section3_text1} 
+                      <i className="fa-solid fa-indian-rupee-sign"></i>{OnSaleDetails?.data?.section3_text1} 
                     </h5>
                   </div>
                 </div>
               </div>
 
-              <div class="col-lg-4 mb-4">
+              <div className="col-lg-4 mb-4">
                 <Link to={OnSaleDetails?.data?.section3_url2}>
-                <div
-                  class="dfgfdg7853"
-                  style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section3_image2})`,
-                  }}
-                >
-                  <div class="hdfbjh554">
+                <div className="dfgfdg7853 position-relative overflow-hidden">
+                  <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section3_image2}`} alt="" />
+
+                  <div className="hdfbjh554 position-absolute w-100">
                     <h5>STYLIES UNDER</h5>
                     <h5>
-                      <i class="fa-solid fa-indian-rupee-sign"></i>{OnSaleDetails?.data?.section3_text2} 
+                      <i className="fa-solid fa-indian-rupee-sign"></i>{OnSaleDetails?.data?.section3_text2} 
                     </h5>
                   </div>
                 </div>
                 </Link>
               </div>
 
-              <div class="col-lg-4 mb-4">
+              <div className="col-lg-4 mb-4">
                 <Link to={OnSaleDetails?.data?.section3_url3}>
-                <div
-                  class="dfgfdg7853"
-                  style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section3_image3})`,
-                  }}
-                >
-                  <div class="hdfbjh554">
+                <div className="dfgfdg7853 position-relative overflow-hidden">
+                  <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section3_image3}`} alt="" />
+
+                  <div className="hdfbjh554 position-absolute w-100">
                     <h5>STYLIES UNDER</h5>
                     <h5>
-                      <i class="fa-solid fa-indian-rupee-sign"></i>{OnSaleDetails?.data?.section3_text3} 
+                      <i className="fa-solid fa-indian-rupee-sign"></i>{OnSaleDetails?.data?.section3_text3} 
                     </h5>
                   </div>
                 </div>
                 </Link>
               </div>
 
-              <div class="col-lg-4 mb-4">
+              <div className="col-lg-4 mb-4">
                 <Link to={OnSaleDetails?.data?.section3_url4}>
-                <div
-                  class="dfgfdg7853"
-                  style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section3_image4})`,
-                  }}
-                >
-                  <div class="hdfbjh554">
+                <div className="dfgfdg7853 position-relative overflow-hidden">
+                  <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section3_image4}`} alt="" />
+
+                  <div className="hdfbjh554 position-absolute w-100">
                     <h5>STYLIES UNDER</h5>
                     <h5>
-                      <i class="fa-solid fa-indian-rupee-sign"></i>{OnSaleDetails?.data?.section3_text4} 
+                      <i className="fa-solid fa-indian-rupee-sign"></i>{OnSaleDetails?.data?.section3_text4} 
                     </h5>
                   </div>
                 </div>
                 </Link>
               </div>
 
-              <div class="col-lg-4 mb-4">
+              <div className="col-lg-4 mb-4">
                 <Link to={OnSaleDetails?.data?.section3_url5}>
-                <div
-                  class="dfgfdg7853"
-                  style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section3_image5})`,
-                  }}
-                >
-                  <div class="hdfbjh554">
+                <div className="dfgfdg7853 position-relative overflow-hidden">
+                  <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section3_image5}`} alt="" />
+
+                  <div className="hdfbjh554 position-absolute w-100">
                     <h5>STYLIES UNDER</h5>
                     <h5>
-                      <i class="fa-solid fa-indian-rupee-sign"></i>{OnSaleDetails?.data?.section3_text5} 
+                      <i className="fa-solid fa-indian-rupee-sign"></i>{OnSaleDetails?.data?.section3_text5} 
                     </h5>
                   </div>
                 </div>
                 </Link>
               </div>
 
-              <div class="col-lg-4 mb-4">
+              <div className="col-lg-4 mb-4">
                 <Link to={OnSaleDetails?.data?.section3_url6}>
-                <div
-                  class="dfgfdg7853"
-                  style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section3_image6})`,
-                  }}
-                >
-                  <div class="hdfbjh554">
+                <div className="dfgfdg7853 position-relative overflow-hidden">
+                  <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section3_image6}`} alt="" />
+
+                  <div className="hdfbjh554 position-absolute w-100">
                     <h5>STYLIES UNDER</h5>
                     <h5>
-                      <i class="fa-solid fa-indian-rupee-sign"></i>{OnSaleDetails?.data?.section3_text6} 
+                      <i className="fa-solid fa-indian-rupee-sign"></i>{OnSaleDetails?.data?.section3_text6} 
                     </h5>
                   </div>
                 </div>
@@ -420,38 +351,38 @@ export const OnSale = () => {
         </div>
       </div>
 
-      <div class="sdhfdfgdf pt-5">
-        <div class="container-fluid">
-          <div class="dfjvdgd">
+      <div className="sdhfdfgdf pt-5">
+        <div className="container-fluid">
+          <div className="dfjvdgd">
             <h2>{OnSaleDetails?.data?.section4_title}</h2>
           </div>
             <Link to={OnSaleDetails?.data?.section4_url}>
-          <div class="dfngjhfdgdf">
+          <div className="dfngjhfdgdf">
             <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section4_image}`}  alt="onsale"/>
           </div>
           </Link>   
         </div>
       </div>
 
-      <div class="fjsdjhfsdf55">
-        <div class="container-fluid">
-          <div class="dfjvdgd">
+      <div className="fjsdjhfsdf55">
+        <div className="container-fluid">
+          <div className="dfjvdgd">
             <h2>{OnSaleDetails?.data?.section5_title}</h2>
           </div>
 
-          <div class="dfgjhdfgdfgf mt-4">
+          <div className="dfgjhdfgdfgf mt-4">
 
             <div
-              class="dfbdff"
+              className="dfbdff"
               style={{
                     backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image1})`,
                   }}
             >
-              <div class="overlay-sale">
-                <div class="fdbdfgdf">
+              <div className="overlay-sale">
+                <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
-                <div class="bsdfhsdfsdf">
+                <div className="bsdfhsdfsdf">
                   <h5>{OnSaleDetails?.data?.section5_text1}</h5>
                   <Link to={OnSaleDetails?.data?.section5_url1}>
                   <button>SHOP NOW</button>
@@ -461,16 +392,16 @@ export const OnSale = () => {
             </div>
             
             <div
-              class="dfbdff"
+              className="dfbdff"
               style={{
                     backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image2})`,
                   }}
             >
-              <div class="overlay-sale">
-                <div class="fdbdfgdf">
+              <div className="overlay-sale">
+                <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
-                <div class="bsdfhsdfsdf">
+                <div className="bsdfhsdfsdf">
                   <h5>{OnSaleDetails?.data?.section5_text2}</h5>
                    <Link to={OnSaleDetails?.data?.section5_url2}>
                   <button>SHOP NOW</button>
@@ -480,16 +411,16 @@ export const OnSale = () => {
             </div>
 
             <div
-              class="dfbdff"
+              className="dfbdff"
               style={{
                     backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image3})`,
                   }}
             >
-              <div class="overlay-sale">
-                <div class="fdbdfgdf">
+              <div className="overlay-sale">
+                <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
-                <div class="bsdfhsdfsdf">
+                <div className="bsdfhsdfsdf">
                   <h5>{OnSaleDetails?.data?.section5_text3}</h5>
                    <Link to={OnSaleDetails?.data?.section5_url3}>
                   <button>SHOP NOW</button>
@@ -499,16 +430,16 @@ export const OnSale = () => {
             </div>
 
             <div
-              class="dfbdff"
+              className="dfbdff"
               style={{
                     backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image4})`,
                   }}
             >
-              <div class="overlay-sale">
-                <div class="fdbdfgdf">
+              <div className="overlay-sale">
+                <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
-                <div class="bsdfhsdfsdf">
+                <div className="bsdfhsdfsdf">
                   <h5>{OnSaleDetails?.data?.section5_text4}</h5>
                    <Link to={OnSaleDetails?.data?.section5_url4}>
                   <button>SHOP NOW</button>
@@ -518,16 +449,16 @@ export const OnSale = () => {
             </div>
 
             <div
-              class="dfbdff"
+              className="dfbdff"
               style={{
                     backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image5})`,
                   }}
             >
-              <div class="overlay-sale">
-                <div class="fdbdfgdf">
+              <div className="overlay-sale">
+                <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
-                <div class="bsdfhsdfsdf">
+                <div className="bsdfhsdfsdf">
                   <h5>{OnSaleDetails?.data?.section5_text5}</h5>
                    <Link to={OnSaleDetails?.data?.section5_url5}>
                   <button>SHOP NOW</button>
@@ -537,16 +468,16 @@ export const OnSale = () => {
             </div>
 
             <div
-              class="dfbdff"
+              className="dfbdff"
               style={{
                     backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image6})`,
                   }}
             >
-              <div class="overlay-sale">
-                <div class="fdbdfgdf">
+              <div className="overlay-sale">
+                <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
-                <div class="bsdfhsdfsdf">
+                <div className="bsdfhsdfsdf">
                   <h5>{OnSaleDetails?.data?.section5_text6}</h5>
                    <Link to={OnSaleDetails?.data?.section5_url6}>
                   <button>SHOP NOW</button>
@@ -556,16 +487,16 @@ export const OnSale = () => {
             </div>
 
             <div
-              class="dfbdff"
+              className="dfbdff"
               style={{
                     backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image7})`,
                   }}
             >
-              <div class="overlay-sale">
-                <div class="fdbdfgdf">
+              <div className="overlay-sale">
+                <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
-                <div class="bsdfhsdfsdf">
+                <div className="bsdfhsdfsdf">
                   <h5>{OnSaleDetails?.data?.section5_text7}</h5>
                   <Link to={OnSaleDetails?.data?.section5_url7}>
                   <button>SHOP NOW</button>
@@ -575,16 +506,16 @@ export const OnSale = () => {
             </div>
 
             <div
-              class="dfbdff"
+              className="dfbdff"
               style={{
                     backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image8})`,
                   }}
             >
-              <div class="overlay-sale">
-                <div class="fdbdfgdf">
+              <div className="overlay-sale">
+                <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
-                <div class="bsdfhsdfsdf">
+                <div className="bsdfhsdfsdf">
                   <h5>{OnSaleDetails?.data?.section5_text8}</h5>
                    <Link to={OnSaleDetails?.data?.section5_url8}>
                   <button>SHOP NOW</button>
@@ -594,16 +525,16 @@ export const OnSale = () => {
             </div>
 
             <div
-              class="dfbdff"
+              className="dfbdff"
               style={{
                     backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image9})`,
                   }}
             >
-              <div class="overlay-sale">
-                <div class="fdbdfgdf">
+              <div className="overlay-sale">
+                <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
-                <div class="bsdfhsdfsdf">
+                <div className="bsdfhsdfsdf">
                   <h5>{OnSaleDetails?.data?.section5_text9}</h5>
                    <Link to={OnSaleDetails?.data?.section5_url9}>
                   <button>SHOP NOW</button>
@@ -613,16 +544,16 @@ export const OnSale = () => {
             </div>
 
             <div
-              class="dfbdff"
+              className="dfbdff"
               style={{
                     backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image10})`,
                   }}
             >
-              <div class="overlay-sale">
-                <div class="fdbdfgdf">
+              <div className="overlay-sale">
+                <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
-                <div class="bsdfhsdfsdf">
+                <div className="bsdfhsdfsdf">
                   <h5>{OnSaleDetails?.data?.section5_text10}</h5>
                    <Link to={OnSaleDetails?.data?.section5_url10}>
                   <button>SHOP NOW</button>
@@ -635,13 +566,13 @@ export const OnSale = () => {
         </div>
       </div>
 
-      <div class="sdhfdfgdf pt-5">
-        <div class="container-fluid">
-          <div class="dfjvdgd">
+      <div className="sdhfdfgdf pt-5">
+        <div className="container-fluid">
+          <div className="dfjvdgd">
             <h2>{OnSaleDetails?.data?.section6_title}</h2>
           </div>
 
-          <div class="dfngjhfdgdf sdcvewfaasd overflow-hidden">
+          <div className="dfngjhfdgdf sdcvewfaasd overflow-hidden">
             <div className="row">
               <div className="col-lg-4 pe-0">
                 <Link to={OnSaleDetails?.data?.section6_url1}>

@@ -636,7 +636,7 @@ export const Wedding = () => {
               <div className="col-lg-4">
                 <div className="fbghjdfgfd">
                   <div className="row">
-                    <div className="col-lg-6 col-md-6 col-sm-6 col-12 pe-0 ps-0">
+                    <div className="col-lg-6 col-md-6 col-sm-6 col-12">
                       <Link to={WeddingDetails?.data?.section5to9?.section7_url3}>
                       <div className="ffdgf548">
                         <img
@@ -646,7 +646,7 @@ export const Wedding = () => {
                       </div>
                       </Link>
                     </div>
-                    <div className="col-lg-6 col-md-6 col-sm-6 col-12 pe-0 ps-0">
+                    <div className="col-lg-6 col-md-6 col-sm-6 col-12">
                       <Link to={WeddingDetails?.data?.section5to9?.section7_url4}>
                       <div className="ffdgf548">
                         <img
@@ -881,7 +881,7 @@ export const Wedding = () => {
               <div className="col-lg-4">
                 <div className="fbghjdfgfd">
                   <div className="row">
-                    <div className="col-lg-6 col-md-6 col-sm-6 col-12 pe-0 ps-0">
+                    <div className="col-lg-6 col-md-6 col-sm-6 col-12">
                       <Link to={WeddingDetails?.data?.section5to9?.section9_url3}>
                       <div className="ffdgf548">
                         <img
@@ -891,7 +891,7 @@ export const Wedding = () => {
                       </div>
                       </Link>
                     </div>
-                    <div className="col-lg-6 col-md-6 col-sm-6 col-12 pe-0 ps-0">
+                    <div className="col-lg-6 col-md-6 col-sm-6 col-12">
                       <Link to={WeddingDetails?.data?.section5to9?.section9_url4}>
                       <div className="ffdgf548">
                         <img

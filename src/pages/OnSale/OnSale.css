@@ -40,55 +40,67 @@
 
 .fhgdfg {
   width: 100%;
-  height: 320px;
-  background-size: 100% 100%;
+  height: 314px;
   border-radius: 25px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  margin-bottom: 17px;
+}
+
+.fhgdfg img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .overlay-sales {
   width: 100%;
-  height: 320px;
+  height: 100%;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
   border-radius: 25px;
   border: 4px solid var(--pink-main-color);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 75%, rgb(61, 61, 61) 100%);
 }
 
-.fhgdfg {
-  margin-bottom: 17px;
-}
-
 .cvbjhdfdf {
   text-align: center;
-}
-.cvbjhdfdf h4 {
-  padding-top: 270px;
-  color: white;
+  bottom: 6%;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
 }
 
 .dfgfdg7853 {
   width: 100%;
-  height: 350px;
+  height: 359px;
   border-radius: 25px;
   border: 4px solid var(--pink-main-color);
 }
+
 .dfgfdg7853 img {
-  background-size: 100% 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .hdfbjh554 {
   width: 100%;
   padding: 10px 0;
-  margin-top: 274px;
   background-color: rgba(133, 13, 85, 0.6);
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
   opacity: 80%;
-}
-.hdfbjh554 h5 {
-  margin-bottom: 0;
+  bottom: 0;
   text-align: center;
-  color: white;
+}
+
+.hdfbjh554 h5{
+  color: #fff;
+}
+
+.hdfbjh554 h5:last-child{
+  margin-bottom: 0 !important;
 }
 
 .dfgjhdfgdfgf {
@@ -223,6 +235,49 @@
 .ghbgfgdf .col-lg-3:last-child .dfnghfd{
   border-right: 0;
 }
+
+
+
+
+
+
+@media only screen and (min-width: 3001px){
+  .fhgdfg,
+  .dfgfdg7853 {
+    height: auto;
+  }
+}
+
+
+
+
+
+@media only screen and (max-width: 3000px){
+  .fhgdfg,
+  .dfgfdg7853 {
+    height: auto;
+  }
+}
+
+
+
+
+
+
+@media only screen and (max-width: 1366px){
+  .fhgdfg {
+    height: 314px;
+  }
+
+  .dfgfdg7853{
+    height: 359px;
+  }
+}
+
+
+
+
+
 
 
 @media only screen and (max-width: 991px) {
