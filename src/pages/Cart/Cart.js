@@ -1168,10 +1168,10 @@ export const Cart = () => {
                           </tr>
 
                           <tr>
-                            <td>Vinhem Discount :</td>
+                            <td>VinHem Discount :</td>
 
                             <td style={{color:"green"}}>
-                              (-) 
+                              (-) &nbsp;
                               {/* <i class="bi bi-currency-rupee"></i> */}
                               {formatPrice(totalPrice.total_discount_price, { showDecimals: true })}
                             </td>
@@ -1193,15 +1193,42 @@ export const Cart = () => {
                               </td>
                             </tr>
                           )}
-                          {totalPrice.total_add_on_charges !== '0' && (
+
+                          {totalPrice.mojri_charge !== '0' && (
                             <tr>
-                              <td>Add On Charges :</td>
+                              <td>Matching Mojri :</td>
                               <td>
-                                {/* <i class="bi bi-currency-rupee"></i> */}
-                                {formatPrice(totalPrice.total_add_on_charges, { showDecimals: true })}
+                                {formatPrice(totalPrice.mojri_charge, { showDecimals: true })}
                               </td>
                             </tr>
                           )}
+
+                          {totalPrice.turban_charge !== '0' && (
+                            <tr>
+                              <td>Matching Turban :</td>
+                              <td>
+                                {formatPrice(totalPrice.turban_charge, { showDecimals: true })}
+                              </td>
+                            </tr>
+                          )}
+
+                          {totalPrice.stole_charge !== '0' && (
+                            <tr>
+                              <td>Matching Stole :</td>
+                              <td>
+                                {formatPrice(totalPrice.stole_charge, { showDecimals: true })}
+                              </td>
+                            </tr>
+                          )}
+                          
+                          {/* {totalPrice.total_add_on_charges !== '0' && (
+                            <tr>
+                              <td>Add On Charges :</td>
+                              <td>
+                                {formatPrice(totalPrice.total_add_on_charges, { showDecimals: true })}
+                              </td>
+                            </tr>
+                          )} */}
                        
                           <tr>
                             <td>Shipping & Duties :</td>
@@ -1229,7 +1256,11 @@ export const Cart = () => {
                             <td>
                               {/* <i class="bi bi-currency-rupee"></i> */}
                               {/* {formatPrice(Number(totalPrice.cart_totalPrice) - appliedDiscount, { showDecimals: true })} */}
-                              {formatPrice(Number(totalPrice.cart_totalPrice), { showDecimals: true })}
+                              {/* {formatPrice(Number(totalPrice.cart_totalPrice), { showDecimals: true })} */}
+                              {formatPrice(Number(totalPrice.total_selling_price) +
+                                Number(totalPrice.total_add_on_charges) +
+                                Number(totalPrice.custom_fit_charges) +
+                                Number(totalPrice.stiching_charges))}
                             </td>
                           </tr>
                         </tbody>
@@ -1459,10 +1490,10 @@ export const Cart = () => {
                           </tr>
 
                           <tr>
-                            <td>Vinhem Discount :</td>
+                            <td>VinHem Discount :</td>
 
                             <td style={{color:"green"}}>
-                              (-) 
+                              (-) &nbsp;
                               {/* <i class="bi bi-currency-rupee"></i> */}
                               {formatPrice(totalPrice.total_discount_price, { showDecimals: true })}
                             </td>
@@ -1484,19 +1515,45 @@ export const Cart = () => {
                               </td>
                             </tr>
                           )}
-                          {totalPrice.total_add_on_charges !== '0' && (
+                          {/* {totalPrice.total_add_on_charges !== '0' && (
                             <tr>
                               <td>Add On Charges :</td>
                               <td>
-                                {/* <i class="bi bi-currency-rupee"></i> */}
                                 {formatPrice(totalPrice.total_add_on_charges, { showDecimals: true })}
+                              </td>
+                            </tr>
+                          )} */}
+                          
+                          {totalPrice.mojri_charge !== '0' && (
+                            <tr>
+                              <td>Matching Mojri :</td>
+                              <td>
+                                {formatPrice(totalPrice.mojri_charge, { showDecimals: true })}
+                              </td>
+                            </tr>
+                          )}
+
+                          {totalPrice.turban_charge !== '0' && (
+                            <tr>
+                              <td>Matching Turban :</td>
+                              <td>
+                                {formatPrice(totalPrice.turban_charge, { showDecimals: true })}
+                              </td>
+                            </tr>
+                          )}
+
+                          {totalPrice.stole_charge !== '0' && (
+                            <tr>
+                              <td>Matching Stole :</td>
+                              <td>
+                                {formatPrice(totalPrice.stole_charge, { showDecimals: true })}
                               </td>
                             </tr>
                           )}
                        
                           <tr>
                             <td>
-                              Shipping & Duties{" "}
+                              Shipping & Duties
                               {freeShipping && (
                                 <span className="sergvasdrg">(Coupon Applied)</span>
                               )}
@@ -2002,10 +2059,10 @@ export const Cart = () => {
                           </tr>
 
                           <tr>
-                            <td>Vinhem Discount :</td>
+                            <td>VinHem Discount :</td>
 
                             <td style={{color:"green"}}>
-                              (-) 
+                              (-) &nbsp;
                               {/* <i class="bi bi-currency-rupee"></i> */}
                               {formatPrice(totalPrice.total_discount_price, { showDecimals: true })}
                             </td>
@@ -2027,12 +2084,38 @@ export const Cart = () => {
                               </td>
                             </tr>
                           )}
-                          {totalPrice.total_add_on_charges !== '0' && (
+                          {/* {totalPrice.total_add_on_charges !== '0' && (
                             <tr>
                               <td>Add On Charges :</td>
                               <td>
-                                {/* <i class="bi bi-currency-rupee"></i> */}
                                 {formatPrice(totalPrice.total_add_on_charges, { showDecimals: true })}
+                              </td>
+                            </tr>
+                          )} */}
+
+                          {totalPrice.mojri_charge !== '0' && (
+                            <tr>
+                              <td>Matching Mojri :</td>
+                              <td>
+                                {formatPrice(totalPrice.mojri_charge, { showDecimals: true })}
+                              </td>
+                            </tr>
+                          )}
+
+                          {totalPrice.turban_charge !== '0' && (
+                            <tr>
+                              <td>Matching Turban :</td>
+                              <td>
+                                {formatPrice(totalPrice.turban_charge, { showDecimals: true })}
+                              </td>
+                            </tr>
+                          )}
+
+                          {totalPrice.stole_charge !== '0' && (
+                            <tr>
+                              <td>Matching Stole :</td>
+                              <td>
+                                {formatPrice(totalPrice.stole_charge, { showDecimals: true })}
                               </td>
                             </tr>
                           )}
