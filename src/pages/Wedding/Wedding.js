@@ -673,13 +673,10 @@ export const Wedding = () => {
             <div className="row">
 
               <div className="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div
-                  className="dfbhhfgdf55"
-                  style={{
-                    backgroundImage: `url(${WeddingDetails?.image_url}/${WeddingDetails?.data?.section5to9?.section8_image1})`,
-                  }}
-                >
-                  <div className="overlay-black3">
+                <div className="dfbhhfgdf55 position-relative overflow-hidden">
+                  <img src={`${WeddingDetails?.image_url}/${WeddingDetails?.data?.section5to9?.section8_image1}`} alt="" />
+
+                  <div className="overlay-black3 position-absolute w-100 h-100">
                     <div className="dfbghf3">
                       <h4>
                         {WeddingDetails?.data?.section5to9?.section8_text1}
@@ -693,13 +690,10 @@ export const Wedding = () => {
               </div>
 
               <div className="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div
-                  className="dfbhhfgdf55"
-                  style={{
-                    backgroundImage: `url(${WeddingDetails?.image_url}/${WeddingDetails?.data?.section5to9?.section8_image2})`,
-                  }}
-                >
-                  <div className="overlay-black3">
+                <div className="dfbhhfgdf55 position-relative overflow-hidden">
+                  <img src={`${WeddingDetails?.image_url}/${WeddingDetails?.data?.section5to9?.section8_image2}`} alt="" />
+
+                  <div className="overlay-black3 position-absolute w-100 h-100">
                     <div className="dfbghf3">
                       <h4>
                         {WeddingDetails?.data?.section5to9?.section8_text2}
@@ -713,13 +707,10 @@ export const Wedding = () => {
               </div>
 
               <div className="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div
-                  className="dfbhhfgdf55"
-                  style={{
-                    backgroundImage: `url(${WeddingDetails?.image_url}/${WeddingDetails?.data?.section5to9?.section8_image3})`,
-                  }}
-                >
-                  <div className="overlay-black3">
+                <div className="dfbhhfgdf55 position-relative overflow-hidden">
+                  <img src={`${WeddingDetails?.image_url}/${WeddingDetails?.data?.section5to9?.section8_image3}`} alt="" />
+
+                  <div className="overlay-black3 position-absolute w-100 h-100">
                     <div className="dfbghf3">
                       <h4>
                         {WeddingDetails?.data?.section5to9?.section8_text3}
@@ -733,13 +724,10 @@ export const Wedding = () => {
               </div>
 
               <div className="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div
-                  className="dfbhhfgdf55"
-                  style={{
-                    backgroundImage: `url(${WeddingDetails?.image_url}/${WeddingDetails?.data?.section5to9?.section8_image4})`,
-                  }}
-                >
-                  <div className="overlay-black3">
+                <div className="dfbhhfgdf55 position-relative overflow-hidden">
+                  <img src={`${WeddingDetails?.image_url}/${WeddingDetails?.data?.section5to9?.section8_image4}`} alt="" />
+
+                  <div className="overlay-black3 position-absolute w-100 h-100">
                     <div className="dfbghf3">
                       <h4>
                         {WeddingDetails?.data?.section5to9?.section8_text4}
@@ -753,13 +741,10 @@ export const Wedding = () => {
               </div>
 
               <div className="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div
-                  className="dfbhhfgdf55"
-                  style={{
-                    backgroundImage: `url(${WeddingDetails?.image_url}/${WeddingDetails?.data?.section5to9?.section8_image5})`,
-                  }}
-                >
-                  <div className="overlay-black3">
+                <div className="dfbhhfgdf55 position-relative overflow-hidden">
+                  <img src={`${WeddingDetails?.image_url}/${WeddingDetails?.data?.section5to9?.section8_image5}`} alt="" />
+
+                  <div className="overlay-black3 position-absolute w-100 h-100">
                     <div className="dfbghf3">
                       <h4>
                         {WeddingDetails?.data?.section5to9?.section8_text5}
@@ -773,13 +758,10 @@ export const Wedding = () => {
               </div>
 
               <div className="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div
-                  className="dfbhhfgdf55"
-                  style={{
-                    backgroundImage: `url(${WeddingDetails?.image_url}/${WeddingDetails?.data?.section5to9?.section8_image6})`,
-                  }}
-                >
-                  <div className="overlay-black3">
+                <div className="dfbhhfgdf55 position-relative overflow-hidden">
+                  <img src={`${WeddingDetails?.image_url}/${WeddingDetails?.data?.section5to9?.section8_image6}`} alt="" />
+
+                  <div className="overlay-black3 position-absolute w-100 h-100">
                     <div className="dfbghf3">
                       <h4>
                         {WeddingDetails?.data?.section5to9?.section8_text6}
@@ -793,13 +775,10 @@ export const Wedding = () => {
               </div>
 
               <div className="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div
-                  className="dfbhhfgdf55"
-                  style={{
-                    backgroundImage: `url(${WeddingDetails?.image_url}/${WeddingDetails?.data?.section5to9?.section8_image7})`,
-                  }}
-                >
-                  <div className="overlay-black3">
+                <div className="dfbhhfgdf55 position-relative overflow-hidden">
+                  <img src={`${WeddingDetails?.image_url}/${WeddingDetails?.data?.section5to9?.section8_image7}`} alt="" />
+
+                  <div className="overlay-black3 position-absolute w-100 h-100">
                     <div className="dfbghf3">
                       <h4>
                         {WeddingDetails?.data?.section5to9?.section8_text7}
@@ -813,13 +792,10 @@ export const Wedding = () => {
               </div>
 
               <div className="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div
-                  className="dfbhhfgdf55"
-                  style={{
-                    backgroundImage: `url(${WeddingDetails?.image_url}/${WeddingDetails?.data?.section5to9?.section8_image8})`,
-                  }}
-                >
-                  <div className="overlay-black3">
+                <div className="dfbhhfgdf55 position-relative overflow-hidden">
+                  <img src={`${WeddingDetails?.image_url}/${WeddingDetails?.data?.section5to9?.section8_image8}`} alt="" />
+
+                  <div className="overlay-black3 position-absolute w-100 h-100">
                     <div className="dfbghf3">
                       <h4>
                         {WeddingDetails?.data?.section5to9?.section8_text8}

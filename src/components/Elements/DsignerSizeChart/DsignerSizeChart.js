@@ -91,7 +91,7 @@ export const DesignerSizeChart = ({ productDetails }) => {
             <div className="djnweuihrwer">
               <div className="opmkojwojoiwere d-flex justify-content-between">
                 <div className="dkewhknewhirwer">
-                  <h5>Size Chart for {productDetails?.data?.product_category}</h5>
+                  {/* <h5>Size Chart for {productDetails?.data?.product_category}</h5> */}
 
                   <h6 className="mb-0">
                     BODY MEASUREMENTS [ 3-4 INCHES LOOSENING REQUIRED]

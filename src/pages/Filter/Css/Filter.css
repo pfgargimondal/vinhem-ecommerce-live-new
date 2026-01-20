@@ -300,6 +300,10 @@
   padding-bottom: 0.6rem;
 }
 
+.form-select:focus{
+  border-color: var(--pink-main-color) !important;
+}
+
 .doewnkrhwersdvzdfb input:checked + label{
   background: var(--black-background-color) !important;
   color: #fff !important;
@@ -562,16 +566,24 @@
 .pagination_ff button{
   width: 3rem;
   height: 100%;
+  background: var(--pink-main-color);
+  border-color: var(--pink-main-color) !important;
 }
 
 .pagination_ff button.active{
   background: var(--pink-main-color);
   border-color: var(--pink-main-color) !important;
   color: #fff;
+  box-shadow: rgba(132, 13, 86, 0.25) 0px 54px 71px, rgba(132, 13, 86, 0.12) 0px -12px 30px, rgba(132, 13, 86, 0.12) 0px 4px 6px, rgba(132, 13, 86, 0.17) 0px 12px 13px, rgba(132, 13, 86, 0.09) 0px -3px 5px;
 }
 
 .pagination_ff button:hover{
-  background: var(--pink-main-color);
+  background: var(--pink-main-color) !important;
   border-color: var(--pink-main-color) !important;
+  border-radius: 5px !important;
   color: #fff;
+}
+
+.dfgsfsfsfsdf button.btn-main:hover{
+  border-radius: 5px;
 }

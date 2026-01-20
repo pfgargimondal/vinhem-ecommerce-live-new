@@ -40,29 +40,52 @@ export const Filter = () => {
   const [mainCatgry, setMainCatgry] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [pageWindowStart, setPageWindowStart] = useState(1);
 
   const productsPerPage = 24;
+  const visibleCount = 5;
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProduct = products?.slice(indexOfFirstProduct, indexOfLastProduct);
+
   const totalPages = Math.ceil(products?.length / productsPerPage);
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
-  let pages = [];
-
-  for (let i = 0; i < totalPages; i++) {
-    pages.push(i + 1);
-  }
-
-  
-  const handlePrev = () => {
-    (currentPage > 1) && setCurrentPage(currentPage - 1); 
+  const getVisiblePages = () => {
+    return pages.slice(
+      pageWindowStart - 1,
+      pageWindowStart - 1 + visibleCount
+    );
   };
 
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handlePrev = () => {
+    if (currentPage > 1) {
+      const newPage = currentPage - 1;
+      setCurrentPage(newPage);
+
+      if (newPage < pageWindowStart) {
+        setPageWindowStart(prev => Math.max(1, prev - 1));
+      }
+    }
+  };
 
   const handleNext = () => {
-    (currentPage < totalPages) && setCurrentPage(currentPage + 1); 
+    if (currentPage < totalPages) {
+      const newPage = currentPage + 1;
+      setCurrentPage(newPage);
+
+      if (newPage >= pageWindowStart + visibleCount) {
+        setPageWindowStart(prev => prev + 1);
+      }
+    }
   };
+
+
 
   const search = useLocation().search;
   const searchTerm = new URLSearchParams(search).get("search")?.trim() || "";
@@ -327,7 +350,7 @@ export const Filter = () => {
 
         <div className="row mt-5 dffedfgwetttt">
           <div className="col-lg-3">
-            <div className="filter-options">
+            <div className="filter-options" style={category && !category.includes("all-products") && !subcategory ? {transform: "translateY(-18vw)"} : {}}>
               <div className="oidenjwihrwer mb-4 d-flex align-items-center justify-content-between">
                 <h5
                   className="mb-0"
@@ -507,18 +530,17 @@ export const Filter = () => {
                               </div>
 
                               <div className={`fdbdfgdfgdf ${ !viewType ? "col-lg-12 px-1" : "col-lg-9"}`}>
-                                <h6><i class="bi me-1 bi-truck"></i> Ships in {product.shipping_time}</h6>
+                                <div className={`d-flex align-items-center ${(product.rts_quantity > '0' && (product?.best_seller === '1' || product?.best_seller === true) ? "justify-content-between" : "")}`}>
+                                  <h6 className="dokwehorjweojrower"><i class="bi bi-truck"></i> Ships in {product.shipping_time}</h6>
 
-                                {/* {product.product_category === "READY TO SHIP" && (
-                                  <h6><i class="bi me-1 bi-rocket-takeoff"></i> Ready to ship</h6>
-                                )} */}
-                                {product.rts_quantity > '0' && (
-                                  <h6><i class="bi me-1 bi-rocket-takeoff"></i> Ready to ship</h6>
-                                )}
+                                  {product.rts_quantity > '0' && (
+                                    <h6><i class="bi bi-rocket-takeoff"></i> Ready to ship</h6>
+                                  )}
 
-                                {(product.best_seller === '1' || product.best_seller === true) && (
-                                  <h6><i class="bi bi-lightning-charge"></i> Best Seller</h6>
-                                )}                             
+                                  {(product?.best_seller === '1' || product?.best_seller === true) && (
+                                    <h6><i class="bi bi-lightning-charge"></i> Best Seller</h6>
+                                  )}
+                                </div>                           
 
                                 <h4>{product.product_name}</h4>
 
@@ -605,15 +627,35 @@ export const Filter = () => {
                 </div>
                 {products?.length > 0 && (
                   <div className="dfgsfsfsfsdf d-flex justify-content-center align-items-center">
-                    <button className="btn btn-main" onClick={handlePrev}>Prev</button>
+
+                    <button
+                      className="btn btn-main"
+                      onClick={handlePrev}
+                      disabled={currentPage === 1}
+                    >
+                      Prev
+                    </button>
 
                     <div className="pagination_ff d-flex align-items-center">
-                      {pages.map(page => (
-                        <button key={page} className={(currentPage === page) ? "btn btn-main active" : "btn btn-main"} onClick={() => setCurrentPage(page)}>{page}</button>
+                      {getVisiblePages().map(page => (
+                        <button
+                          key={page}
+                          className={`btn btn-main ${currentPage === page ? "active" : ""}`}
+                          onClick={() => handlePageClick(page)}
+                        >
+                          {page}
+                        </button>
                       ))}
                     </div>
 
-                    <button className="btn btn-main" onClick={handleNext}>Next</button>
+                    <button
+                      className="btn btn-main"
+                      onClick={handleNext}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                    </button>
+
                   </div>
                 )}
               </div>

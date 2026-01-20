@@ -357,7 +357,7 @@ const applyPriceFilter = (min, max) => {
                                                   />
 
                                                   <span className="checkbox__symbol">
-                                                    <svg aria-hidden="true" className="icon-checkbox" width="28" height="28">
+                                                    <svg aria-hidden="true" className="icon-checkbox" width="28" height="28" viewBox="0 0 28 28">
                                                       <path d="M4 14l8 7L24 7"></path>
                                                     </svg>
                                                   </span>
