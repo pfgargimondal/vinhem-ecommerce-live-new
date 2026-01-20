@@ -79,7 +79,7 @@ export const OnSale = () => {
           <div className="dffgydfdf mt-4">
             <div className="row">
 
-              <div className="col-lg-3">
+              <div className="col-lg-3 col-md-6 col-12">
                  <Link to={OnSaleDetails?.data?.section2_url1}>
                 <div className="fhgdfg position-relative overflow-hidden">
                   <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image1}`} alt="" />
@@ -93,7 +93,7 @@ export const OnSale = () => {
                 </Link>
               </div>
 
-              <div className="col-lg-3">
+              <div className="col-lg-3 col-md-6 col-12">
                  <Link to={OnSaleDetails?.data?.section2_url2}>
                 <div className="fhgdfg position-relative overflow-hidden">
                   <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image2}`} alt="" />
@@ -107,7 +107,7 @@ export const OnSale = () => {
                 </Link>
               </div>
 
-              <div className="col-lg-3">
+              <div className="col-lg-3 col-md-6 col-12">
                  <Link to={OnSaleDetails?.data?.section2_url3}>
                 <div className="fhgdfg position-relative overflow-hidden">
                   <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image3}`} alt="" />
@@ -121,7 +121,7 @@ export const OnSale = () => {
                 </Link>
               </div>
 
-              <div className="col-lg-3">
+              <div className="col-lg-3 col-md-6 col-12">
                  <Link to={OnSaleDetails?.data?.section2_url4}>
                 <div className="fhgdfg position-relative overflow-hidden">
                   <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image4}`} alt="" />
@@ -135,7 +135,7 @@ export const OnSale = () => {
                 </Link>
               </div>
 
-              <div className="col-lg-3">
+              <div className="col-lg-3 col-md-6 col-12">
                  <Link to={OnSaleDetails?.data?.section2_url5}>
                 <div className="fhgdfg position-relative overflow-hidden">
                   <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image5}`} alt="" />
@@ -149,7 +149,7 @@ export const OnSale = () => {
                 </Link>
               </div>
 
-              <div className="col-lg-3">
+              <div className="col-lg-3 col-md-6 col-12">
                  <Link to={OnSaleDetails?.data?.section2_url6}>
                 <div className="fhgdfg position-relative overflow-hidden">
                   <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image6}`} alt="" />
@@ -163,7 +163,7 @@ export const OnSale = () => {
                 </Link>
               </div>
 
-              <div className="col-lg-3">
+              <div className="col-lg-3 col-md-6 col-12">
                  <Link to={OnSaleDetails?.data?.section2_url7}>
                 <div className="fhgdfg position-relative overflow-hidden">
                   <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image7}`} alt="" />
@@ -177,7 +177,7 @@ export const OnSale = () => {
                 </Link>
               </div>
 
-              <div className="col-lg-3">
+              <div className="col-lg-3 col-md-6 col-12">
                  <Link to={OnSaleDetails?.data?.section2_url8}>
                 <div className="fhgdfg position-relative overflow-hidden">
                   <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image8}`} alt="" />
@@ -191,7 +191,7 @@ export const OnSale = () => {
                 </Link>
               </div>
 
-              <div className="col-lg-3">
+              <div className="col-lg-3 col-md-6 col-12">
                  <Link to={OnSaleDetails?.data?.section2_url9}>
                 <div className="fhgdfg position-relative overflow-hidden">
                   <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image9}`} alt="" />
@@ -205,7 +205,7 @@ export const OnSale = () => {
                 </Link>
               </div>
 
-              <div className="col-lg-3">
+              <div className="col-lg-3 col-md-6 col-12">
                  <Link to={OnSaleDetails?.data?.section2_url10}>
                 <div className="fhgdfg position-relative overflow-hidden">
                   <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image10}`} alt="" />
@@ -219,7 +219,7 @@ export const OnSale = () => {
                 </Link>
               </div>
 
-              <div className="col-lg-3">
+              <div className="col-lg-3 col-md-6 col-12">
                  <Link to={OnSaleDetails?.data?.section2_url11}>
                 <div className="fhgdfg position-relative overflow-hidden">
                   <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image11}`} alt="" />
@@ -233,7 +233,7 @@ export const OnSale = () => {
                 </Link>
               </div>
 
-              <div className="col-lg-3">
+              <div className="col-lg-3 col-md-6 col-12">
                  <Link to={OnSaleDetails?.data?.section2_url12}>
                 <div className="fhgdfg position-relative overflow-hidden">
                   <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section2_image12}`} alt="" />
@@ -258,7 +258,7 @@ export const OnSale = () => {
           </div>
           <div className="fghdfg mt-4">
             <div className="row">
-              <div className="col-lg-4 mb-4">
+              <div className="col-lg-4 col-md-6 col-12 mb-4">
                 <Link to={OnSaleDetails?.data?.section3_url1}></Link>
                 <div className="dfgfdg7853 position-relative overflow-hidden">
                   <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section3_image1}`} alt="" />
@@ -272,7 +272,7 @@ export const OnSale = () => {
                 </div>
               </div>
 
-              <div className="col-lg-4 mb-4">
+              <div className="col-lg-4 col-md-6 col-12 mb-4">
                 <Link to={OnSaleDetails?.data?.section3_url2}>
                 <div className="dfgfdg7853 position-relative overflow-hidden">
                   <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section3_image2}`} alt="" />
@@ -287,7 +287,7 @@ export const OnSale = () => {
                 </Link>
               </div>
 
-              <div className="col-lg-4 mb-4">
+              <div className="col-lg-4 col-md-6 col-12 mb-4">
                 <Link to={OnSaleDetails?.data?.section3_url3}>
                 <div className="dfgfdg7853 position-relative overflow-hidden">
                   <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section3_image3}`} alt="" />
@@ -302,7 +302,7 @@ export const OnSale = () => {
                 </Link>
               </div>
 
-              <div className="col-lg-4 mb-4">
+              <div className="col-lg-4 col-md-6 col-12 mb-4">
                 <Link to={OnSaleDetails?.data?.section3_url4}>
                 <div className="dfgfdg7853 position-relative overflow-hidden">
                   <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section3_image4}`} alt="" />
@@ -317,7 +317,7 @@ export const OnSale = () => {
                 </Link>
               </div>
 
-              <div className="col-lg-4 mb-4">
+              <div className="col-lg-4 col-md-6 col-12 mb-4">
                 <Link to={OnSaleDetails?.data?.section3_url5}>
                 <div className="dfgfdg7853 position-relative overflow-hidden">
                   <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section3_image5}`} alt="" />
@@ -332,7 +332,7 @@ export const OnSale = () => {
                 </Link>
               </div>
 
-              <div className="col-lg-4 mb-4">
+              <div className="col-lg-4 col-md-6 col-12 mb-4">
                 <Link to={OnSaleDetails?.data?.section3_url6}>
                 <div className="dfgfdg7853 position-relative overflow-hidden">
                   <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section3_image6}`} alt="" />
@@ -372,13 +372,10 @@ export const OnSale = () => {
 
           <div className="dfgjhdfgdfgf mt-4">
 
-            <div
-              className="dfbdff"
-              style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image1})`,
-                  }}
-            >
-              <div className="overlay-sale">
+            <div className="dfbdff position-relative overflow-hidden">
+              <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image1}`} alt="" />
+
+              <div className="overlay-sale position-absolute w-100 h-100">
                 <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
@@ -391,13 +388,10 @@ export const OnSale = () => {
               </div>
             </div>
             
-            <div
-              className="dfbdff"
-              style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image2})`,
-                  }}
-            >
-              <div className="overlay-sale">
+            <div className="dfbdff position-relative overflow-hidden">
+              <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image2}`} alt="" />
+
+              <div className="overlay-sale position-absolute w-100 h-100">
                 <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
@@ -410,13 +404,10 @@ export const OnSale = () => {
               </div>
             </div>
 
-            <div
-              className="dfbdff"
-              style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image3})`,
-                  }}
-            >
-              <div className="overlay-sale">
+            <div className="dfbdff position-relative overflow-hidden">
+              <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image3}`} alt="" />
+
+              <div className="overlay-sale position-absolute w-100 h-100">
                 <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
@@ -429,13 +420,10 @@ export const OnSale = () => {
               </div>
             </div>
 
-            <div
-              className="dfbdff"
-              style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image4})`,
-                  }}
-            >
-              <div className="overlay-sale">
+            <div className="dfbdff position-relative overflow-hidden">
+              <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image4}`} alt="" />
+
+              <div className="overlay-sale position-absolute w-100 h-100">
                 <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
@@ -448,13 +436,10 @@ export const OnSale = () => {
               </div>
             </div>
 
-            <div
-              className="dfbdff"
-              style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image5})`,
-                  }}
-            >
-              <div className="overlay-sale">
+            <div className="dfbdff position-relative overflow-hidden">
+              <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image5}`} alt="" />
+
+              <div className="overlay-sale position-absolute w-100 h-100">
                 <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
@@ -467,13 +452,10 @@ export const OnSale = () => {
               </div>
             </div>
 
-            <div
-              className="dfbdff"
-              style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image6})`,
-                  }}
-            >
-              <div className="overlay-sale">
+            <div className="dfbdff position-relative overflow-hidden">
+              <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image6}`} alt="" />
+
+              <div className="overlay-sale position-absolute w-100 h-100">
                 <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
@@ -486,13 +468,10 @@ export const OnSale = () => {
               </div>
             </div>
 
-            <div
-              className="dfbdff"
-              style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image7})`,
-                  }}
-            >
-              <div className="overlay-sale">
+            <div className="dfbdff position-relative overflow-hidden">
+              <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image7}`} alt="" />
+              
+              <div className="overlay-sale position-absolute w-100 h-100">
                 <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
@@ -505,13 +484,10 @@ export const OnSale = () => {
               </div>
             </div>
 
-            <div
-              className="dfbdff"
-              style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image8})`,
-                  }}
-            >
-              <div className="overlay-sale">
+            <div className="dfbdff position-relative overflow-hidden">
+              <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image8}`} alt="" />
+
+              <div className="overlay-sale position-absolute w-100 h-100">
                 <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
@@ -524,13 +500,10 @@ export const OnSale = () => {
               </div>
             </div>
 
-            <div
-              className="dfbdff"
-              style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image9})`,
-                  }}
-            >
-              <div className="overlay-sale">
+            <div className="dfbdff position-relative overflow-hidden">
+              <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image9}`} alt="" />
+
+              <div className="overlay-sale position-absolute w-100 h-100">
                 <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
@@ -543,13 +516,10 @@ export const OnSale = () => {
               </div>
             </div>
 
-            <div
-              className="dfbdff"
-              style={{
-                    backgroundImage: `url(${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image10})`,
-                  }}
-            >
-              <div className="overlay-sale">
+            <div className="dfbdff position-relative overflow-hidden">
+              <img src={`${OnSaleDetails?.image_url}/${OnSaleDetails?.data?.section5_image10}`} alt="" />
+
+              <div className="overlay-sale position-absolute w-100 h-100">
                 <div className="fdbdfgdf">
                   <h6>Up to 50% off</h6>
                 </div>
