@@ -2653,7 +2653,7 @@ export const ProductDetail = () => {
           {productDetails?.data?.product_category?.toLowerCase() ===
             "accessories" && (
             <h4 className="mb-1">
-              Size Chart for  
+              Size Chart for &nbsp;
               {productDetails?.data?.product_sub_category?.toLowerCase() ===
               "foot wear"
                 ? productDetails?.data?.product_sub_category
@@ -2663,7 +2663,7 @@ export const ProductDetail = () => {
           {productDetails?.data?.product_category?.toLowerCase() !==
             "accessories" && (
               <h4 className="mb-1">
-                Size Chart for  
+                Size Chart for &nbsp;
                 {productDetails?.data?.product_category}
               </h4>
           )}
