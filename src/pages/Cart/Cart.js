@@ -42,13 +42,13 @@ export const Cart = () => {
   const [couponModal, setCouponModal] = useState(false);
   const [addressModal, setAddressModal] = useState(false);
   const [billingAddressModal, setBillingAddressModal] = useState(false);
-  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState("");
   const { setCartCount } = useCart();
   const { resetCart } = useCart();
   const { formatPrice } = useCurrency();
   const [hideDBAddress, setHideDBAddress] = useState(false);
-  const [shippingCharge, setShippingCharge] = useState("");
+  const [shippingCharge, setShippingCharge] = useState(0);
   const [isGift, setIsGift] = useState(false);
 
   // console.log(localStorage.getItem("selectedCurrency"), 'selectedCurrency');
@@ -86,16 +86,23 @@ export const Cart = () => {
 
     if (!selected) return 0;
 
-    if (weight <= 999) {
-      return selected["0_999gms"];
-    } else if (weight <= 5000) {
-      return selected["1000_5000gms"];
-    } else {
-      return selected["5000_plus"] || 0;
-    }
-  }, [shippingCountry]);
+    let charge;
 
-  // console.log(shippingCharge, 'shippingCharge');
+    if (weight <= 999) {
+      charge = selected["0_999gms"];
+    } else if (weight <= 5000) {
+      charge = selected["1000_5000gms"];
+    } else {
+      charge = selected["5000_plus"];
+    }
+
+    // Normalize
+    if (typeof charge === "string" && charge.toLowerCase().includes("free")) {
+      return 0;
+    }
+
+    return Number(charge) || 0;
+  }, [shippingCountry]);
 
   useEffect(() => {
     if (!token) return;
@@ -296,6 +303,7 @@ export const Cart = () => {
   const [shippingAddress, setShippingAddress] = useState(null);
   const [billingAddress, setBillingAddress] = useState(null);
   const [sameAsShipping, setSameAsShipping] = useState(false);
+
   const [errors, setErrors] = useState({});
 
   // -------------------------------
@@ -345,15 +353,15 @@ export const Cart = () => {
 
         if (apiData) {
           // eslint-disable-next-line
-          const formatted = formatShippingAddress(apiData);
+          // const formatted = formatShippingAddress(apiData);
           setPreviousAddress(apiData);
-          setShippingAddress(apiData);
+          // setShippingAddress(apiData);
 
-          setBillingAddress(apiData); // billing from database
-          setSameAsShipping(false);
+          // setBillingAddress(apiData); // billing from database
+          // setSameAsShipping(false);
 
-          localStorage.setItem("shipping_address", JSON.stringify(apiData));
-          localStorage.setItem("billing_address", JSON.stringify(apiData));
+          // localStorage.setItem("shipping_address", JSON.stringify(apiData));
+          // localStorage.setItem("billing_address", JSON.stringify(apiData));
 
           const charge = getShippingCharge(
             apiData.shippingCountry,
@@ -362,6 +370,20 @@ export const Cart = () => {
           setShippingCharge(charge);
 
           localStorage.setItem("shipping_charge", charge);
+
+          const formattedShipping = formatShippingAddress(apiData);
+          const formattedBilling = formatBillingAddress(apiData);
+
+          setShippingAddress(apiData);
+          setBillingAddress(apiData);
+
+          localStorage.setItem("shipping_address", JSON.stringify(apiData));
+          localStorage.setItem("billing_address", JSON.stringify(apiData));
+
+          // ✅ AUTO CHECK SAME AS SHIPPING
+          const same = isSameAddress(formattedShipping, formattedBilling);
+          setSameAsShipping(same);
+          
 
         }
       } catch (error) {
@@ -374,6 +396,21 @@ export const Cart = () => {
 
   // console.log(previousAddress, 'previousAddress');
   // console.log(shippingCharge, 'shippingCharge');
+
+  const isSameAddress = (shipping, billing) => {
+    if (!shipping || !billing) return false;
+
+    return (
+      shipping.shippingName === billing.shippingName &&
+      shipping.shippingFullAddress === billing.shippingFullAddress &&
+      shipping.shippingCity === billing.shippingCity &&
+      shipping.shippingPinCode === billing.shippingPinCode &&
+      shipping.shippingState === billing.shippingState &&
+      shipping.shippingCountry === billing.shippingCountry &&
+      shipping.shippingNumber === billing.shippingNumber &&
+      shipping.shippingEmail === billing.shippingEmail
+    );
+  };
 
 
   const handleInputChange = (e) => {
@@ -508,20 +545,20 @@ export const Cart = () => {
 
   // Billing Data Store start
 
-    const [billingData, setBillingData] = useState({
-      billing_first_name: "",
-      billing_last_name: "",
-      billing_country: "India",
-      billing_pincode: "",
-      billing_aptNo: "",
-      billing_street_address: "",
-      billing_city: "",
-      billing_state: "",
-      billing_mobileCode: "+91",
-      billing_mobile_number: "",
-      billing_email: "",
-      billing_address_as: "",
-    });
+  const [billingData, setBillingData] = useState({
+    billing_first_name: "",
+    billing_last_name: "",
+    billing_country: "India",
+    billing_pincode: "",
+    billing_aptNo: "",
+    billing_street_address: "",
+    billing_city: "",
+    billing_state: "",
+    billing_mobileCode: "+91",
+    billing_mobile_number: "",
+    billing_email: "",
+    billing_address_as: "",
+  });
 
 
   const formatBillingAddress = (data) => {
@@ -659,9 +696,10 @@ export const Cart = () => {
     Number(totalPrice.custom_fit_charges) +
     Number(totalPrice.stiching_charges);
 
+    
     const finalTotal = freeShipping
-    ? baseTotal // shipping = 0, no discount applied
-    : baseTotal + Number(shippingCharge) - appliedDiscount;
+      ? baseTotal - appliedDiscount
+      : baseTotal + shippingCharge - appliedDiscount;
 
 
     localStorage.setItem("final_total", finalTotal);
@@ -1311,7 +1349,7 @@ export const Cart = () => {
 
                     <div className="uiwdhiwerwerwer">
                         <button
-                          className="btn btn-main w-100 mb-3"
+                          className="btn btn-main w-100 mb-2"
                           onClick={handleProceed}
                         >
                           PROCEED TO CHECKOUT
@@ -1330,15 +1368,15 @@ export const Cart = () => {
                     <div className="diwebjrwert_left">
                       <div className="djikewirwerwer">
                         <div className="inmoijjrwerwe mb-4">
-                          <div className="jbdjnewnllr d-flex align-items-center justify-content-between">
-                            <h4 className="mb-3">SHIPPING AND BILLING ADDRESS</h4>
+                          <div className="jbdjnewnllr d-flex align-items-center justify-content-between w-100">
+                            <h4 className="mb-0">SHIPPING AND BILLING ADDRESS</h4>
                           </div>
 
                           <div className="iudghweewr pt-3">                           
                             <div className="dinwemojerr mb-4">
-                              <label className="form-label">Shipping Address</label>
+                              {/* <label className="form-label">Shipping Address</label> */}
 
-                              <button onClick={handleAddressToggle} className="btn btn-main bg-transparent text-black d-block w-100 mt-2">
+                              <button onClick={handleAddressToggle} className="btn btn-main bg-transparent text-black d-block w-100">
                                 {/* <i class="bi me-1 bi-plus-square"></i> */}
                                 
                                 ADD SHIPPING ADDRESS
@@ -1385,7 +1423,7 @@ export const Cart = () => {
                                   localStorage.setItem("billing_address", JSON.stringify(shippingAddress));
                                 } else {
                                   // If unchecked, clear billing address or reset
-                                  setBillingAddress({});
+                                  setBillingAddress(null);
                                   localStorage.removeItem("billing_address");
                                 }
                               }}
@@ -1399,7 +1437,7 @@ export const Cart = () => {
                           <div className="iudghweewr">       
                             {!sameAsShipping && (
                               <div className="dinwemojerr mb-4">
-                                <label className="form-label">Billing Address</label>
+                                {/* <label className="form-label">Billing Address</label> */}
                                 <button 
                                   onClick={handleBillingAddressToggle} 
                                   className="btn btn-main bg-transparent text-black d-block w-100 mt-2"
@@ -1434,7 +1472,7 @@ export const Cart = () => {
                         </div>
                       </div>
 
-                      <div className="dweihriwerwerw mt-4">
+                      {/* <div className="dweihriwerwerw mt-4">
                         <p className="mb-1">*Once your order has been placed no subsequent changes can be made in it.</p>
 
                         <p className="mb-1">*Shipping cost may vary depending on the delivery destination.</p>
@@ -1456,7 +1494,7 @@ export const Cart = () => {
                             <Link to="/contact-us">Contact Us</Link>
                           </li>
                         </ul>
-                      </div>
+                      </div> */}
 
                       <div className="sadfdgrwedwe d-flex align-items-center justify-content-end aksbdjbererre dojweirkwejirwer">
                         <button className="btn px-3 me-2 btn-main" onClick={handleCart}>
@@ -1476,7 +1514,7 @@ export const Cart = () => {
                             VIEW ALL OFFER & COUPONS 
                           </button>
                       </div>
-                      <div className="sdegdsbhsdfgbnh mt-4 mb-4">
+                      <div className="sdegdsbhsdfgbnh mb-4">
                         <h4 className="opsjdfohsij mb-0 pb-2">ORDER SUMMARY</h4>
                       </div>
                       
@@ -1560,7 +1598,7 @@ export const Cart = () => {
                        
                           <tr>
                             <td>
-                              Shipping & Duties
+                              Shipping & Duties :
                               {freeShipping && (
                                 <span className="sergvasdrg">(Coupon Applied)</span>
                               )}
@@ -1597,7 +1635,8 @@ export const Cart = () => {
                             </tr>
                           ):null}
                           <tr>
-                            <td>Total Payable :</td>
+                            {/* <td>Total Payable :</td> */}
+                            <td>After Discount </td>
                               <td style={{display: "flex", alignItems: "center", justifyContent: "end"}}>
                                   {/* <span style={{ textDecoration: "line-through", color: "#999" }}>
                                     {formatPrice(totalPrice.total_mrp_price, { showDecimals: true })}
@@ -1874,13 +1913,13 @@ export const Cart = () => {
                       <div className="djikewirwerwer">
                         <div className="inmoijjrwerwe mb-4">
                           <div className="jbdjnewnllr">
-                            <h4 className="mb-3">SELECT PAYMENT METHOD</h4>
+                            <h4 className="mb-0">SELECT PAYMENT METHOD</h4>
                           </div>
 
                           <div className="soidjwoejoirwer">
                             <div className="omweojuirhwerrr">
                               <div className="doiweuijrwerwer">
-                                <div className="radio-wrapper-26 mb-3">
+                                <div className="radio-wrapper-26 mb-3" style={{marginTop: "25px"}}>
                                   <label htmlFor="example-26sda">
                                     <div className="inputAndLeftText d-flex">
                                       <input
@@ -2025,7 +2064,7 @@ export const Cart = () => {
                               <div className="dfiwehrwerwe mb-5">
                                 <div className="form-check">
                                   <input className="form-check-input" type="checkbox" 
-                                    defaultValue="" id="flexCheckDefasadsult" 
+                                    defaultValue="" id="flexCheckDefasadsult"
                                     checked={agreeTerms}
                                     onChange={(e) => setAgreeTerms(e.target.checked)}
                                   />
@@ -2045,7 +2084,7 @@ export const Cart = () => {
                   <div className="col-lg-4">
                     <div className="diwebjrwert_right sfvswfrwerwr sticky-top">
                       {/* <h4 className="opsjdfohsij mb-0 pb-2">PRICE DETAILS</h4> */}
-                      <div className="sdegdsbhsdfgbnh mt-4 mb-4">
+                      <div className="sdegdsbhsdfgbnh mb-4">
                         <h4 className="opsjdfohsij mb-0 pb-2">PRICE DETAILS</h4>
                       </div>
 
@@ -2129,7 +2168,7 @@ export const Cart = () => {
                        
                           <tr>
                             <td>
-                              Shipping & Duties{" "}
+                              Shipping & Duties : 
                               {freeShipping && (
                                 <span className="sergvasdrg">(Coupon Applied)</span>
                               )}
@@ -2167,7 +2206,7 @@ export const Cart = () => {
                           ):null}
 
                           <tr>
-                            <td>Total Payable :</td>
+                            <td>After Discount </td>
                               <td style={{display: "flex", alignItems: "center", justifyContent: "end"}}>
                                   {/* <span style={{ textDecoration: "line-through", color: "#999" }}>
                                     {formatPrice(totalPrice.total_mrp_price, { showDecimals: true })}
@@ -2219,7 +2258,7 @@ export const Cart = () => {
                       </span>
                     </div>
 
-                    {/* <div className="dweoihrwerwer aiksndjhugwerwerw d-flex align-items-center justify-content-between p-2">
+                    <div className="dweoihrwerwer aiksndjhugwerwerw d-flex align-items-center justify-content-between p-2">
                       <div className="doewjirwerwer">
                         <input type="checkbox" id="gft" className="m-1" checked={isGift}
                             onChange={(e) => setIsGift(e.target.checked)}/>
@@ -2228,7 +2267,7 @@ export const Cart = () => {
                       </div>
 
                       <span>Free Gift Wrap</span>
-                    </div> */}
+                    </div>
 
                     <div className="oiasmdjweijrwerwer py-2 mb-4 d-flex align-items-center justify-content-between zsdvfdesdeadfrer mt-3">
                       <label className="mb-0">Total Payable</label>

@@ -66,6 +66,7 @@
   color: var(--pink-main-color) !important;
 }
 
+
 .cart-wrapper .sdegdsbhsdfgbnh h4{
   background-color: #f5f5f5;
   padding: 0.8rem;
@@ -390,8 +391,16 @@
 }
 
 label.cdsfedere{
-  font-size: 0.8rem;
-  color: var(--grey-border-color);
+  font-size: 0.9rem;
+  /* color: var(--grey-border-color); */
+  color: var(--pink-main-color);
+  font-weight: 500;
+}
+
+.jbdjnewnllr{
+  background-color: #f5f5f5;
+  padding: 0.65rem;
+  border: 1px solid #f5f5f5 !important;
 }
 
 p.sfvsedweqqwe{
@@ -406,16 +415,17 @@ p.sfvsedweqqwe{
 
 .fihweijrwer a:first-child{
   color: var(--pink-main-color);
+  font-weight: 500;
 }
 
 .fihweijrwer a:last-child{
   color: red;
 }
 
-.diwehirwerwer{
+/* .diwehirwerwer{
   border-bottom: 1px solid rgba(132, 13, 86, 0.2);
   box-shadow: rgba(132, 13, 86, 0.1) 0px 4px 6px -1px, rgba(132, 13, 86, 0.06) 0px 2px 4px -1px;
-}
+} */
 
 .ojasdaskkse{
   border: 2px solid var(--pink-main-color);
@@ -424,7 +434,8 @@ p.sfvsedweqqwe{
 
 .sddgeweeeerr h6{
   font-size: 0.9rem;
-  color: var(--text-lighter-gray-color);
+  /* color: var(--text-lighter-gray-color); */
+  color: #616161;
 }
 
 .kasndkhasd{

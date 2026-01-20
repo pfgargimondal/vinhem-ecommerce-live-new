@@ -159,8 +159,10 @@
 }
 
 .aksbdjbererre button:first-child{
-  background: transparent;
-  color: var(--black-background-color);
+  /* background: transparent;
+  color: var(--black-background-color); */
+  background: var(--black-background-color) !important;
+  color: #fff;
 }
 
 .aksbdjbererre button:first-child:hover{

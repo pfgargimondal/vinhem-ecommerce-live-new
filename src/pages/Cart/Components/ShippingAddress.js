@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export const ShippingAddress = ({ address, onEdit, onRemove }) => (
     <>
-    <div className="delojowerer py-3 px-4 d-flex align-items-center ">
+    <div className="delojowerer py-3 px-4 d-flex align-items-center d-none">
     <i class="bi me-3 bi-exclamation-triangle-fill"></i>
     <p className="mb-0">A valid Indian mobile is required for seamless delivery. 
         Before delivery of this order, you will get a one-time passowrd on {address?.shippingNumber}
