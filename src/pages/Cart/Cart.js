@@ -895,8 +895,8 @@ export const Cart = () => {
               <div className="row justify-content-between">
                 <div className="col-lg-8">
                   <div className="diwebjrwert_left">
-                    <div className="odnwejirhwerwer py-2 px-3 d-flex">
-                      <h4 className="mb-1 mt-2" style={{borderRight:"3px solid #616161", paddingRight: "11px"}}>YOUR SHOPPING CART</h4>
+                    <div className="odnwejirhwerwer py-0 px-3 d-flex" style={{marginTop: "0.1rem"}}>
+                      <h4 className="mb-1 mt-2" style={{paddingTop: "2px"}}>YOUR SHOPPING CART &nbsp;|&nbsp;</h4>
                       <p className="mb-1 mt-1 d-flex align-items-center" style={{paddingLeft: "11px"}}>
                         To get additional offers on your order or to know more
                         <a
@@ -904,7 +904,7 @@ export const Cart = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <button className="btn ms-2 py-2 btn-main">
+                            <button className="btn ms-2 btn-main">
                               <i class="bi me-1 bi-whatsapp"></i> Chat With Us
                             </button>
                         </a>
@@ -939,19 +939,25 @@ export const Cart = () => {
                                       {cartItemsVal.belongsTo === 'filter_size' ? (
                                         <>
                                           <span className="old-price">
-                                            {/* <i class="bi bi-currency-rupee"></i> */}
                                             {formatPrice(cartItemsVal.mrp_price, { showDecimals: true })}
                                           </span>&nbsp;
                                           <span>
-                                            {/* <i class="bi bi-currency-rupee"></i> */}
                                             {formatPrice(cartItemsVal.selling_price, { showDecimals: true })}
+                                          </span>
+                                        </>
+                                      ) : cartItemsVal.belongsTo === 'plus_sizes' ? (
+                                        <>
+                                          <span>
+                                            {formatPrice(cartItemsVal.plus_sizes_charges, { showDecimals: true })}
                                           </span>
                                         </>
                                       ) : (
                                         <>
+                                          <span className="old-price">
+                                            {formatPrice(cartItemsVal.mrp_price, { showDecimals: true })}
+                                          </span>&nbsp;
                                           <span>
-                                            {/* <i class="bi bi-currency-rupee"></i> */}
-                                            {formatPrice(cartItemsVal.plus_sizes_charges, { showDecimals: true })}
+                                            {formatPrice(cartItemsVal.selling_price, { showDecimals: true })}
                                           </span>
                                         </>
                                       )}
@@ -970,13 +976,15 @@ export const Cart = () => {
                                 <div className="dnweghbjewrwer">
                                   <p className="mb-1">ITEM ID: {cartItemsVal.item_id}</p>
                                   <p className="mb-1">Colour: {cartItemsVal.color}</p>
-                                  <p className="mb-1">Stitching Option : {cartItemsVal.actual_stitch_option}
-                                    {cartItemsVal.size === '' && ` | Qty : ${cartItemsVal.quantity}`}
-                                  </p>
+                                  {cartItemsVal.actual_stitch_option !== 'Ready To Wear' && (
+                                    <p className="mb-1">
+                                      Stitching Option : {cartItemsVal.actual_stitch_option}
+                                      {cartItemsVal.size === '' && ` | Qty : ${cartItemsVal.quantity}`}
+                                    </p>
+                                  )} 
                                   {cartItemsVal.size !== '' && (
                                     <p className="mb-1">Size : {cartItemsVal.size} | Qty : {cartItemsVal.quantity}</p>
                                   )}
-
                                   {(
                                     cartItemsVal.turban_selected === "1" ||
                                     cartItemsVal.mojri_selected === "1" ||
@@ -1084,9 +1092,8 @@ export const Cart = () => {
                                         <p className="mb-0">Move to Wishlist</p>
                                       </div>
 
-                                      <div className="doijerewr d-flex align-items-center ps-2">
-                                        <i className="bi me-1 bi-trash3" onClick={() => handleRemoveItem(cartItemsVal.id)}></i>
-
+                                      <div className="doijerewr d-flex align-items-center ps-2" onClick={() => handleRemoveItem(cartItemsVal.id)}>
+                                        <i className="bi me-1 bi-trash3"></i>
                                         <p className="mb-0">Remove</p>
                                       </div>
                                     </div>
