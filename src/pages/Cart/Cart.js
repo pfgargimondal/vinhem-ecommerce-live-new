@@ -50,6 +50,7 @@ export const Cart = () => {
   const [hideDBAddress, setHideDBAddress] = useState(false);
   const [shippingCharge, setShippingCharge] = useState(0);
   const [isGift, setIsGift] = useState(false);
+  const [pymntSmmryDrpdwn, setPymntSmmryDrpdwn] = useState(true);
 
   // console.log(localStorage.getItem("selectedCurrency"), 'selectedCurrency');
 
@@ -419,7 +420,9 @@ export const Cart = () => {
     let newValue = value;
 
     if (name === "shipping_mobile_number") {
-      newValue = value.replace(/[^0-9]/g, "");
+      newValue = value.replace(/\D/g, "");
+
+      newValue = newValue.slice(0, 10);
     }
 
     if (name === "shipping_pincode") {
@@ -1816,88 +1819,110 @@ export const Cart = () => {
                         <div className="d-flex align-items-center justify-content-between">
                           <p className="mb-0">Order Details - <span>{cartItems?.length} Item(s)</span></p>
 
-                          <i class="bi bi-chevron-up"></i>
+                          <i style={{cursor: "pointer"}} className={pymntSmmryDrpdwn ? "bi bi-chevron-up" : "bi bi-chevron-down"} onClick={() => setPymntSmmryDrpdwn(prev => !prev)}></i>
                         </div>
 
-                        <div className="dowejroihwrt_wrapper mt-3">
+                        {pymntSmmryDrpdwn && (
+                          <div className="dowejroihwrt_wrapper">
                           {cartItems?.length === 0 && <p>No items in cart</p>}
-                          {cartItems?.map((cartItemsVal) => (
-                            <div className="dfgjhbdfg sdfaedaeeewwqwee position-relative p-3 mb-3">
-                              <div className="row">
-                                <div className="col-lg-3">
-                                  <div className="donweihrwewer">
-                                    <Link to={`/products/${cartItemsVal.slug}`}>
-                                      <img
-                                        src={cartItemsVal.encoded_image_url_1}
-                                        alt={cartItemsVal.product_name}
-                                      />
-                                    </Link>
-                                  </div>
-                                </div>
-
-                                <div className="col-lg-9 ps-1">
-                                  <div className="dowehriwerwer sdvwdewrwerwere">
-                                    <div className="dknwekhwe">
-                                      <div className="dokwejlkpewr d-flex flex-wrap align-items-center justify-content-between">
-                                        <div className="d-flex align-items-center justify-content-between w-100 mb-1">
-                                          <h6 className="mb-0">{cartItemsVal.designer}</h6>
-
-                                          <div className="diejwijrwer">
-                                            <i
-                                              onClick={() =>
-                                                toggleWishlist(
-                                                  cartItemsVal.products_table_id
-                                                )
-                                              }
-                                              className={
-                                                wishlistIds.includes(
-                                                  cartItemsVal.products_table_id
-                                                )
-                                                  ? "bi bi-heart-fill"
-                                                  : "bi me-2 bi-heart"
-                                              }
-                                              style={{ cursor: "pointer" }}
-                                            ></i>
-                                            <i class="bi bi-trash3" onClick={() => handleRemoveItem(cartItemsVal.id)}></i>
-                                          </div>
-                                        </div>
-
-                                        <p className="mb-0">
-                                          {cartItemsVal.product_name}
-                                        </p>
-                                      </div>
+                            {cartItems?.map((cartItemsVal) => (
+                              <div className="dfgjhbdfg sdfaedaeeewwqwee position-relative p-3 mb-3">
+                                <div className="d-flex gap-2">
+                                  <div className="dasferqrrqqq">
+                                    <div className="donweihrwewer">
+                                      <Link to={`/products/${cartItemsVal.slug}`}>
+                                        <img
+                                          src={cartItemsVal.encoded_image_url_1}
+                                          alt={cartItemsVal.product_name}
+                                        />
+                                      </Link>
                                     </div>
+                                  </div>
 
-                                    <div className="dnweghbjewrwer">                                      
-                                      <p className="mb-0">Colour: {cartItemsVal.color} | {cartItemsVal.stitch_option === 'customFit' ? (
-                                            <>
-                                              Size: Custom Fit
-                                            </>
-                                          ) : cartItemsVal.size === '' ? (
-                                            <>
-                                              Stitching Option : {cartItemsVal.actual_stitch_option}
-                                            </>
-                                          ) : (
-                                            <>
-                                              {cartItemsVal.size}
-                                            </>
-                                          )}</p>
+                                  <div className="esrwerwrgtwwrwre ps-1">
+                                    <div className="dowehriwerwer sdvwdewrwerwere">
+                                      <div className="dknwekhwe">
+                                        <div className="dokwejlkpewr d-flex flex-wrap align-items-center justify-content-between">
+                                          <div className="d-flex align-items-center justify-content-between w-100 mb-1">
+                                            <h6 className="mb-0">{cartItemsVal.designer}</h6>
 
-                                      <p className="mb-1">Price: 
-                                        <span>
-                                          {/* <i class="bi bi-currency-rupee"></i> */}
-                                          {formatPrice(cartItemsVal.actual_price, { showDecimals: true })}
-                                        </span>
-                                      </p>
+                                            <div className="diejwijrwer">
+                                              <i
+                                                onClick={() =>
+                                                  toggleWishlist(
+                                                    cartItemsVal.products_table_id
+                                                  )
+                                                }
+                                                className={
+                                                  wishlistIds.includes(
+                                                    cartItemsVal.products_table_id
+                                                  )
+                                                    ? "bi bi-heart-fill"
+                                                    : "bi me-2 bi-heart"
+                                                }
+                                                style={{ cursor: "pointer" }}
+                                              ></i>
+                                              <i class="bi bi-trash3" onClick={() => handleRemoveItem(cartItemsVal.id)}></i>
+                                            </div>
+                                          </div>
 
-                                      <h6 className="sadcadaededee mb-0"><i class="bi me-1 bi-truck"></i> {cartItemsVal.non_returnable}</h6>
+                                          <p className="mb-0">
+                                            {cartItemsVal.product_name}
+                                          </p>
+                                        </div>
+                                      </div>
+
+                                      <div className="dnweghbjewrwer">                                      
+                                        <p className="mb-0">Colour: {cartItemsVal.color} | {cartItemsVal.stitch_option === 'customFit' ? (
+                                              <>
+                                                Size: Custom Fit
+                                              </>
+                                            ) : cartItemsVal.size === '' ? (
+                                              <>
+                                                Stitching Option : {cartItemsVal.actual_stitch_option}
+                                              </>
+                                            ) : (
+                                              <>
+                                                {cartItemsVal.size}
+                                              </>
+                                            )}</p>
+
+                                        <p className="mb-1">Price: 
+                                          <span>
+                                            {/* <i class="bi bi-currency-rupee"></i> */}
+                                            {formatPrice(cartItemsVal.actual_price, { showDecimals: true })}
+                                          </span>
+                                        </p>
+
+                                        <h6 className="sadcadaededee mb-0"><i class="bi me-1 bi-truck"></i> {cartItemsVal.non_returnable}</h6>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          ))}
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="diwenfrjikwehirwerwer p-3 my-3">
+                        <p>Save up to 18% with business pricing and GST input tax credit.</p>
+
+                        <div className="adosejoifrjewrwer row">
+                          <div className="col-lg-9">
+                            <input type="text" className="form-control" placeholder="Enter Your GST Number*" />
+                          </div>
+
+                          <div className="col-lg-3 ps-0">
+                            <button className="btn w-100 scfsefweqwe btn-main">Submit</button>
+                          </div>
                         </div>
+                      </div>
+
+                      <div className="doriwer d-flex align-items-center">
+                        <img src="./images/safgder.png" className="me-2" alt="" />
+
+                        <p className="mb-0">Safe and Secure Payments. Easy returns. 100% Authentic products.</p>
                       </div>
                     </div>
                   </div>
@@ -2342,88 +2367,89 @@ export const Cart = () => {
                         <div className="d-flex align-items-center justify-content-between">
                           <p className="mb-0">Order Details - <span>{cartItems?.length} Item(s)</span></p>
 
-                          <i class="bi bi-chevron-up"></i>
+                          <i style={{cursor: "pointer"}} className={pymntSmmryDrpdwn ? "bi bi-chevron-up" : "bi bi-chevron-down"} onClick={() => setPymntSmmryDrpdwn(prev => !prev)}></i>
                         </div>
-
-                        <div className="dowejroihwrt_wrapper mt-3">
-                          {cartItems?.length === 0 && <p>No items in cart</p>}
-                          {cartItems?.map((cartItemsVal) => (
-                            <div className="dfgjhbdfg sdfaedaeeewwqwee position-relative p-3 mb-3">
-                              <div className="row">
-                                <div className="col-lg-3">
-                                  <div className="donweihrwewer">
-                                    <Link to={`/products/${cartItemsVal.slug}`}>
-                                      <img
-                                        src={cartItemsVal.encoded_image_url_1}
-                                        alt={cartItemsVal.product_name}
-                                      />
-                                    </Link>
-                                  </div>
-                                </div>
-
-                                <div className="col-lg-9 ps-1">
-                                  <div className="dowehriwerwer sdvwdewrwerwere">
-                                    <div className="dknwekhwe">
-                                      <div className="dokwejlkpewr d-flex flex-wrap align-items-center justify-content-between">
-                                        <div className="d-flex align-items-center justify-content-between w-100 mb-1">
-                                          <h6 className="mb-0">{cartItemsVal.designer}</h6>
-
-                                          <div className="diejwijrwer">
-                                            <i
-                                              onClick={() =>
-                                                toggleWishlist(
-                                                  cartItemsVal.products_table_id
-                                                )
-                                              }
-                                              className={
-                                                wishlistIds.includes(
-                                                  cartItemsVal.products_table_id
-                                                )
-                                                  ? "bi bi-heart-fill"
-                                                  : "bi me-2 bi-heart"
-                                              }
-                                              style={{ cursor: "pointer" }}
-                                            ></i>
-                                            <i class="bi bi-trash3" onClick={() => handleRemoveItem(cartItemsVal.id)}></i>
-                                          </div>
-                                        </div>
-
-                                        <p className="mb-0">
-                                          {cartItemsVal.product_name}
-                                        </p>
-                                      </div>
+                        {pymntSmmryDrpdwn && (
+                          <div className="dowejroihwrt_wrapper mt-3">
+                            {cartItems?.length === 0 && <p>No items in cart</p>}
+                            {cartItems?.map((cartItemsVal) => (
+                              <div className="dfgjhbdfg sdfaedaeeewwqwee position-relative p-3 mb-3">
+                                <div className="row">
+                                  <div className="col-lg-3">
+                                    <div className="donweihrwewer">
+                                      <Link to={`/products/${cartItemsVal.slug}`}>
+                                        <img
+                                          src={cartItemsVal.encoded_image_url_1}
+                                          alt={cartItemsVal.product_name}
+                                        />
+                                      </Link>
                                     </div>
+                                  </div>
 
-                                    <div className="dnweghbjewrwer">                                      
-                                      <p className="mb-0">Colour: {cartItemsVal.color} | {cartItemsVal.stitch_option === 'customFit' ? (
-                                            <>
-                                              Size: Custom Fit
-                                            </>
-                                          ) : cartItemsVal.size === '' ? (
-                                            <>
-                                              Stitching Option : {cartItemsVal.actual_stitch_option}
-                                            </>
-                                          ) : (
-                                            <>
-                                              {cartItemsVal.size}
-                                            </>
-                                          )}</p>
+                                  <div className="col-lg-9 ps-1">
+                                    <div className="dowehriwerwer sdvwdewrwerwere">
+                                      <div className="dknwekhwe">
+                                        <div className="dokwejlkpewr d-flex flex-wrap align-items-center justify-content-between">
+                                          <div className="d-flex align-items-center justify-content-between w-100 mb-1">
+                                            <h6 className="mb-0">{cartItemsVal.designer}</h6>
 
-                                      <p className="mb-1">Price: 
-                                        <span>
-                                          {/* <i class="bi bi-currency-rupee"></i> */}
-                                          {formatPrice(cartItemsVal.actual_price, { showDecimals: true })}
-                                        </span>
-                                      </p>
+                                            <div className="diejwijrwer">
+                                              <i
+                                                onClick={() =>
+                                                  toggleWishlist(
+                                                    cartItemsVal.products_table_id
+                                                  )
+                                                }
+                                                className={
+                                                  wishlistIds.includes(
+                                                    cartItemsVal.products_table_id
+                                                  )
+                                                    ? "bi bi-heart-fill"
+                                                    : "bi me-2 bi-heart"
+                                                }
+                                                style={{ cursor: "pointer" }}
+                                              ></i>
+                                              <i class="bi bi-trash3" onClick={() => handleRemoveItem(cartItemsVal.id)}></i>
+                                            </div>
+                                          </div>
 
-                                      <h6 className="sadcadaededee mb-0"><i class="bi me-1 bi-truck"></i> {cartItemsVal.non_returnable}</h6>
+                                          <p className="mb-0">
+                                            {cartItemsVal.product_name}
+                                          </p>
+                                        </div>
+                                      </div>
+
+                                      <div className="dnweghbjewrwer">                                      
+                                        <p className="mb-0">Colour: {cartItemsVal.color} | {cartItemsVal.stitch_option === 'customFit' ? (
+                                              <>
+                                                Size: Custom Fit
+                                              </>
+                                            ) : cartItemsVal.size === '' ? (
+                                              <>
+                                                Stitching Option : {cartItemsVal.actual_stitch_option}
+                                              </>
+                                            ) : (
+                                              <>
+                                                {cartItemsVal.size}
+                                              </>
+                                            )}</p>
+
+                                        <p className="mb-1">Price: 
+                                          <span>
+                                            {/* <i class="bi bi-currency-rupee"></i> */}
+                                            {formatPrice(cartItemsVal.actual_price, { showDecimals: true })}
+                                          </span>
+                                        </p>
+
+                                        <h6 className="sadcadaededee mb-0"><i class="bi me-1 bi-truck"></i> {cartItemsVal.non_returnable}</h6>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          ))}
-                        </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

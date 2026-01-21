@@ -484,7 +484,7 @@ export const MeasurementForm = ({
               : "customize-modal overflow-hidden position-fixed bg-white"
           }
         >
-          <div className="okdjeiwirwejrwerwer bg-white px-4 pt-4 mb-3">
+          <div className="okdjeiwirwejrwerwer size-guide-modal-header d-flex align-items-center justify-content-between px-4 py-3">
             <h4>Customize Options</h4>
 
             <i
@@ -511,7 +511,7 @@ export const MeasurementForm = ({
                       />
                     </div>
 
-                    <p>
+                    <p className="text-align-center">
                       {productDetails?.data?.product_name} -{" "}
                       {productDetails?.data?.PID}
                     </p>

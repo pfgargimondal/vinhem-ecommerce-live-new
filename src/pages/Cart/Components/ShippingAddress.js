@@ -7,7 +7,7 @@ export const ShippingAddress = ({ address, onEdit, onRemove }) => (
     <p className="mb-0">A valid mobile no is required for seamless delivery. 
         Before delivery of this order, you will get a one-time passowrd on {address?.shippingNumber}
         <span className="ms-1" onClick={onEdit}>Edit</span></p>
-    </div>
+    </div> 
 
     <div className="ojasdaskkse p-4 pb-0">
         <div className="sddgeweeeerr d-flex mb-3 align-items-center justify-content-between">

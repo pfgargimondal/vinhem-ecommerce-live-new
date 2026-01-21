@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation, Mousewheel } from "swiper/modules";
@@ -314,6 +314,7 @@ export const ProductDetail = () => {
     );
   };
 
+  const normalizeSize = (size = "") => size.replace(/\s+/g, "");
   const [selectedSize, setSelectedSize] = useState("");
   const [availableQty, setAvailableQty] = useState(0);
   const [selectedQuantity, setSelectedQuantity] = useState(1);
@@ -326,71 +327,22 @@ export const ProductDetail = () => {
   const [isMojriChecked, setIsMojriChecked] = useState(false);
   const [isStoleChecked, setIsStoleChecked] = useState(false);
 
-  useEffect(() => {
-    if (productDetails?.data?.mto_quantity) {
-      setAvailableQty(productDetails.data.mto_quantity);
-    }
-  }, [productDetails]);
+  const isOutOfStock = availableQty < 1 || selectedQuantity < 1;
+
+  // useEffect(() => {
+  //   if (productDetails?.data?.mto_quantity) {
+  //     setAvailableQty(productDetails.data.mto_quantity);
+  //   }
+  // }, [productDetails]);
 
   // ------------------------------
   // Handle size change
   // ------------------------------
   const handleSizeChange = (e) => {
-    const newSize = e.target.value.split(" - ").join("-");
-    setSelectedSize(e.target.value);
+    const normalizedSize = normalizeSize(e.target.value);
 
-    const allSizes = productDetails?.data?.product_allSize || [];
-    const base = productDetails?.data || {};
-
-    // Find selected row from inventory
-    const selectedInventory = allSizes.find(
-      (item) => item.filter_size === newSize || item.plus_sizes === newSize
-    );
-
-    // ----------------------------
-    // ✅ Quantity Logic
-    // ----------------------------
-    let newQty = 0;
-
-    if (selectedInventory) {
-      // If selected is filter size
-      if (selectedInventory.filter_size === newSize) {
-        newQty = Number(selectedInventory.mto_quantity || 0);
-      }
-      // If selected is plus size
-      else if (selectedInventory.plus_sizes === newSize) {
-        newQty = Number(selectedInventory.plus_size_quantity || 0);
-      }
-    } else {
-      // No Inventory → fallback to product default
-      if (allSizes.some((item) => item.filter_size === newSize)) {
-        newQty = Number(base.mto_quantity || 0);
-      } else if (allSizes.some((item) => item.plus_sizes === newSize)) {
-        newQty = Number(base.plus_size_quantity || 0);
-      }
-    }
-
-    setAvailableQty(newQty);
-    if (selectedQuantity > newQty) setSelectedQuantity(1);
-
-    // ----------------------------
-    // ✅ Price Logic
-    // ----------------------------
-    const sellingPrice = parseFloat(
-      selectedInventory?.selling_price || base.selling_price || 0
-    );
-
-    const plusCharge = parseFloat(selectedInventory?.plus_sizes_charges || 0);
-
-    let finalPrice = 0;
-
-    if (selectedInventory?.plus_sizes === newSize && plusCharge > 0) {
-      finalPrice = plusCharge;
-    } else {
-      finalPrice = sellingPrice;
-    }
-    setSizeAccordingPrice(finalPrice);
-    setSelectedPrice(finalPrice);
+    setSelectedSize(normalizedSize);
+    updateQtyAndPriceBySize(normalizedSize);
   };
 
   const handleQuantitySelect = (qty) => {
@@ -434,6 +386,64 @@ export const ProductDetail = () => {
 
     setFinalPrice(total);
   };
+
+  const updateQtyAndPriceBySize = useCallback(
+    (normalizedSize) => {
+      const allSizes = productDetails?.data?.product_allSize || [];
+      const base = productDetails?.data || {};
+
+      const inventory = allSizes.find(
+        (item) =>
+          normalizeSize(item.filter_size) === normalizedSize ||
+          normalizeSize(item.plus_sizes) === normalizedSize
+      );
+
+      let qty = 0;
+
+      if (inventory) {
+        if (normalizeSize(inventory.filter_size) === normalizedSize) {
+          qty = Number(inventory.mto_quantity || 0);
+        }
+
+        if (normalizeSize(inventory.plus_sizes) === normalizedSize) {
+          qty = Number(inventory.plus_size_quantity || 0);
+        }
+      }
+
+      setAvailableQty(qty);
+      setSelectedQuantity(1);
+
+      const sellingPrice = parseFloat(
+        inventory?.selling_price || base.selling_price || 0
+      );
+
+      const plusCharge = parseFloat(inventory?.plus_sizes_charges || 0);
+
+      const final =
+        normalizeSize(inventory?.plus_sizes) === normalizedSize &&
+        plusCharge > 0
+          ? plusCharge
+          : sellingPrice;
+
+      setSelectedPrice(final);
+      setSizeAccordingPrice(final);
+    },
+    [productDetails]
+  );
+
+  useEffect(() => {
+    if (
+      productDetails?.data?.stitching_option === "Ready To Wear" &&
+      productDetails?.data?.product_allSize?.length > 0 &&
+      !selectedSize
+    ) {
+      const firstSize = productDetails.data.product_allSize[0].filter_size;
+      const normalized = normalizeSize(firstSize);
+
+      setSelectedSize(normalized);
+      updateQtyAndPriceBySize(normalized);
+    }
+  }, [productDetails, selectedSize, updateQtyAndPriceBySize]);
 
   // ------------------------------
   // Calculate total price dynamically
@@ -500,6 +510,11 @@ export const ProductDetail = () => {
         alert("Please select a size before adding to cart.");
         return;
       }
+    }
+
+    if (selectedQuantity < 1) {
+      toast.error("Product is out of stock.");
+      return;
     }
 
     // ✅ 2. Validate accessory sizes (if selected)
@@ -592,10 +607,19 @@ export const ProductDetail = () => {
   };
 
   const handleBuyNow = async () => {
+    if (selectedQuantity < 1) {
+      toast.error("Product is out of stock.");
+      return;
+    }
     const added = await handleAddToCart();
     if (added) {
       navigate("/cart");
     }
+  };
+
+  const isPlusSize = (size) => {
+    if (!size) return false;
+    return /^[2-9]XL|10XL$/i.test(size);
   };
 
   const [mssrmntSbmtConfrm, setMssrmntSbmtConfrm] = useState(false);
@@ -1139,7 +1163,7 @@ export const ProductDetail = () => {
                             {sizeAccordingPrice === 0 ? (formatPrice(productDetails?.data?.selling_price))
                             :(formatPrice(sizeAccordingPrice))
                             }
-                          </span>
+                          </span> 
 
                           <span className="gdfg55 d-flex align-items-center ms-2">
                             {/* <i class="bi bi-currency-rupee"></i> */}
@@ -1348,86 +1372,84 @@ export const ProductDetail = () => {
                               <div className="select-form-drpdwn weqwthyuytredfgw me-3">
                                 <div className="dgndfjgdf">
                                   <select
-                                    name="product_size"
-                                    id="product_size"
-                                    className="form-select"
-                                    onChange={handleSizeChange}
-                                    value={selectedSize}
-                                  >
-                                    <option value="">Select Size</option>
+                                      name="product_size"
+                                      id="product_size"
+                                      className="form-select"
+                                      onChange={handleSizeChange}
+                                      value={selectedSize}
+                                    >
+                                      <option value="">Select Size</option>
 
-                                    {(() => {
-                                      const sizeOrder = [
-                                        "XXS",
-                                        "XS",
-                                        "S",
-                                        "M",
-                                        "L",
-                                        "XL",
-                                        "2XL",
-                                        "3XL",
-                                        "4XL",
-                                        "5XL",
-                                        "6XL",
-                                        "7XL",
-                                        "8XL",
-                                        "9XL",
-                                        "10XL",
-                                      ];
+                                      {(() => {
+                                        const sizeOrder = [
+                                          "XXS",
+                                          "XS",
+                                          "S",
+                                          "M",
+                                          "L",
+                                          "XL",
+                                          "2XL",
+                                          "3XL",
+                                          "4XL",
+                                          "5XL",
+                                          "6XL",
+                                          "7XL",
+                                          "8XL",
+                                          "9XL",
+                                          "10XL",
+                                        ];
 
-                                      // Flatten sizes (filter_size + plus_sizes)
-                                      const flatSizes =
-                                        productDetails?.data?.product_allSize?.flatMap(
-                                          (item) => {
-                                            const arr = [item.filter_size];
-                                            if (
-                                              item.plus_sizes &&
-                                              item.plus_sizes !== "0"
-                                            ) {
+                                        const flatSizes =
+                                          productDetails?.data?.product_allSize?.flatMap((item) => {
+                                            const arr = [];
+                                            if (item.filter_size) arr.push(item.filter_size);
+                                            if (item.plus_sizes && item.plus_sizes !== "0") {
                                               arr.push(item.plus_sizes);
                                             }
                                             return arr;
-                                          }
-                                        ) || [];
+                                          }) || [];
 
-                                      const uniqueSizes = [
-                                        ...new Set(flatSizes),
-                                      ];
+                                        const uniqueSizes = [...new Set(flatSizes)];
 
-                                      // Sort sizes using prefix before "-"
-                                      const sorted = uniqueSizes.sort(
-                                        (a, b) => {
+                                        const sortedSizes = uniqueSizes.sort((a, b) => {
                                           const prefixA = a.split("-")[0];
                                           const prefixB = b.split("-")[0];
+                                          return sizeOrder.indexOf(prefixA) - sizeOrder.indexOf(prefixB);
+                                        });
+
+                                        return sortedSizes.map((size, index) => {
+                                          const [prefix, value] = size.split("-");
+
                                           return (
-                                            sizeOrder.indexOf(prefixA) -
-                                            sizeOrder.indexOf(prefixB)
+                                            <option key={index} value={size}>
+                                              {`${prefix} - ${value}`}
+                                            </option>
                                           );
-                                        }
-                                      );
+                                        });
+                                      })()}
+                                    </select>
 
-                                      const formattedSizes = sorted.map(
-                                        (size) => {
-                                          const [prefix, value] =
-                                            size.split("-");
-                                          return `${prefix} - ${value}`;
-                                        }
-                                      );
+                                    {(() => {
+                                      const data = productDetails?.data || {};
 
-                                      // Return sorted options
-                                      return formattedSizes.map(
-                                        (size, index) => (
-                                          <option key={index} value={size}>
-                                            {size}
-                                          </option>
-                                        )
-                                      );
+                                      const plusQty = Number(data.plus_size_quantity || 0);
+                                      const rtsQty  = Number(data.rts_quantity || 0);
+                                      const mtoQty  = Number(data.mto_quantity || 0);
+
+                                      let availablesdgsfdQty = 0;
+
+                                      if (isPlusSize(selectedSize)) {
+                                        // ✅ PLUS SIZE → only plus stock matters
+                                        availablesdgsfdQty = plusQty;
+                                      } else {
+                                        // ✅ Normal size → RTS first, then MTO
+                                        availablesdgsfdQty = rtsQty > 0 ? rtsQty : mtoQty;
+                                      }
+
+                                      return availablesdgsfdQty > 0 && availablesdgsfdQty <= 5 ? (
+                                        <p className="mt-0">Only few left</p>
+                                      ) : null;
                                     })()}
-                                  </select>
-
-                                  {productDetails?.data?.mto_quantity <= 5 && (
-                                    <p className="mt-2">Only few left</p>
-                                  )}
                                 </div>
                               </div>
 
@@ -1464,16 +1486,19 @@ export const ProductDetail = () => {
                             }
                             disabled={!availableQty}
                             className="form-select weqwthyuytredfgw select-form-drpdwn"
-                          >
+                          > 
                             {availableQty > 0 ? (
-                              Array.from({ length: availableQty }, (_, i) => (
-                                <option key={i + 1} value={i + 1}>
-                                  {i + 1}
-                                </option>
-                              ))
-                            ) : (
-                              <option value="">Select Size First</option>
-                            )}
+                                Array.from(
+                                  { length: Math.min(availableQty, 5) },
+                                  (_, i) => i + 1
+                                ).map((qty) => (
+                                  <option key={qty} value={qty}>
+                                    {qty}
+                                  </option>
+                                ))
+                              ) : (
+                                <option value="">Out of Stock</option>
+                              )}
                           </select>
                         </div>
                       </div>
@@ -1539,7 +1564,19 @@ export const ProductDetail = () => {
                                     <option selected value="">
                                       Select size
                                     </option>
-                                    <option value="1">1</option>
+                                    <option value="20">20</option>
+                                    <option value="20.5">20.5</option>
+                                    <option value="21">21</option>
+                                    <option value="21.5">21.5</option>
+                                    <option value="22">22</option>
+                                    <option value="22.5">22.5</option>
+                                    <option value="23">23</option>
+                                    <option value="23.5">23.5</option>
+                                    <option value="24">24</option>
+                                    <option value="24">24.5</option>
+                                    <option value="25">25</option>
+                                    <option value="25.5">25.5</option>
+                                    <option value="26">26</option>
                                   </select>
                                 </div>
 
@@ -1673,164 +1710,46 @@ export const ProductDetail = () => {
                                     <option value="" selected>
                                       Select Size
                                     </option>
-                                    <option
-                                      value="-- U.S. &amp; Canada ----"
-                                      disabled="disabled"
-                                      class="disableDdlItems"
-                                    >
-                                      -- U.S. &amp; Canada ----
+
+                                    {/* INDIA / UK */}
+                                    <option disabled className="disableDdlItems">
+                                      -- INDIA / UK --
                                     </option>
-                                    <option value="US Size 7.5">
-                                      US Size 7.5
+                                    {[4,5,6,7,8,9,10,11,12,13].map(size => (
+                                      <option key={`IN/UK-${size}`} value={`IN/UK ${size}`}>
+                                        IN / UK Size {size}
+                                      </option>
+                                    ))}
+
+                                    {/* US & CANADA */}
+                                    <option disabled className="disableDdlItems">
+                                      -- US & Canada --
                                     </option>
-                                    <option value="US Size 8.5">
-                                      US Size 8.5
+                                    {[5,6,7,8,9,10,11,12,13,14].map(size => (
+                                      <option key={`US-canada-${size}`} value={`US-Canada ${size}`}>
+                                        US & Canada Size {size}
+                                      </option>
+                                    ))}
+
+                                    {/* EURO */}
+                                    <option disabled className="disableDdlItems">
+                                      -- EURO --
                                     </option>
-                                    <option value="US Size 9.5">
-                                      US Size 9.5
+                                    {[38,39,40,41,42,43,44,45,46,47].map(size => (
+                                      <option key={`EU-${size}`} value={`EU ${size}`}>
+                                        EURO Size {size}
+                                      </option>
+                                    ))}
+
+                                    {/* AUSTRALIA */}
+                                    <option disabled className="disableDdlItems">
+                                      -- AUSTRALIA --
                                     </option>
-                                    <option value="US Size 10.0">
-                                      US Size 10.0
-                                    </option>
-                                    <option value="US Size 10.5">
-                                      US Size 10.5
-                                    </option>
-                                    <option value="US Size 12.0">
-                                      US Size 12.0
-                                    </option>
-                                    <option value="US Size 13.0">
-                                      US Size 13.0
-                                    </option>
-                                    <option value="US Size 14.0">
-                                      US Size 14.0
-                                    </option>
-                                    <option
-                                      value="-- U.K. ----"
-                                      disabled="disabled"
-                                      class="disableDdlItems"
-                                    >
-                                      -- U.K. ----
-                                    </option>
-                                    <option value="UK Size 5.0">
-                                      UK Size 5.0
-                                    </option>
-                                    <option value="UK Size 6.0">
-                                      UK Size 6.0
-                                    </option>
-                                    <option value="UK Size 7.0">
-                                      UK Size 7.0
-                                    </option>
-                                    <option value="UK Size 7.5">
-                                      UK Size 7.5
-                                    </option>
-                                    <option value="UK Size 8.0">
-                                      UK Size 8.0
-                                    </option>
-                                    <option value="UK Size 9.5">
-                                      UK Size 9.5
-                                    </option>
-                                    <option value="UK Size 10.5">
-                                      UK Size 10.5
-                                    </option>
-                                    <option value="UK Size 11.5">
-                                      UK Size 11.5
-                                    </option>
-                                    <option
-                                      value="-- Europe ----"
-                                      disabled="disabled"
-                                      class="disableDdlItems"
-                                    >
-                                      -- Europe ----
-                                    </option>
-                                    <option value="Euro Size 38">
-                                      Euro Size 38
-                                    </option>
-                                    <option value="Euro Size 39">
-                                      Euro Size 39
-                                    </option>
-                                    <option value="Euro Size 41">
-                                      Euro Size 41
-                                    </option>
-                                    <option value="Euro Size  42">
-                                      Euro Size 42
-                                    </option>
-                                    <option value="Euro Size  43">
-                                      Euro Size 43
-                                    </option>
-                                    <option value="Euro Size  43">
-                                      Euro Size 43
-                                    </option>
-                                    <option value="Euro Size  44">
-                                      Euro Size 44
-                                    </option>
-                                    <option value="Euro Size  45">
-                                      Euro Size 45
-                                    </option>
-                                    <option value="Euro Size  46.5">
-                                      Euro Size 46.5
-                                    </option>
-                                    <option
-                                      value="-- India ----"
-                                      disabled="disabled"
-                                      class="disableDdlItems"
-                                    >
-                                      -- India ----
-                                    </option>
-                                    <option value="IN Size 5.0">
-                                      IN Size 5.0
-                                    </option>
-                                    <option value="IN Size 6.0">
-                                      IN Size 6.0
-                                    </option>
-                                    <option value="IN Size 7.0">
-                                      IN Size 7.0
-                                    </option>
-                                    <option value="IN Size 7.5">
-                                      IN Size 7.5
-                                    </option>
-                                    <option value="IN Size 8.0">
-                                      IN Size 8.0
-                                    </option>
-                                    <option value="IN Size 9.5">
-                                      IN Size 9.5
-                                    </option>
-                                    <option value="IN Size 10.5">
-                                      IN Size 10.5
-                                    </option>
-                                    <option value="IN Size 11.5">
-                                      IN Size 11.5
-                                    </option>
-                                    <option
-                                      value="-- Australia ----"
-                                      disabled="disabled"
-                                      class="disableDdlItems"
-                                    >
-                                      -- Australia ----
-                                    </option>
-                                    <option value="AU Size 6.0">
-                                      AU Size 6.0
-                                    </option>
-                                    <option value="AU Size 7.0">
-                                      AU Size 7.0
-                                    </option>
-                                    <option value="AU Size 8.0">
-                                      AU Size 8.0
-                                    </option>
-                                    <option value="AU Size 8.5">
-                                      AU Size 8.5
-                                    </option>
-                                    <option value="AU Size 9.0">
-                                      AU Size 9.0
-                                    </option>
-                                    <option value="AU Size 10.5">
-                                      AU Size 10.5
-                                    </option>
-                                    <option value="AU Size 11.5">
-                                      AU Size 11.5
-                                    </option>
-                                    <option value="AU Size 12.5">
-                                      AU Size 12.5
-                                    </option>
+                                    {[4,5,6,7,8,9,10,11,12,13].map(size => (
+                                      <option key={`AUS-${size}`} value={`AUS ${size}`}>
+                                        AUS Size {size}
+                                      </option>
+                                    ))}
                                   </select>
                                 </div>
 
@@ -1868,17 +1787,18 @@ export const ProductDetail = () => {
                               <button
                                 className="btn btn-main px-3 me-4"
                                 onClick={handleAddToCart}
-                                disabled={cartLoading}
+                                disabled={cartLoading || isOutOfStock}
                               >
-                                <i class="bi bi-bag me-1"></i>{" "}
-                                {cartLoading ? "Adding..." : "Add to Cart"}
+                                <i className="bi bi-bag me-1"></i>
+                                {isOutOfStock ? "Out of Stock" : "Add to Cart"}
                               </button>
-
                               <button
                                 className="btn btn-main btn-transparent px-3"
                                 onClick={handleBuyNow}
+                                disabled={isOutOfStock}
                               >
-                                <i class="bi bi-bag me-1"></i> Buy Now
+                                <i className="bi bi-bag me-1"></i>
+                                {isOutOfStock ? "Out of Stock" : "Buy Now"}
                               </button>
                             </>
                           ) : (

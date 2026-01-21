@@ -476,12 +476,13 @@ h6.sadcadaededee,
 }
 
 .sdfaedaeeewwqwee .donweihrwewer{
-  min-height: 105px !important;
-  max-height: 105px !important;
+  min-height: 150px !important;
+  max-height: 150px !important;
 }
 
 .sdfaedaeeewwqwee .donweihrwewer img{
-  min-height: 105px !important;
+  min-height: auto !important;
+  max-height: 150px !important;
 }
 
 .sfvswfrwerwr.sticky-top{
@@ -678,4 +679,45 @@ h6.sadcadaededee,
     width: 85%;
     min-width: initial;
   }
+}
+
+
+.diwenfrjikwehirwerwer{
+  border: 1px solid var(--light-background-color);
+  border-radius: 5px;
+}
+
+.adosejoifrjewrwer .form-control{
+  border-color: var(--light-background-color);
+  border-radius: 5px;
+}
+
+.adosejoifrjewrwer .form-control::placeholder{
+  font-size: 1.2rem;
+}
+
+.scfsefweqwe.btn-main{
+  background: #EAEAEA !important;
+  border: 1px solid #EAEAEA !important;
+  color: #000 !important;
+}
+
+.scfsefweqwe.btn-main:hover{
+  background: var(--pink-main-color) !important;
+  border: 1px solid var(--pink-main-color) !important;
+  color: #fff !important;
+}
+
+.diwenfrjikwehirwerwer > p{
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.doriwer img{
+  max-width: 100%;
+}
+
+.doriwer p{
+  color: var(--grey-border-color);
+  font-size: 0.8rem;
 }

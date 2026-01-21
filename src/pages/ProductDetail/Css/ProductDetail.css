@@ -603,7 +603,7 @@ p.sidifsdiyhr{
 }
 .customize-modal #co-close-btn {
   right: 5%;
-  top: 5%;
+  /* top: 5%; */
   font-size: 1.4rem;
   cursor: pointer;
 }
