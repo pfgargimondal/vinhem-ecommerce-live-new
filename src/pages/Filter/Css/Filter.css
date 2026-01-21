@@ -331,7 +331,10 @@
  .dohwekrjiwejr .price-input .field {
 	 display: flex;
 	 width: 42%;
-	 align-items: end;
+	 align-items: center;
+}
+.dohwekrjiwejr .price-input .field span{
+  margin-top: 1.5rem;
 }
  .dohwekrjiwejr .field input {
 	 width: 100%;
@@ -343,6 +346,27 @@
 	 text-align: center;
 	 border: 1px solid #999;
 	 -moz-appearance: textfield;
+}
+.diwenjriwejrjhwer span{
+  font-weight: 600;
+}
+.btn-filter-tag.btn-main{
+  border-color: #fff !important;
+  font-weight: 500; 
+  border-radius: 5px !important;
+}
+.btn-filter-tag.btn-main:hover{
+  background: #fff0fe !important;
+  border-color: var(--pink-main-color) !important;
+  font-weight: 500;
+}
+.btn-filter-tag.btn-main i{
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  border: 1px solid var(--pink-main-color);
+  line-height: 1.2;
+  color: var(--pink-main-color);
 }
  .dohwekrjiwejr input[type="number"]::-webkit-outer-spin-button, .dohwekrjiwejr input[type="number"]::-webkit-inner-spin-button {
 	 -webkit-appearance: none;
@@ -574,7 +598,7 @@
   background: var(--pink-main-color);
   border-color: var(--pink-main-color) !important;
   color: #fff;
-  box-shadow: rgba(132, 13, 86, 0.25) 0px 54px 71px, rgba(132, 13, 86, 0.12) 0px -12px 30px, rgba(132, 13, 86, 0.12) 0px 4px 6px, rgba(132, 13, 86, 0.17) 0px 12px 13px, rgba(132, 13, 86, 0.09) 0px -3px 5px;
+  border-style: dotted;
 }
 
 .pagination_ff button:hover{

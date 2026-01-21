@@ -5,7 +5,7 @@ import { filterReducer } from "../reducers/filterReducers";
 const filterInitialState = {
     productList: [],
     minPrice: 0,
-    maxPrice: 100000,
+    maxPrice: 1000000,
     mainCategory: [],
     subCategory: [],
     filterCategory: [],

@@ -236,6 +236,12 @@ const applyPriceFilter = (min, max) => {
                     onTouchEnd={() => applyPriceFilter(minPrice, maxPrice)}
                   />
                 </div>
+
+                <div className="diwenjriwejrjhwer d-flex align-items-center justify-content-between mt-3">
+                  <span><i className="fa-solid fa-indian-rupee-sign"></i> {minPrice}</span>
+
+                  <span><i className="fa-solid fa-indian-rupee-sign"></i> {maxPrice}</span>
+                </div>
               </div>
             </div>
           </div>
