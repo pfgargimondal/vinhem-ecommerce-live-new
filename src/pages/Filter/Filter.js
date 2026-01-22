@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate , useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Css/Filter.css";
 import "./Css/FilterResponsive.css";
 import http from "../../http";
@@ -18,10 +18,10 @@ export const Filter = () => {
   const { formatPrice } = useCurrency();
   const { user } = useAuth();
   const location = useLocation();
-    // eslint-disable-next-line
+  // eslint-disable-next-line
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const { products, initialProductList, sortBy, setSortBy, setNewArrival, setReadyToShip, setCstmFit, setOnSale, resetFilter, onSale, newIn, readyToShip, cstmFit } = useFilter();
+  const { products, initialProductList, mainCategory, subCategory, filterCategory, filterCategoryCntxt, color, material, designer, plusSize, occasion, size, celebrity, shippingTime, sortBy, setSortBy, setNewArrival, setReadyToShip, setCstmFit, setOnSale, resetFilter, onSale, newIn, readyToShip, removeMainCategory, removeSubCategory, removeFilterCategory, removeColor, removeMaterial, removeDesigner, removePlusSize, removeOccasion, removeSize, removeCelebrity, removeShippingTime, cstmFit } = useFilter();
   // eslint-disable-next-line
   const [viewType, setViewType] = useState(false);
   const [resFltrMenu, setResFltrMenu] = useState(false);
@@ -31,7 +31,7 @@ export const Filter = () => {
   const [filterdetails, Setfilterdetails] = useState(null);
   const [allFilterData, SetallFilterData] = useState(null);
   const [allFilterMappingdata, SetallFilterMappingdata] = useState([]);
-  const [filterCategories, setFilterCategories] = useState([]);  
+  const [filterCategories, setFilterCategories] = useState([]);
 
   const [loading, setLoading] = useState(true);
   const [productsLoaded, setProductsLoaded] = useState(false);
@@ -41,6 +41,54 @@ export const Filter = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageWindowStart, setPageWindowStart] = useState(1);
+
+
+  const filterOptionsItems = [
+    ...(Array.isArray(mainCategory) ? mainCategory.map(v => ({ type: "main", value: v })) : []),
+    ...(Array.isArray(subCategory) ? subCategory.map(v => ({ type: "sub", value: v })) : []),
+    ...(Array.isArray(filterCategoryCntxt) ? filterCategoryCntxt.map(v => ({ type: "filter", value: v })) : []),
+    ...(Array.isArray(color) ? color.map(v => ({ type: "color", value: v })) : []),
+    ...(Array.isArray(material) ? material.map(v => ({ type: "material", value: v })) : []),
+    ...(Array.isArray(designer) ? designer.map(v => ({ type: "designer", value: v })) : []),
+    ...(Array.isArray(plusSize) ? plusSize.map(v => ({ type: "plusSize", value: v })) : []),
+    ...(Array.isArray(occasion) ? occasion.map(v => ({ type: "occasion", value: v })) : []),
+    ...(Array.isArray(size) ? size.map(v => ({ type: "size", value: v })) : []),
+    ...(Array.isArray(celebrity) ? celebrity.map(v => ({ type: "celebrity", value: v })) : []),
+    ...(Array.isArray(shippingTime) ? shippingTime.map(v => ({ type: "shippingTime", value: v })) : []),
+  ];
+
+  const DEFAULT_VISIBLE = 6;
+
+  const [selectedFilterOptions, setSelectedFilterOptions] = useState(DEFAULT_VISIBLE);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleSelectedFilterOptionsToggle = () => {
+    if (isExpanded) {
+      setSelectedFilterOptions(DEFAULT_VISIBLE);
+    } else {
+      setSelectedFilterOptions(filterOptionsItems.length);
+    }
+    setIsExpanded(prev => !prev);
+  };
+
+
+  const handleFilterOptionRemove = ({ type, value }) => {
+    switch (type) {
+      case "main": return removeMainCategory(value);
+      case "sub": return removeSubCategory(value);
+      case "filter": return removeFilterCategory(value);
+      case "color": return removeColor(value);
+      case "material": return removeMaterial(value);
+      case "designer": return removeDesigner(value);
+      case "plusSize": return removePlusSize(value);
+      case "occasion": return removeOccasion(value);
+      case "size": return removeSize(value);
+      case "celebrity": return removeCelebrity(value);
+      case "shippingTime": return removeShippingTime(value);
+      default: return;
+    }
+  };
+
 
   const productsPerPage = 24;
   const visibleCount = 5;
@@ -92,17 +140,17 @@ export const Filter = () => {
 
 
   useEffect(() => {
-      const fetchMainCategory = async () => {
-          try {
-              const getresponse = await http.get("/product-category");
-              const allresponse = getresponse.data;
-              setMainCatgry(allresponse.data); 
-          } catch (error) {
-              console.error("Error fetching main category:", error);
-          }
-      };
+    const fetchMainCategory = async () => {
+      try {
+        const getresponse = await http.get("/product-category");
+        const allresponse = getresponse.data;
+        setMainCatgry(allresponse.data);
+      } catch (error) {
+        console.error("Error fetching main category:", error);
+      }
+    };
 
-      fetchMainCategory();
+    fetchMainCategory();
   }, []);
 
   useEffect(() => {
@@ -112,11 +160,11 @@ export const Filter = () => {
   }, [location.pathname]);
 
   const toTitleCase = (s = "") =>
-  s
-    .toString()
-    .replace(/[-_]/g, " ")
-    .replace(/\b\w/g, (c) => c.toUpperCase())
-    .trim();
+    s
+      .toString()
+      .replace(/[-_]/g, " ")
+      .replace(/\b\w/g, (c) => c.toUpperCase())
+      .trim();
 
   //Res Filter Page No-scroll
   useEffect(() => {
@@ -132,16 +180,16 @@ export const Filter = () => {
   // };
 
 
-    const segments = location.pathname.split("/").filter(Boolean);
-    let category = null;
-    let subcategory = null;
+  const segments = location.pathname.split("/").filter(Boolean);
+  let category = null;
+  let subcategory = null;
 
-    if (segments.length === 1) {
-      category = segments[0];
-    } else if (segments.length >= 2) {
-      category = segments[0];
-      subcategory = segments[1];
-    }
+  if (segments.length === 1) {
+    category = segments[0];
+  } else if (segments.length >= 2) {
+    category = segments[0];
+    subcategory = segments[1];
+  }
 
 
   useEffect(() => {
@@ -155,10 +203,10 @@ export const Filter = () => {
 
         SetallFilterData(allData);
         Setfilterdetails(allfilterDetails);
-        
+
         const normalizedSearch = searchTerm.toLowerCase();
 
-        const filteredProducts = searchTerm 
+        const filteredProducts = searchTerm
           ? allProducts.filter(product => {
             const name = product.product_name?.toLowerCase() || "";
 
@@ -181,11 +229,11 @@ export const Filter = () => {
   const { wishlistIds, addToWishlist, removeFromWishlist } = useWishlist(); // ✅ from context
 
   const toggleWishlist = (productId) => {
-      if (wishlistIds.includes(productId)) {
+    if (wishlistIds.includes(productId)) {
       removeFromWishlist(productId);
-      } else {
+    } else {
       addToWishlist(productId);
-      }
+    }
   };
 
   useEffect(() => {
@@ -283,11 +331,11 @@ export const Filter = () => {
             <div className="alosjdjkhrjfse">
               <h4 className="mb-0">
                 {category === "all-products"
-                ? "All Products"
-                : subcategory
-                  ? `${toTitleCase(subcategory)} For ${toTitleCase(category)}`
-                  : `All Products For ${toTitleCase(category)}`}
-              <span> - Showing {products?.length ?? 0} Results</span>
+                  ? "All Products"
+                  : subcategory
+                    ? `${toTitleCase(subcategory)} For ${toTitleCase(category)}`
+                    : `All Products For ${toTitleCase(category)}`}
+                <span> - Showing {products?.length ?? 0} Results</span>
               </h4>
             </div>
           </div>
@@ -300,21 +348,21 @@ export const Filter = () => {
               >
                 {filterdetails
                   ? (
-                      <img
-                        src={`${allFilterData?.banner_image_url}/${filterdetails?.image}`}
-                        className="img-fluid w-100"
-                        alt=""
-                      />
-                    )
+                    <img
+                      src={`${allFilterData?.banner_image_url}/${filterdetails?.image}`}
+                      className="img-fluid w-100"
+                      alt=""
+                    />
+                  )
                   : (
-                      <img
-                        src="images/fltrdbnnr.png"
-                        className="img-fluid w-100"
-                        alt=""
-                      />
-                    )}
+                    <img
+                      src="images/fltrdbnnr.png"
+                      className="img-fluid w-100"
+                      alt=""
+                    />
+                  )}
               </div>
-            </div>            
+            </div>
           )}
         </div>
 
@@ -325,19 +373,19 @@ export const Filter = () => {
           >
             {filterdetails
               ? (
-                  <img
-                    src={`${allFilterData?.banner_image_url}/${filterdetails?.image}`}
-                    className="img-fluid w-100"
-                    alt=""
-                  />
-                )
+                <img
+                  src={`${allFilterData?.banner_image_url}/${filterdetails?.image}`}
+                  className="img-fluid w-100"
+                  alt=""
+                />
+              )
               : (
-                  <img
-                    src="../images/fltrdbnnr.png"
-                    className="img-fluid w-100"
-                    alt=""
-                  />
-                )}
+                <img
+                  src="../images/fltrdbnnr.png"
+                  className="img-fluid w-100"
+                  alt=""
+                />
+              )}
           </div>
         )}
 
@@ -350,7 +398,27 @@ export const Filter = () => {
 
         <div className="row mt-5 dffedfgwetttt">
           <div className="col-lg-3">
-            <div className="filter-options" style={category && !category.includes("all-products") && !subcategory ? {transform: "translateY(-18vw)"} : {}}>
+            <div className="filter-options" style={category && !subcategory && !category.includes("all-products") ? { transform: "translateY(-18vw)" } : {}}>
+              <div className="dweihrihwerwerwer pb-4">
+                <div className="doeihrmwerwer d-flex flex-wrap">
+                  {filterOptionsItems.slice(0, selectedFilterOptions).map(item => (
+                      <button
+                        key={`${item.type}-${item.value}`}
+                        onClick={() => handleFilterOptionRemove(item)}
+                        className="btn btn-filter-tag p-2 bg-transparent rounded-0 text-dark btn-main"
+                      >
+                        <i className="fa-solid fa-xmark"></i> {item.value.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
+                      </button>
+                    ))}
+                </div>
+
+                {filterOptionsItems.length > DEFAULT_VISIBLE && (
+                  <p onClick={handleSelectedFilterOptionsToggle} className="mb-0 ms-4 cursor-pointer">
+                    {isExpanded ? "Show less" : `+${filterOptionsItems.length - DEFAULT_VISIBLE} more`}
+                  </p>
+                )}
+              </div>
+
               <div className="oidenjwihrwer mb-4 d-flex align-items-center justify-content-between">
                 <h5
                   className="mb-0"
@@ -364,12 +432,11 @@ export const Filter = () => {
               </div>
 
               <div
-                className={`saojdkjierwerwer ${
-                  resFltrMenu ? "" : "res-filtr-nav-hide"
-                }`}
+                className={`saojdkjierwerwer ${resFltrMenu ? "" : "res-filtr-nav-hide"
+                  }`}
                 id="res-filtr-nav"
               >
-              <FilterSection category={category} subcategory={subcategory} setResFltrMenu={setResFltrMenu} allFilterMappingdata={allFilterMappingdata} filterCategories={filterCategories} />
+                <FilterSection category={category} subcategory={subcategory} filterCategory={filterCategory} setResFltrMenu={setResFltrMenu} allFilterMappingdata={allFilterMappingdata} filterCategories={filterCategories} />
               </div>
             </div>
           </div>
@@ -402,7 +469,7 @@ export const Filter = () => {
                     </div>
 
                     <div className="doewnkrhwer">
-                      <input type="checkbox" className="d-none" id="daedfweweer" name="djikeiewr" value="READY TO SHIP" checked={readyToShip} onChange={(e) => setReadyToShip(e.target.checked ? e.target.value : null)}/>
+                      <input type="checkbox" className="d-none" id="daedfweweer" name="djikeiewr" value="READY TO SHIP" checked={readyToShip} onChange={(e) => setReadyToShip(e.target.checked ? e.target.value : null)} />
 
                       <label htmlFor="daedfweweer" className="btn btn-main me-1">
                         <i className="bi me-1 bi-lightning-charge"></i> Ready to Ship
@@ -410,8 +477,8 @@ export const Filter = () => {
                     </div>
 
                     <div className="doewnkrhwer">
-                      <input type="checkbox" name="djikeiewr" className="d-none" id="gfdewerwr" checked={onSale} onChange={(e) => setOnSale(e.target.checked)}/>
-                      
+                      <input type="checkbox" name="djikeiewr" className="d-none" id="gfdewerwr" checked={onSale} onChange={(e) => setOnSale(e.target.checked)} />
+
                       <label
                         htmlFor="gfdewerwr"
                         className="btn btn-main me-1"
@@ -421,29 +488,29 @@ export const Filter = () => {
                     </div>
 
                     <div className="doewnkrhwer">
-                      <input type="checkbox" name="djikeiewr" className="d-none" id="asddettt" checked={cstmFit} onChange={(e) => setCstmFit(e.target.checked)}/>
+                      <input type="checkbox" name="djikeiewr" className="d-none" id="asddettt" checked={cstmFit} onChange={(e) => setCstmFit(e.target.checked)} />
 
                       <label htmlFor="asddettt" className="btn btn-main me-1">
                         <i class="bi me-1 bi-vignette"></i>  Custom-fit
                       </label>
-                    </div>                    
+                    </div>
                   </div>
                 </div>
 
                 <div className="col-lg-3">
                   <div className="podwejorjwierwer">
-                    <select name="" className="form-select" id="" onChange={(e) => setSortBy(e.target.value)}>                      
+                    <select name="" className="form-select" id="" onChange={(e) => setSortBy(e.target.value)}>
                       <option selected value="RECOMMENDED">Sort By: Recommended</option>
 
-                      <option value="NEW_ARRIVALS">New Arrivals</option>
+                      <option value="NEW_ARRIVALS">Sort By: New Arrivals</option>
 
-                      <option value="BEST_SELLER">Best Seller</option>
+                      <option value="BEST_SELLER">Sort By: Best Seller</option>
 
-                      <option value="LOW_TO_HIGH">Price Low to High</option>
+                      <option value="LOW_TO_HIGH">Sort By: Price Low to High</option>
 
-                      <option value="HIGH_TO_LOW">Price High to Low</option>
+                      <option value="HIGH_TO_LOW">Sort By: Price High to Low</option>
 
-                      <option value="DISCOUNT_HIGH_TO_LOW">Discount High to Low</option>
+                      <option value="DISCOUNT_HIGH_TO_LOW">Sort By: Discount High to Low</option>
                     </select>
                   </div>
                 </div>
@@ -459,7 +526,7 @@ export const Filter = () => {
                             <div className="image position-relative">
                               {onSale && product?.discount && (
                                 <div className="dscnt-prce px-0">
-                                  <span className="price">{product?.discount}% <br/> OFF</span>
+                                  <span className="price">{product?.discount}% <br /> OFF</span>
                                 </div>
                               )}
 
@@ -477,7 +544,7 @@ export const Filter = () => {
                                   />
                                 </Link>
 
-                                <div className="doikwenirnwekhrwer d-flex position-absolute" style={{top: onSale && product?.discount ? "17%" : "3%"}}>
+                                <div className="doikwenirnwekhrwer d-flex position-absolute" style={{ top: onSale && product?.discount ? "17%" : "3%" }}>
                                   {user ? (
                                     <>
                                       <button
@@ -529,18 +596,19 @@ export const Filter = () => {
                                 </div>
                               </div>
 
-                              <div className={`fdbdfgdfgdf ${ !viewType ? "col-lg-12 px-1" : "col-lg-9"}`}>
-                                <div className={`d-flex align-items-center ${(product.rts_quantity > '0' && (product?.best_seller === '1' || product?.best_seller === true) ? "justify-content-between" : "")}`}>
-                                  <h6 className="dokwehorjweojrower"><i class="bi bi-truck"></i> Ships in {product.shipping_time}</h6>
+                              <div className={`fdbdfgdfgdf ${!viewType ? "col-lg-12 px-1" : "col-lg-9"}`}>
+                                <h6><i class="bi me-1 bi-truck"></i> Ships in {product.shipping_time}</h6>
 
-                                  {product.rts_quantity > '0' && (
-                                    <h6><i class="bi bi-rocket-takeoff"></i> Ready to ship</h6>
-                                  )}
+                                {/* {product.product_category === "READY TO SHIP" && (
+                                  <h6><i class="bi me-1 bi-rocket-takeoff"></i> Ready to ship</h6>
+                                )} */}
+                                {product.rts_quantity > '0' && (
+                                  <h6><i class="bi me-1 bi-rocket-takeoff"></i> Ready to ship</h6>
+                                )}
 
-                                  {(product?.best_seller === '1' || product?.best_seller === true) && (
-                                    <h6><i class="bi bi-lightning-charge"></i> Best Seller</h6>
-                                  )}
-                                </div>                           
+                                {(product.best_seller === '1' || product.best_seller === true) && (
+                                  <h6><i class="bi bi-lightning-charge"></i> Best Seller</h6>
+                                )}
 
                                 <h4>{product.product_name}</h4>
 
@@ -557,7 +625,7 @@ export const Filter = () => {
                                   <span class="fghfgg114 d-flex align-items-center ms-2">{product?.discount}%OFF</span>
                                 </div>
 
-                                <div className="dlksfskjrewrwere d-flex align-items-center justify-content-between mt-5" style={{top: onSale && product?.discount ? "17%" : "3%"}}>
+                                <div className="dlksfskjrewrwere d-flex align-items-center justify-content-between mt-5" style={{ top: onSale && product?.discount ? "17%" : "3%" }}>
                                   <div className="doikwenirnwekhrwer position-relative">
                                     {user ? (
                                       <>
@@ -620,10 +688,10 @@ export const Filter = () => {
                   ) : (
                     <div className="col-12 text-center py-5">
                       <h5>No products found for your search.</h5>
-                      
+
                       <p>Try changing your search or browse other categories.</p>
                     </div>
-                  ) }
+                  )}
                 </div>
                 {products?.length > 0 && (
                   <div className="dfgsfsfsfsdf d-flex justify-content-center align-items-center">
@@ -676,7 +744,7 @@ export const Filter = () => {
           autoClose={3000}
           style={{ zIndex: 9999999999 }}
         />
-      </div> 
+      </div>
 
       <div className="odjweoijrwer">
         <div onClick={handleResSortByClose} className={`${resSrtByOptions ? "srt-by-backdrop" : "srt-by-backdrop srt-by-backdrop-hidden"} position-fixed w-100 h-100`}></div>
@@ -695,7 +763,7 @@ export const Filter = () => {
               className="d-none"
               id="na"
               checked={sortBy === "NEW_ARRIVALS"}
-              onChange={() => {setSortBy("NEW_ARRIVALS"); handleResSortByClose()}}
+              onChange={() => { setSortBy("NEW_ARRIVALS"); handleResSortByClose() }}
             />
 
             <label htmlFor="na" className="srt-by-options w-100 p-2">
@@ -710,7 +778,7 @@ export const Filter = () => {
               className="d-none"
               id="plth"
               checked={sortBy === "LOW_TO_HIGH"}
-              onChange={() => {setSortBy("LOW_TO_HIGH"); handleResSortByClose()}}
+              onChange={() => { setSortBy("LOW_TO_HIGH"); handleResSortByClose() }}
             />
 
             <label htmlFor="plth" className="srt-by-options w-100 p-2">
@@ -725,7 +793,7 @@ export const Filter = () => {
               className="d-none"
               id="phtl"
               checked={sortBy === "HIGH_TO_LOW"}
-              onChange={() => {setSortBy("HIGH_TO_LOW"); handleResSortByClose()}}
+              onChange={() => { setSortBy("HIGH_TO_LOW"); handleResSortByClose() }}
             />
 
             <label htmlFor="phtl" className="srt-by-options w-100 p-2">
@@ -740,7 +808,7 @@ export const Filter = () => {
               className="d-none"
               id="dlth"
               checked={sortBy === "DISCOUNT_LOW_TO_HIGH"}
-              onChange={() => {setSortBy("DISCOUNT_LOW_TO_HIGH"); handleResSortByClose()}}
+              onChange={() => { setSortBy("DISCOUNT_LOW_TO_HIGH"); handleResSortByClose() }}
             />
 
             <label htmlFor="dlth" className="srt-by-options w-100 p-2">
@@ -748,7 +816,7 @@ export const Filter = () => {
             </label>
           </div>
         </div>
-      </div>  
+      </div>
 
       <div className="filter-bottom-fixed d-none py-3 bg-white w-100">
         <div className="d-flex justify-content-around">
@@ -776,7 +844,7 @@ export const Filter = () => {
             </div>
           </div>
         </div>
-      </div>   
+      </div>
     </div>
   );
 };

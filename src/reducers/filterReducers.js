@@ -1,231 +1,231 @@
 export const filterReducer = (state, action) => {
-    const {type, payload} = action;
+    switch (action.type) {
 
-    switch(type) {
-        
+        /* ---------------- PRODUCT LIST ---------------- */
         case "PRODUCT_LIST":
-            return {...state, productList: payload.products}
+            return {
+                ...state,
+                productList: action.payload.products
+            };
 
+        /* ---------------- PRICE ---------------- */
         case "PRICE":
-            return {...state, minPrice: payload.minPrice, maxPrice: payload.maxPrice};
-
-        case "MAIN_CATEGORY": {
-            const clicked = payload.mainCategory;
-            const alreadySelected = state.mainCategory.includes(clicked);
-
-            let updatedMainCategory;
-
-            if (alreadySelected) {
-                updatedMainCategory = state.mainCategory.filter(c => c !== clicked);
-            } else {
-                updatedMainCategory = [...state.mainCategory, clicked];
-            }
-
-            return {...state, mainCategory: updatedMainCategory, subCategory: null, filterCategory: null};
-        }
-
-        case "SUB_CATEGORY": {
-            const clickedSub = payload.subCategory?.toLowerCase();
-            if (!clickedSub) return state;
-
-            const existing = state.subCategory || [];   // fallback to empty array
-            const alreadySelected = existing.includes(clickedSub);
-
-            const updatedSubCategory = alreadySelected
-                ? existing.filter(s => s !== clickedSub)
-                : [...existing, clickedSub];
-
             return {
                 ...state,
-                subCategory: updatedSubCategory,
-                filterCategory: null
+                minPrice: action.payload.minPrice,
+                maxPrice: action.payload.maxPrice
             };
-        }
 
-        case "FILTER_CATEGORY": {
-            const clicked = payload.filterCategory;
-            const existing = state.filterCategory || [];
-            const already = existing.includes(clicked);
-
-            const updated = already
-                ? existing.filter(f => f !== clicked)
-                : [...existing, clicked];
-
+        /* ---------------- MAIN CATEGORY ---------------- */
+        case "MAIN_CATEGORY":
             return {
                 ...state,
-                filterCategory: updated
+                mainCategory: state.mainCategory.includes(action.payload.mainCategory)
+                    ? state.mainCategory.filter(v => v !== action.payload.mainCategory)
+                    : [...state.mainCategory, action.payload.mainCategory]
             };
-        }
 
+        case "REMOVE_MAIN_CATEGORY":
+            return {
+                ...state,
+                mainCategory: state.mainCategory.filter(v => v !== action.payload),
+                subCategory: [],
+                filterCategory: []
+            };
+
+        /* ---------------- SUB CATEGORY ---------------- */
+        case "SUB_CATEGORY":
+            return {
+                ...state,
+                subCategory: state.subCategory.includes(action.payload.subCategory)
+                    ? state.subCategory.filter(v => v !== action.payload.subCategory)
+                    : [...state.subCategory, action.payload.subCategory]
+            };
+
+        case "REMOVE_SUB_CATEGORY":
+            return {
+                ...state,
+                subCategory: state.subCategory.filter(v => v !== action.payload),
+                filterCategory: []
+            };
+
+        /* ---------------- FILTER CATEGORY ---------------- */
+        case "FILTER_CATEGORY":
+            return {
+                ...state,
+                filterCategory: state.filterCategory.includes(action.payload.filterCategory)
+                    ? state.filterCategory.filter(v => v !== action.payload.filterCategory)
+                    : [...state.filterCategory, action.payload.filterCategory]
+            };
+
+        case "REMOVE_FILTER_CATEGORY":
+            return {
+                ...state,
+                filterCategory: state.filterCategory.filter(v => v !== action.payload)
+            };
+
+        /* ---------------- FILTER CATEGORY NAME ---------------- */
         case "FILTER_CATEGORY_NAME":
             return {
                 ...state,
                 filterCategoryName: state.filterCategoryName.includes(action.payload)
-                ? state.filterCategoryName.filter(item => item !== action.payload)
-                : [...state.filterCategoryName, action.payload],
+                    ? state.filterCategoryName.filter(v => v !== action.payload)
+                    : [...state.filterCategoryName, action.payload]
             };
 
-        case "COLOR": {
-            const clickedColor = payload.color;
-            if (!clickedColor) return state;
-
-            const existing = Array.isArray(state.color) ? state.color : [];
-            const alreadySelected = existing.includes(clickedColor);
-
-            const updatedColor = alreadySelected
-                ? existing.filter(c => c !== clickedColor)
-                : [...existing, clickedColor];
-
+        /* ---------------- COLOR ---------------- */
+        case "COLOR":
             return {
                 ...state,
-                color: updatedColor
+                color: state.color.includes(action.payload.color)
+                    ? state.color.filter(v => v !== action.payload.color)
+                    : [...state.color, action.payload.color]
             };
-        }
 
-        case "MATERIAL": {
-            const clickedMaterial = payload.material;
-            if (!clickedMaterial) return state;
-
-            const existing = Array.isArray(state.material) ? state.material : [];
-            const alreadySelected = existing.includes(clickedMaterial);
-
-            const updatedMaterial = alreadySelected
-                ? existing.filter(m => m !== clickedMaterial)
-                : [...existing, clickedMaterial];
-
+        case "REMOVE_COLOR":
             return {
                 ...state,
-                material: updatedMaterial
+                color: state.color.filter(v => v !== action.payload)
             };
-        }
 
-        case "DESIGNER": {
-            const clickedDesigner = payload.designer;
-            if (!clickedDesigner) return state;
-
-            const existing = Array.isArray(state.designer) ? state.designer : [];
-            const alreadySelected = existing.includes(clickedDesigner);
-
-            const updatedDesigner = alreadySelected
-                ? existing.filter(d => d !== clickedDesigner)
-                : [...existing, clickedDesigner];
-
+        /* ---------------- MATERIAL ---------------- */
+        case "MATERIAL":
             return {
                 ...state,
-                designer: updatedDesigner
+                material: state.material.includes(action.payload.material)
+                    ? state.material.filter(v => v !== action.payload.material)
+                    : [...state.material, action.payload.material]
             };
-        }
 
-        case "PLUS_SIZE": {
-            const clickedSize = payload.plusSize?.toLowerCase();
-            if (!clickedSize) return state;
-
-            const existing = Array.isArray(state.plusSize) ? state.plusSize : [];
-            const alreadySelected = existing.includes(clickedSize);
-
-            const updatedPlusSize = alreadySelected
-                ? existing.filter(s => s !== clickedSize)
-                : [...existing, clickedSize];
-
+        case "REMOVE_MATERIAL":
             return {
                 ...state,
-                plusSize: updatedPlusSize
+                material: state.material.filter(v => v !== action.payload)
             };
-        }
 
-        case "OCCASION": {
-            const clickedOccasion = payload.occasion?.toLowerCase();
-            if (!clickedOccasion) return state;
-
-            const existing = Array.isArray(state.occasion) ? state.occasion : [];
-            const alreadySelected = existing.includes(clickedOccasion);
-
-            const updatedOccasion = alreadySelected
-                ? existing.filter(o => o !== clickedOccasion)
-                : [...existing, clickedOccasion];
-
+        /* ---------------- DESIGNER ---------------- */
+        case "DESIGNER":
             return {
                 ...state,
-                occasion: updatedOccasion
+                designer: state.designer.includes(action.payload.designer)
+                    ? state.designer.filter(v => v !== action.payload.designer)
+                    : [...state.designer, action.payload.designer]
             };
-        }
 
-        case "SIZE": {
-            const clickedSize = payload.size?.toLowerCase();
-            if (!clickedSize) return state;
-
-            const existing = Array.isArray(state.size) ? state.size : [];
-            const alreadySelected = existing.includes(clickedSize);
-
-            const updatedSize = alreadySelected
-                ? existing.filter(s => s !== clickedSize)
-                : [...existing, clickedSize];
-
+        case "REMOVE_DESIGNER":
             return {
                 ...state,
-                size: updatedSize
+                designer: state.designer.filter(v => v !== action.payload)
             };
-        }
 
-        case "CELEBRITY": {
-            const clickedCelebrity = payload.celebrity?.toLowerCase();
-            if (!clickedCelebrity) return state;
-
-            const existing = Array.isArray(state.celebrity) ? state.celebrity : [];
-            const alreadySelected = existing.includes(clickedCelebrity);
-
-            const updatedCelebrity = alreadySelected
-                ? existing.filter(s => s !== clickedCelebrity)
-                : [...existing, clickedCelebrity];
-
+        /* ---------------- PLUS SIZE ---------------- */
+        case "PLUS_SIZE":
             return {
                 ...state,
-                celebrity: updatedCelebrity
+                plusSize: state.plusSize.includes(action.payload.plusSize)
+                    ? state.plusSize.filter(v => v !== action.payload.plusSize)
+                    : [...state.plusSize, action.payload.plusSize]
             };
-        }
 
-        case "SHIPPING_TIME": {
-            const clickedShippingTime = payload.shippingTime?.toLowerCase();
-            if (!clickedShippingTime) return state;
-
-            const existing = Array.isArray(state.shippingTime) ? state.shippingTime : [];
-            const alreadySelected = existing.includes(clickedShippingTime);
-
-            const updatedShippingTime = alreadySelected
-                ? existing.filter(s => s !== clickedShippingTime)
-                : [...existing, clickedShippingTime];
-
+        case "REMOVE_PLUS_SIZE":
             return {
                 ...state,
-                shippingTime: updatedShippingTime
+                plusSize: state.plusSize.filter(v => v !== action.payload)
             };
-        }
 
+        /* ---------------- OCCASION ---------------- */
+        case "OCCASION":
+            return {
+                ...state,
+                occasion: state.occasion.includes(action.payload.occasion)
+                    ? state.occasion.filter(v => v !== action.payload.occasion)
+                    : [...state.occasion, action.payload.occasion]
+            };
+
+        case "REMOVE_OCCASION":
+            return {
+                ...state,
+                occasion: state.occasion.filter(v => v !== action.payload)
+            };
+
+        /* ---------------- SIZE ---------------- */
+        case "SIZE":
+            return {
+                ...state,
+                size: state.size.includes(action.payload.size)
+                    ? state.size.filter(v => v !== action.payload.size)
+                    : [...state.size, action.payload.size]
+            };
+
+        case "REMOVE_SIZE":
+            return {
+                ...state,
+                size: state.size.filter(v => v !== action.payload)
+            };
+
+        /* ---------------- CELEBRITY ---------------- */
+        case "CELEBRITY":
+            return {
+                ...state,
+                celebrity: state.celebrity.includes(action.payload.celebrity)
+                    ? state.celebrity.filter(v => v !== action.payload.celebrity)
+                    : [...state.celebrity, action.payload.celebrity]
+            };
+
+        case "REMOVE_CELEBRITY":
+            return {
+                ...state,
+                celebrity: state.celebrity.filter(v => v !== action.payload)
+            };
+
+        /* ---------------- SHIPPING TIME ---------------- */
+        case "SHIPPING_TIME":
+            return {
+                ...state,
+                shippingTime: state.shippingTime.includes(action.payload.shippingTime)
+                    ? state.shippingTime.filter(v => v !== action.payload.shippingTime)
+                    : [...state.shippingTime, action.payload.shippingTime]
+            };
+
+        case "REMOVE_SHIPPING_TIME":
+            return {
+                ...state,
+                shippingTime: state.shippingTime.filter(v => v !== action.payload)
+            };
+
+        /* ---------------- SORT ---------------- */
         case "SORT_BY":
-            return {...state, sortBy: payload.sortBy}
+            return {
+                ...state,
+                sortBy: action.payload.sortBy
+            };
 
+        /* ---------------- FLAGS ---------------- */
         case "NEW_ARRIVAL":
-            return {...state, newIn: payload.newIn}
+            return { ...state, newIn: action.payload.newIn };
 
         case "READY_TO_SHIP":
-            return {...state, readyToShip: payload.readyToShip}
-
-        case "ON_SALE":
-            return {...state, onSale: payload.onSale}
+            return { ...state, readyToShip: action.payload.readyToShip };
 
         case "CSTM_FIT":
-            return {...state, cstmFit: payload.cstmFit}
+            return { ...state, cstmFit: action.payload.cstmFit };
 
+        case "ON_SALE":
+            return { ...state, onSale: action.payload.onSale };
+
+        /* ---------------- RESET ---------------- */
         case "REST_FILTER":
             return {
                 ...state,
+                minPrice: 0,
+                maxPrice: 1000000,
                 mainCategory: [],
                 subCategory: [],
                 filterCategory: [],
                 filterCategoryName: [],
                 color: [],
                 material: [],
-                designer: [],    
+                designer: [],
                 plusSize: [],
                 occasion: [],
                 size: [],
@@ -236,9 +236,9 @@ export const filterReducer = (state, action) => {
                 readyToShip: null,
                 onSale: false,
                 cstmFit: false
-            }
+            };
 
         default:
             throw new Error("No product found!");
     }
-}
+};

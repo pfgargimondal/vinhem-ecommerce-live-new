@@ -241,17 +241,10 @@
 
 .oeijmewrwer{
   border-radius: 10px;
+  background: #fff;
   overflow: hidden;
   border: 1px solid var(--light-background-color);
   box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
-}
-
-.doewjorjwoejrwer .col-lg-4:nth-of-type(odd) .oeijmewrwer{
-  background: #efd2d2;
-}
-
-.doewjorjwoejrwer .col-lg-4:nth-of-type(even) .oeijmewrwer{
-  background: #d2efd8;
 }
 
 .djewojewr_left img{
@@ -265,7 +258,7 @@
 } */ 
 
 .djewojewr_right h6.dwerfqwer{
-  color: var(--text-gray-color);
+  color: var(--pink-main-color);
   font-size: 0.8rem;
   margin-top: 2rem;
   font-weight: 400;
@@ -285,8 +278,8 @@
 
 .doinweiewrwer h6{
   font-size: 0.8rem;
-  font-weight: 400;
-  color: var(--text-gray-color);
+  font-weight: 500;
+  color: var(--pink-main-color);
 }
 
 h5.duiwehrwerwer,

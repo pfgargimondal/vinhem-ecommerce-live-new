@@ -56,15 +56,15 @@ export const Career = () => {
 
   return (
     <div>
-      <div
-        className="aboutusbannr"
+      <div className="container-fluid">
+        <div className="aboutusbannr"
         style={{
           backgroundImage:
             CareerDetails?.image_url && CareerDetails?.data?.banner_image
               ? `url(${CareerDetails.image_url}/${CareerDetails.data.banner_image})`
               : "url(./image/fashion-caeer.png)",
           backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundPosition: "center", borderRadius: "27px", height: "553px", objectFit: "cover", marginTop: "1rem"
         }}
       >
         <div className="container-fluid">
@@ -83,7 +83,8 @@ export const Career = () => {
             </div>
           </div>
         </div>
-      </div>
+        </div>  
+      </div>      
 
       <div className="fbhjjdfjk554">
         <div className="wrapper">

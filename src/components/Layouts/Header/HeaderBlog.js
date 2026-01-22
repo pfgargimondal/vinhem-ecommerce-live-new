@@ -1,14 +1,18 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import Logo from "../../../assets/images/logo.png";
 
 import "./Css/HeaderBlog.css";
+import Loader from "../../Loader/Loader";
+import http from "../../../http";
 
 export const HeaderBlog = () => {
     const [hbModal, setHbModal] = useState(false);
     const searchRef = useRef(null);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [blogsHeader, setBlogsHeader] = useState([]);
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -36,6 +40,31 @@ export const HeaderBlog = () => {
         setHbModal(false);
     };
 
+    useEffect(() => {
+        const fetchBlogHeader = async () => {
+            setLoading(true);
+            try {
+                const getresponse = await http.get("/fetch-blog-header");
+                const dataheaderCategories = getresponse.data.data;
+
+                setBlogsHeader(dataheaderCategories);
+
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchBlogHeader();
+    }, []);
+
+    
+
+    
+    if (loading) {
+        return <Loader />;
+    }
+
 
   return (
     <>
@@ -54,23 +83,15 @@ export const HeaderBlog = () => {
                 <div className="dwejnrkhweijrwer mt-4">
                     <ul className="mb-0 ps-0">
                         <li className="mx-3">
-                            <Link to="/">HOME</Link>
+                            <Link to="/blog">HOME</Link>
                         </li>
-
+                        {blogsHeader.map(blogHeaderItem => (
+                            <li className="mx-3">
+                                <Link to={blogHeaderItem.category_url}>{blogHeaderItem.head_category}</Link>
+                            </li>
+                        ))}
                         <li className="mx-3">
-                            <Link to="/about-us">ABOUT US</Link>
-                        </li>
-
-                        <li className="mx-3">
-                            <Link to="">STYLE COUNCIL - MAGAZINE</Link>
-                        </li>
-
-                        <li className="mx-3">
-                            <Link to="">LATEST TRENDZ</Link>
-                        </li>
-
-                        <li className="mx-3">
-                            <Link to="">SHOP NOW</Link>
+                            <Link to="https://www.vinhemfashion.com/">SHOP NOW</Link>
                         </li>
                     </ul>
                 </div>

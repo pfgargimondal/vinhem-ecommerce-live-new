@@ -77,29 +77,32 @@ export const TrackOrder = () => {
       {loading && <Loader />}
       
       <div>
-        <div className="aboutusbannr" 
-          style={{backgroundSize: "cover",
-            backgroundImage: TrackingOrderDetails?.image_url && TrackingOrderDetails?.data?.banner_image
-              ? `url(${TrackingOrderDetails.image_url}/${TrackingOrderDetails.data.banner_image})`
-              : "none",
-          }}
-        >
-          <div className="container">
-              <div className="dfgnhdfjhgdf">
-                  <div className="row">
-                      <div className="col-lg-8"></div>
-                      <div className="col-lg-4">
-                          <div className="dfbhdf">
-                              <h2>{TrackingOrderDetails.data?.banner_title && TrackingOrderDetails.data.banner_title}</h2>
-                          </div>
-                      </div>
-                  </div>
-              </div>
+        <div className="container-fluid">
+          <div className="aboutusbannr" 
+            style={{backgroundSize: "cover",
+              backgroundImage: TrackingOrderDetails?.image_url && TrackingOrderDetails?.data?.banner_image
+                ? `url(${TrackingOrderDetails.image_url}/${TrackingOrderDetails.data.banner_image})`
+                : "none", borderRadius: "27px", height: "553px", objectFit: "cover", marginTop: "1rem"
+            }}
+          >
+            <div className="sdfgdfgdfg">
+                <div className="dfgnhdfjhgdf">
+                    <div className="row">
+                        <div className="col-lg-8"></div>
+                        <div className="col-lg-4">
+                            <div className="dfbhdf">
+                                {/* <h2>{TrackingOrderDetails.data?.banner_title && TrackingOrderDetails.data.banner_title}</h2> */}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+            </div>
           </div>
         </div>
+        
       <div className="track-order-wrapper">
-        <div className="lksnkjererr container px-5">
+        <div className="lksnkjererr container-fluid px-5">
           <div className="fdgfrwtyrt row py-5">
             <div className="col-lg-8 mb-5">
               <div className="odkioowepow">

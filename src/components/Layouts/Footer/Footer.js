@@ -258,11 +258,11 @@ export const Footer = ({ shouldHideFullHeaderFooterRoutes }) => {
                       <h5>My Account</h5>
 
                       <ul className="f-link mb-0 ps-0">
-                        <li><Link to="/become-vendor"><i class="bi me-2 bi-caret-right-fill"></i> Become a Vendor</Link></li>
+                        <li><Link to="/become-vendor"><i class="bi me-2 bi-caret-right-fill"></i> Supplier Registration</Link></li>
 
-                        <li onClick={handleLoginModal}><Link><i class="bi me-2 bi-caret-right-fill"></i> Sign in</Link></li>
+                        <li onClick={handleLoginModal}><Link><i class="bi me-2 bi-caret-right-fill"></i> Sign in / Sign up</Link></li>
 
-                        <li onClick={handleLoginModal}><Link><i class="bi me-2 bi-caret-right-fill"></i> Sign up</Link></li>
+                        {/* <li onClick={handleLoginModal}><Link><i class="bi me-2 bi-caret-right-fill"></i> Sign up</Link></li> */}
 
                         <li><Link to="/track-order"><i class="bi me-2 bi-caret-right-fill"></i> Track Order</Link></li>
 
@@ -319,6 +319,8 @@ export const Footer = ({ shouldHideFullHeaderFooterRoutes }) => {
                     <li><Link to="" className="social twitter"><i class="bi bi-twitter-x"></i></Link></li>
 
                     <li><Link to="" className="social youtube"><i class="bi bi-youtube"></i></Link></li>
+
+                    <li><Link to="" className="social youtube"><i class="bi bi-linkedin"></i></Link></li>
                   </ul>
 
                   <h5>Fashion Updates</h5>
@@ -356,7 +358,7 @@ export const Footer = ({ shouldHideFullHeaderFooterRoutes }) => {
 
           <div className="idnweihrwerwe text-center py-3">
             <div className="container">
-              <p className="jamdlkjwekrer mb-0">Copyright <i class="bi bi-c-circle"></i> 2012-2025, vinhem fashion.com. All rights reserved. Powered By VinHem Technologies</p>
+              <p className="jamdlkjwekrer mb-0">Copyright <i class="bi bi-c-circle"></i> 2012-2026, VinHem Fashion A Unit of VinHem Technologies - All rights reserved.</p>
             </div>
           </div>
 

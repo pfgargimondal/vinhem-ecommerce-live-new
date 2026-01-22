@@ -4,6 +4,7 @@ footer {
 
 .dgsdfhdrgh{
   color: var(--pink-main-color);
+  font-weight: 500;
 }
 
 footer .dbewjbruwerwer_inner img {
@@ -88,6 +89,11 @@ footer .dbewjbruwerwer_inner ul.f-fu-link li a {
 /* YouTube */
 .f-fu-link .youtube:hover {
   color: #ff0000;
+}
+
+/* LinkedIn */
+.f-fu-link .bi-linkedin:hover{
+  color: #0270AD;
 }
 
 footer .dbewjbruwerwer_inner input.form-control {

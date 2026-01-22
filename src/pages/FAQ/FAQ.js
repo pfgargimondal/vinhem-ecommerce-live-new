@@ -37,15 +37,15 @@ export const FAQ = () => {
     <div>
       {/* Banner Section */}
       <div className="fgyfgfd5215g">
-        <div className="container">
+        <div className="container-fluid">
           <div
             className="aboutusbannr55"
             style={{
               backgroundImage: FAQDetails.data?.banner_image
                 ? `url(${FAQDetails.image_url}/${FAQDetails.data.banner_image})`
                 : "none",
-              backgroundSize: "100% 100%",
-              height: "450px",
+              backgroundSize: "cover",
+              backgroundPosition: "center", borderRadius: "27px", height: "553px", objectFit: "cover", marginTop: "1rem"
             }}
           >
             <div className="dfgnhdfjhgdf">
@@ -61,7 +61,7 @@ export const FAQ = () => {
       {/* FAQ Section */}
       <div className="fjgnfg55d">
         <div className="wrapper">
-          <div className="container">
+          <div className="container-fluid">
             <h1 className="mb-4">
               {FAQDetails.data?.title &&
                 FAQDetails.data.title}

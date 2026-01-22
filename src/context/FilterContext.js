@@ -12,7 +12,7 @@ const filterInitialState = {
     filterCategoryName: [],
     color: [],
     material: [],
-    designer: [],    
+    designer: [],
     plusSize: [],
     occasion: [],
     size: [],
@@ -28,8 +28,8 @@ const filterInitialState = {
 
 const FilterContext = createContext(filterInitialState);
 
-export const FilterProvider = ({children}) => {
-    const [state, dispatch] = useReducer(filterReducer, filterInitialState);    
+export const FilterProvider = ({ children }) => {
+    const [state, dispatch] = useReducer(filterReducer, filterInitialState);
 
 
     //productlist
@@ -59,7 +59,7 @@ export const FilterProvider = ({children}) => {
             return price >= state.minPrice && price <= state.maxPrice;
         });
     }
-    
+
 
     //main category
 
@@ -110,7 +110,7 @@ export const FilterProvider = ({children}) => {
     }
 
 
-    
+
 
 
     //filter category
@@ -166,24 +166,24 @@ export const FilterProvider = ({children}) => {
             if (!productCategories) return false;
 
             if (typeof productCategories === "string") {
-            return productCategories
-                .toLowerCase()
-                .split(",")
-                .map(v => v.trim())
-                .some(cat => state.filterCategoryName.includes(cat));
+                return productCategories
+                    .toLowerCase()
+                    .split(",")
+                    .map(v => v.trim())
+                    .some(cat => state.filterCategoryName.includes(cat));
             }
 
             if (Array.isArray(productCategories)) {
-            return productCategories
-                .map(v => v.toLowerCase())
-                .some(cat => state.filterCategoryName.includes(cat));
+                return productCategories
+                    .map(v => v.toLowerCase())
+                    .some(cat => state.filterCategoryName.includes(cat));
             }
 
             return false;
         });
     }
 
-    
+
 
 
     //color
@@ -193,7 +193,7 @@ export const FilterProvider = ({children}) => {
 
         dispatch({
             type: "COLOR",
-            payload: { 
+            payload: {
                 color: color.toLowerCase()
             }
         });
@@ -212,8 +212,8 @@ export const FilterProvider = ({children}) => {
 
         dispatch({
             type: "MATERIAL",
-            payload: { 
-                material: material.toLowerCase() 
+            payload: {
+                material: material.toLowerCase()
             }
         });
     }
@@ -222,7 +222,7 @@ export const FilterProvider = ({children}) => {
         const selectedMaterials = state.material || [];
         return selectedMaterials.length ? products.filter(product => selectedMaterials.includes(product.fabric?.toLowerCase().trim())) : products;
     }
-    
+
 
 
     //designer
@@ -232,8 +232,8 @@ export const FilterProvider = ({children}) => {
 
         dispatch({
             type: "DESIGNER",
-            payload: { 
-                designer: designer.toLowerCase() 
+            payload: {
+                designer: designer.toLowerCase()
             }
         });
     }
@@ -241,7 +241,7 @@ export const FilterProvider = ({children}) => {
     function filterDesigner(products) {
         const selectedDesigners = state.designer || [];
         return selectedDesigners.length ? products.filter(product => selectedDesigners.includes(product.designer?.toLowerCase())) : products;
-    }   
+    }
 
 
     //plus size
@@ -251,7 +251,7 @@ export const FilterProvider = ({children}) => {
 
         dispatch({
             type: "PLUS_SIZE",
-            payload: { 
+            payload: {
                 plusSize: plusSize.toLowerCase()
             }
         });
@@ -309,8 +309,8 @@ export const FilterProvider = ({children}) => {
 
         dispatch({
             type: "SIZE",
-            payload: { 
-                size: size.toLowerCase() 
+            payload: {
+                size: size.toLowerCase()
             }
         });
     }
@@ -334,8 +334,8 @@ export const FilterProvider = ({children}) => {
 
         dispatch({
             type: "CELEBRITY",
-            payload: { 
-                celebrity: celebrity.toLowerCase() 
+            payload: {
+                celebrity: celebrity.toLowerCase()
             }
         });
     }
@@ -359,8 +359,8 @@ export const FilterProvider = ({children}) => {
 
         dispatch({
             type: "SHIPPING_TIME",
-            payload: { 
-                shippingTime: shippingTime.toLowerCase() 
+            payload: {
+                shippingTime: shippingTime.toLowerCase()
             }
         });
     }
@@ -375,7 +375,7 @@ export const FilterProvider = ({children}) => {
         });
     }
 
-    
+
 
     //sortby
 
@@ -406,7 +406,7 @@ export const FilterProvider = ({children}) => {
 
     // console.log(state.sortBy)
 
-    
+
 
     //new arrival
 
@@ -447,7 +447,7 @@ export const FilterProvider = ({children}) => {
         dispatch({
             type: "CSTM_FIT",
             payload: {
-            cstmFit: value,
+                cstmFit: value,
             },
         });
     }
@@ -474,11 +474,55 @@ export const FilterProvider = ({children}) => {
 
 
     //reset
-    
+
     function resetFilter() {
         dispatch({
             type: "REST_FILTER"
         })
+    }
+
+    function removeMainCategory(value) {
+        dispatch({ type: "REMOVE_MAIN_CATEGORY", payload: value });
+    }
+
+    function removeSubCategory(value) {
+        dispatch({ type: "REMOVE_SUB_CATEGORY", payload: value });
+    }
+
+    function removeFilterCategory(value) {
+        dispatch({ type: "REMOVE_FILTER_CATEGORY", payload: value });
+    }
+
+    function removeColor(value) {
+        dispatch({ type: "REMOVE_COLOR", payload: value });
+    }
+
+    function removeMaterial(value) {
+        dispatch({ type: "REMOVE_MATERIAL", payload: value });
+    }
+
+    function removeDesigner(value) {
+        dispatch({ type: "REMOVE_DESIGNER", payload: value });
+    }
+
+    function removePlusSize(value) {
+        dispatch({ type: "REMOVE_PLUS_SIZE", payload: value });
+    }
+
+    function removeOccasion(value) {
+        dispatch({ type: "REMOVE_OCCASION", payload: value });
+    }
+
+    function removeSize(value) {
+        dispatch({ type: "REMOVE_SIZE", payload: value });
+    }
+
+    function removeCelebrity(value) {
+        dispatch({ type: "REMOVE_CELEBRITY", payload: value });
+    }
+
+    function removeShippingTime(value) {
+        dispatch({ type: "REMOVE_SHIPPING_TIME", payload: value });
     }
 
 
@@ -503,7 +547,7 @@ export const FilterProvider = ({children}) => {
                                                                     )
                                                                 )
                                                             )
-                                                        )                                                        
+                                                        )
                                                     )
                                                 )
                                             )
@@ -522,46 +566,77 @@ export const FilterProvider = ({children}) => {
 
     const value = {
         products: filteredProducts,
+
         onSale: state.onSale,
         newIn: state.newIn,
         readyToShip: state.readyToShip,
         cstmFit: state.cstmFit,
+
         initialProductList,
+
         minPrice: state.minPrice,
         maxPrice: state.maxPrice,
         setPrice,
+
         mainCategory: state.mainCategory,
         setMainCategory,
+
         subCategory: state.subCategory,
         setSubCategory,
-        filterCtgry: state.filterCategory,
+
+        filterCategoryCntxt: state.filterCategory,
         setFilterCategory,
+
         filterCategoryName: state.filterCategoryName,
         setFilterCategoryName,
+
         color: state.color,
         setColor,
+
         material: state.material,
         setMaterial,
+
         designer: state.designer,
         setDesigner,
+
         plusSize: state.plusSize,
         setPlusSize,
+
         occasion: state.occasion,
         setOccasion,
+
         size: state.size,
         setSize,
+
         celebrity: state.celebrity,
         setCelebrity,
+
         shippingTime: state.shippingTime,
         setShippingTime,
+
         sortBy: state.sortBy,
         setSortBy,
+
         setNewArrival,
         setReadyToShip,
         setCstmFit,
         setOnSale,
+
+        // remove handlers
+        removeMainCategory,
+        removeSubCategory,
+        removeFilterCategory,
+        removeColor,
+        removeMaterial,
+        removeDesigner,
+        removePlusSize,
+        removeOccasion,
+        removeSize,
+        removeCelebrity,
+        removeShippingTime,
+
         resetFilter
-    }
+        };
 
     return (
         <FilterContext.Provider value={value}>

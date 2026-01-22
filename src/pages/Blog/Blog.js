@@ -26,6 +26,9 @@ export const Blog = () => {
     const [blogCategories, setBlogCategories] = useState([]);
     const [blogTags, setBlogTags] = useState([]);
 
+    const [blogBanner, setBlogBanner] = useState([]);
+    const [blogBannerimageBaseUrl, setBlogBannerImageBaseUrl] = useState("");
+
     const pathName = useLocation().pathname;
 
     let urlLastSegment = "";
@@ -80,6 +83,10 @@ export const Blog = () => {
 
             setPopularBlogs(dataBlogs.popularblog);
             setImageBaseUrl(dataBlogs.image_url);
+
+            setBlogBanner(dataBlogs.blog_banner);
+            setBlogBannerImageBaseUrl(dataBlogs.banner_image_url);
+
         } catch (error) {
             console.error("Error fetching blogs:", error);
         } finally{
@@ -164,12 +171,12 @@ export const Blog = () => {
                     autoplay={{ delay: 4000, disableOnInteraction: false }}
                     className="featured-swiper"
                 >
-                    {popularblogs.map(popularblog => (
-                        <SwiperSlide key={popularblog?.id}>
+                    {blogBanner.map(blogBannerItem => (
+                        <SwiperSlide key={blogBannerItem?.id}>
                             <div className="lklklkdssdd-slider">
                                 <img
-                                    src={`${imageBaseUrl}/${popularblog?.blog_image}`}
-                                    alt={popularblog?.title}
+                                    src={`${blogBannerimageBaseUrl}/${blogBannerItem?.image}`}
+                                    alt={blogBannerItem?.image}
                                     className="img-fluid w-100"
                                 />
 

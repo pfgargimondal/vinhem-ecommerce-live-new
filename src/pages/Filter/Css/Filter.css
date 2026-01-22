@@ -365,7 +365,7 @@
   height: 1.2rem;
   border-radius: 50%;
   border: 1px solid var(--pink-main-color);
-  line-height: 1.2;
+  line-height: 1.1;
   color: var(--pink-main-color);
 }
  .dohwekrjiwejr input[type="number"]::-webkit-outer-spin-button, .dohwekrjiwejr input[type="number"]::-webkit-inner-spin-button {
@@ -610,4 +610,11 @@
 
 .dfgsfsfsfsdf button.btn-main:hover{
   border-radius: 5px;
+}
+
+.dweihrihwerwerwer p{
+  cursor: pointer;
+  color: var(--pink-main-color);
+  font-weight: 500;
+  display: inline-block;
 }

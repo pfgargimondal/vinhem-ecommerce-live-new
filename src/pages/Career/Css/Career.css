@@ -39,6 +39,7 @@
 
 .answercont.open {
   max-height: initial;
+  border: 1px solid var(--text-gray-color);
 }
 
 .fbhjjdfjk554 .question.active::after {
@@ -148,6 +149,11 @@
 .dfbgjhdf5
 {
   text-align: center;
+}
+
+.dfbgjhdf5 .btn-main{
+  background: var(--pink-main-color);
+  border-color: var(--pink-main-color) !important;
 }
 
 /* end  career2  page css */

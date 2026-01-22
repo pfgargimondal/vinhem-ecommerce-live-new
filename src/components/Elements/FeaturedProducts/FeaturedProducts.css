@@ -281,7 +281,7 @@
 }
 
 .fgnjhdf h6 {
-  color: #bc3d19;
+  color: var(--pink-main-color);
   font-size: 16px;
   font-weight: 500;
 }

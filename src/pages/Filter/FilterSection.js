@@ -9,7 +9,7 @@ import Loader from "../../components/Loader/Loader";
 
 
 export default function FilterSection({ setResFltrMenu, allFilterMappingdata, filterCategories, category, subcategory }) {
-  const { minPrice, maxPrice, setPrice, setMainCategory, setSubCategory, setFilterCategory, setFilterCategoryName, color, setColor, setMaterial, setDesigner, setPlusSize, setOccasion, setSize, setCelebrity, setShippingTime, resetFilter } = useFilter();
+  const { minPrice, maxPrice, setPrice, mainCategory, setMainCategory, subCategory, setSubCategory, filterCategoryCntxt, setFilterCategory, setFilterCategoryName, color, setColor, material, setMaterial, designer, setDesigner, plusSize, setPlusSize, occasion, setOccasion, size, setSize, celebrity, setCelebrity, shippingTime, setShippingTime, resetFilter } = useFilter();
   const [selectedTheme, setSelectedTheme] = useState("");
   const [sbctgry, setSbctgry] = useState(null);
   const [insdSbctgry, setInsdSbctgry] = useState(null);
@@ -307,6 +307,7 @@ const applyPriceFilter = (min, max) => {
                                           <input
                                             id={`mnctgry-${filterCategory.id}`}
                                             onChange={() => setMainCategory(filterCategory.mainCategory_name.toLowerCase())}
+                                            checked={mainCategory.includes(filterCategory.mainCategory_name.toLowerCase())}
                                             value={filterCategory.mainCategory_name.toLowerCase()}
                                             className="checkbox__trigger visuallyhidden"
                                             type="checkbox"
@@ -357,6 +358,7 @@ const applyPriceFilter = (min, max) => {
                                                         sub_category.subCategories_name.toLowerCase()
                                                       )
                                                     }
+                                                    checked={subCategory.includes(sub_category.subCategories_name.toLowerCase())}
                                                     value={sub_category.subCategories_name.toLowerCase()}
                                                     className="checkbox__trigger visuallyhidden"
                                                     type="checkbox"
@@ -406,6 +408,7 @@ const applyPriceFilter = (min, max) => {
                                                           filter_category.filterCategories_name.toLowerCase()
                                                         )
                                                       }
+                                                      checked={filterCategoryCntxt.includes(filter_category.filterCategories_name.toLowerCase())}
                                                       value={filter_category.filterCategories_name.toLowerCase()}
                                                       id={`insd-sb-ctgry-${filter_category.id}`}
                                                       className="checkbox__trigger visuallyhidden"
@@ -497,11 +500,33 @@ const applyPriceFilter = (min, max) => {
                     })
                   ) : (
 
-                    FilterMappingdata.filter_values.split(",").slice(0, valuesToShow).map((item, indexdsvd) => {
-                      const safeId = `${FilterMappingdata.filter_option}-${item
-                        .trim()
-                        .replace(/\s+/g, "-")
-                        .toLowerCase()}-${indexdsvd}`;
+                    FilterMappingdata.filter_values
+                      .split(",")
+                      .slice(0, valuesToShow)
+                      .map((item, indexdsvd) => {
+                        const trimmedValue = item.trim().toLowerCase();
+                        const safeId = `${FilterMappingdata.filter_option}-${trimmedValue}-${indexdsvd}`;
+
+                        let isChecked = false;
+
+                        // Make filter_option lowercase for safety
+                        const filterKey = FilterMappingdata.filter_option.toLowerCase();
+
+                        if (filterKey === "material") {
+                          isChecked = material.includes(trimmedValue);
+                        } else if (filterKey === "designers") {
+                          isChecked = designer.includes(trimmedValue);
+                        } else if (filterKey === "plus_sizes") {
+                          isChecked = plusSize.includes(trimmedValue);
+                        } else if (filterKey === "occasion") {
+                          isChecked = occasion.includes(trimmedValue);
+                        } else if (filterKey === "size") {
+                          isChecked = size.includes(trimmedValue);
+                        } else if (filterKey === "celebrity") {
+                          isChecked = celebrity.includes(trimmedValue);
+                        } else if (filterKey === "shipping_time") {
+                          isChecked = shippingTime.includes(trimmedValue);
+                        }
 
                       return (
                         <div key={`${FilterMappingdata.id}-${indexdsvd}`} className="radio-wrapper-5 px-2 mb-2">
@@ -511,13 +536,14 @@ const applyPriceFilter = (min, max) => {
                                 <input
                                   id={safeId}
                                   name={FilterMappingdata.filter_option}
-                                  value={item.trim().toLowerCase()}
-                                  onChange={() => handleSelect(FilterMappingdata.filter_option, item.trim().toLowerCase())}
-                                  className="checkbox__trigger visuallyhidden"
+                                  value={trimmedValue}
                                   type="checkbox"
+                                  className="checkbox__trigger visuallyhidden"
+                                  checked={isChecked}
+                                  onChange={() => handleSelect(FilterMappingdata.filter_option, trimmedValue)}
                                 />
                                 <span className="checkbox__symbol">
-                                  <svg aria-hidden="true" className="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
+                                  <svg aria-hidden="true" className="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28">
                                     <path d="M4 14l8 7L24 7"></path>
                                   </svg>
                                 </span>
@@ -526,7 +552,7 @@ const applyPriceFilter = (min, max) => {
                             </div>
                           </div>
                         </div>
-                      )
+                      );
                     })
                   )}
                 </div>
