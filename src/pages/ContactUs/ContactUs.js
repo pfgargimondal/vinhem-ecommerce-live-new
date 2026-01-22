@@ -187,7 +187,7 @@ export const ContactUs = () => {
         <div className={styles.addressSection}>
             {ContactUsDetails.contact_details?.warehouse_office_status === 1 && (
               <>
-                <h3>Warehouse Address: (Operation Center)</h3>
+                <h3>Warehouse Address:</h3>
                 <div
                   dangerouslySetInnerHTML={{
                     __html: ContactUsDetails.contact_details?.wholeale_address || "",
@@ -211,7 +211,7 @@ export const ContactUs = () => {
 
             {ContactUsDetails.contact_details?.branch_office_status === 1 && (
               <>
-                <h3> Branch Office Address: (Operation Center) </h3>
+                <h3> Branch Office Address: </h3>
                 <div
                   dangerouslySetInnerHTML={{
                     __html:

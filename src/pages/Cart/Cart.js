@@ -304,7 +304,7 @@ export const Cart = () => {
   const [shippingAddress, setShippingAddress] = useState(null);
   const [billingAddress, setBillingAddress] = useState(null);
   const [sameAsShipping, setSameAsShipping] = useState(false);
-
+  const [isMobileInvalid, setIsMobileInvalid] = useState(false);
   const [errors, setErrors] = useState({});
 
   // -------------------------------
@@ -448,6 +448,10 @@ export const Cart = () => {
       setShippingCharge(savedCharge);
     }
   }, []);
+
+  const handleInvalidMobile = (invalid) => {
+    setIsMobileInvalid(invalid);
+  };
 
 
   const validateForm = () => {
@@ -1394,12 +1398,14 @@ export const Cart = () => {
                                     address={shippingAddress}
                                     onEdit={handleEditAddress}
                                     onRemove={handleRemoveAddress}
+                                    onInvalidMobile={handleInvalidMobile}
                                   />
                                 ) : previousAddress ? (
                                   <ShippingAddress
                                     address={previousAddress}
                                     onEdit={handleEditAddress}
                                     onRemove={handleRemoveAddress}
+                                    onInvalidMobile={handleInvalidMobile}
                                   />
                                 ) : null
                               ) : null}
@@ -1810,6 +1816,7 @@ export const Cart = () => {
                         <button
                           className="btn btn-main w-100 mb-4"
                           onClick={handleCheckoutPayment}
+                          disabled={!shippingAddress || isMobileInvalid}
                         >
                           CONTINUE TO PAYMENT
                         </button>

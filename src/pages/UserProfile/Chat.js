@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { UserProfileNavMenu } from "../../components";
 import styles from "./Css/Chat.module.css";
 import { useEffect, useState } from "react";
-import http from "../../http";
+import http, { BASE_URL } from "../../http";
 
 export const Chat = () => {
     const [selectedSupport, setSelectedSupport] = useState(null);
@@ -154,27 +154,73 @@ export const Chat = () => {
                                         <div className={`${styles.ldknwejknlkkekrrr} flex-grow-1 p-3 bg-light`}>
                                             {loadingMessages ? (
                                                 <div className="text-muted text-center mt-5">Loading messages...</div>
-                                            ) : messages.length === 0 ? (
+                                                ) : messages.length === 0 ? (
                                                 <div className="text-muted text-center mt-5">
                                                     {selectedSupport ? "Start chatting..." : "Select a support person from the user panel"}
                                                 </div>
-                                            ) : (
+                                                ) : (
                                                 messages.map((msg, index) => {
-                                                    const isUser = msg.user_type === "User" || msg.sender === "me";
-                                                    return (
-                                                        <div
-                                                        key={index}
-                                                        className={`mb-2 d-flex ${isUser ? "justify-content-end" : "justify-content-start"}`}
-                                                        >
-                                                        <div
-                                                            className={`p-2 rounded ${
-                                                            isUser ? `${styles.bg_pink} text-white` : "bg-secondary text-white"
-                                                            }`}
-                                                        >
-                                                            {msg.message || msg.text}
-                                                        </div>
-                                                        </div>
+                                                const isUser = msg.user_type === "User" || msg.sender === "me";
+                                                const align = isUser ? "justify-content-end" : "justify-content-start";
+                                                const color = isUser ? `${styles.bg_pink} text-white` :
+                                                                msg.sender === "bot" ? "bg-success text-white" :
+                                                                "bg-secondary text-white";
+
+                                                // Build an array of nodes
+                                                const messageContent = [];
+
+                                                if (msg.message || msg.text) {
+                                                    messageContent.push(<div key="text">{msg.message || msg.text}</div>);
+                                                }
+
+                                                if (msg.attachment && msg.attachment_type) {
+                                                    const fileUrl = `${BASE_URL}/public/all_images/chat_attachments/${msg.attachment}`;
+
+                                                    if (msg.attachment_type.startsWith("image/")) {
+                                                    messageContent.push(
+                                                        <img
+                                                        key="img"
+                                                        alt=""
+                                                        src={fileUrl}
+                                                        className="img-fluid rounded mt-1"
+                                                        style={{ maxWidth: "200px" }}
+                                                        />
                                                     );
+                                                    } else if (msg.attachment_type.startsWith("video/")) {
+                                                    messageContent.push(
+                                                        <video
+                                                        key="video"
+                                                        controls
+                                                        className="mt-1"
+                                                        style={{ maxWidth: "220px" }}
+                                                        >
+                                                        <source src={fileUrl} type={msg.attachment_type} />
+                                                        </video>
+                                                    );
+                                                    } else {
+                                                    messageContent.push(
+                                                        <a
+                                                        key="file"
+                                                        href={fileUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="d-inline-flex align-items-center gap-1 mt-1 fw-semibold chat-download"
+                                                        style={{ color: isUser ? "#fff" : "#000" }}
+                                                        >
+                                                        <i className="bx bx-paperclip"></i> Download file
+                                                        </a>
+                                                    );
+                                                    }
+                                                }
+
+                                                return (
+                                                    <div key={index} className={`mb-2 d-flex ${align}`}>
+                                                    <div className={`p-2 rounded ${color}`} style={{ maxWidth: "70%" }}>
+                                                        {messageContent}
+                                                    </div>
+                                                    {/* <div className="small text-muted mt-1 ms-2">{msg.created_at}</div> */}
+                                                    </div>
+                                                );
                                                 })
                                             )}
                                         </div>
