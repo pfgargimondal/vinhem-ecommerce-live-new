@@ -4,10 +4,12 @@ import http from "../../http";
 import { useNavigate } from "react-router-dom";
 import { FooterTopComponent } from "../../components/Others/FooterTopComponent";
 import Loader from "../../components/Loader/Loader";
+import { useAuthModal } from "../../context/AuthModalContext";
 
 export const AboutUs = () => {
   // eslint-disable-next-line
   const navigate = useNavigate();
+  const { handleLoginModal } = useAuthModal();
 
   const [AboutUsDetails, setAboutUsDetails] = useState({});
   const [loading, setLoading] = useState(false);
@@ -33,9 +35,9 @@ export const AboutUs = () => {
   // Replace plain SIGN IN with a clickable link
   const updatedDescription = description.replace(
     /SIGN IN/g,
-    `<a href="/login" style="color: var(--pink-main-color); text-decoration:underline;">SIGN IN</a>`,
+    `<a class="signin-link" style="color: var(--pink-main-color); text-decoration:underline;">SIGN IN</a>`
   );
-
+ 
   if (loading) {
     return <Loader />;
   }
@@ -324,6 +326,11 @@ export const AboutUs = () => {
               <div
                 dangerouslySetInnerHTML={{
                   __html: updatedDescription,
+                }}
+                onClick={(e) => {
+                  if (e.target.classList.contains('signin-link')) {
+                    handleLoginModal();
+                  }
                 }}
               />
             </div>

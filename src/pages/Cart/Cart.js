@@ -715,8 +715,8 @@ export const Cart = () => {
     
 
     const countryData = JSON.parse(localStorage.getItem("selectedCurrency"));
-    const country = countryData.country_name;
-    const currency_code = countryData.currency_code;
+    const country = countryData?.country_name;
+    const currency_code = countryData?.currency_code;
 
     useEffect(() => {
       const savedGift = localStorage.getItem("is_gift");
@@ -2952,8 +2952,8 @@ export const Cart = () => {
                 >
                   <option value="">Select Country</option>
                   {shippingCountry.map((item) => (
-                    <option key={item.country_name} value={item.country_name}>
-                      {item.country_name}
+                    <option key={item?.country_name} value={item?.country_name}>
+                      {item?.country_name}
                     </option>
                   ))}
                 </select>

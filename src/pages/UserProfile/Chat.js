@@ -1,19 +1,44 @@
 import { Link } from "react-router-dom";
 import { UserProfileNavMenu } from "../../components";
 import styles from "./Css/Chat.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import http, { BASE_URL } from "../../http";
+import EmojiPicker from 'emoji-picker-react';
 
 export const Chat = () => {
     const [selectedSupport, setSelectedSupport] = useState(null);
     const [messages, setMessages] = useState([]);
-    const [input, setInput] = useState("");
     const [chatAdmins, setChatAdmins] = useState([]);
     const [chatSupportAvatarBaseURL, setChatSupportAvatarBaseURL] = useState(null);
       // eslint-disable-next-line
     const [loadingMessages, setLoadingMessages] = useState(false);
+   
 
-    // console.log(messages)
+    const [message, setMessage] = useState("");
+    const [showEmoji, setShowEmoji] = useState(false);
+
+    const emojiRef = useRef(null);
+    const emojiBtnRef = useRef(null);
+
+    // ✅ Close emoji picker on outside click
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+        if (
+            emojiRef.current &&
+            !emojiRef.current.contains(event.target) &&
+            !emojiBtnRef.current.contains(event.target)
+        ) {
+            setShowEmoji(false);
+        }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const handleEmojiClick = (emojiData) => {
+        setMessage((prev) => prev + emojiData.emoji);
+    };
 
 
     useEffect(() => {
@@ -57,31 +82,48 @@ export const Chat = () => {
 
 
     const sendMessage = async () => {
-        if (!input.trim() || !selectedSupport) return;
+        if (!message.trim() || !selectedSupport) return;
+
+        const messageText = message.trim();
 
         const newMessage = {
-            text: input,
+            id: Date.now(),
+            text: messageText,
             sender: "me",
             created_at: new Date().toISOString(),
+            status: "sending",
         };
 
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
-        setInput("");
+        // Optimistic UI update
+        setMessages((prev) => [...prev, newMessage]);
+        setMessage("");
 
         try {
             await http.post("/user/post-chat-message", {
-                reciver_id: selectedSupport.id,
-                message: input,
+            reciver_id: selectedSupport.id,
+            message: messageText,
             });
+
+            setMessages((prev) =>
+            prev.map((msg) =>
+                msg.id === newMessage.id
+                ? { ...msg, status: "sent" }
+                : msg
+            )
+            );
         } catch (error) {
             console.error("Error sending message:", error);
-            setMessages((prevMessages) =>
-                prevMessages.map((msg) =>
-                    msg === newMessage ? { ...msg, error: true } : msg
-                )
+
+            setMessages((prev) =>
+            prev.map((msg) =>
+                msg.id === newMessage.id
+                ? { ...msg, status: "error" }
+                : msg
+            )
             );
         }
     };
+
 
     // ✅ Auto scroll chat box
     useEffect(() => {
@@ -226,17 +268,36 @@ export const Chat = () => {
                                         </div>
 
                                         {/* Input */}
-                                        <div className={`${styles.cdrgbghjjfgrfvrt} d-flex border-top p-2`}>
-                                            <input
+                                        <div className={styles.cdrgbghjjfgrfvrt}>
+                                            <div className={styles.inputBox}>
+                                                <input
                                                 type="text"
-                                                className="form-control me-2"
-                                                placeholder="Type a reply..."
-                                                value={input}
-                                                onChange={(e) => setInput(e.target.value)}
+                                                placeholder="Type a message"
+                                                value={message}
+                                                onChange={(e) => setMessage(e.target.value)}
                                                 disabled={!selectedSupport}
-                                            />
+                                                />
+                                                 <span className={styles.divider}></span>
+                                                <div className={styles.icons}>
+                                                <i class="bi bi-paperclip"></i>
+
+                                                <i
+                                                    ref={emojiBtnRef}
+                                                    className="bi bi-emoji-smile"
+                                                    onClick={() => setShowEmoji((prev) => !prev)}
+                                                    style={{ cursor: "pointer" }}
+                                                />
+                                                </div>
+                                            </div>
+
+                                            {showEmoji && (
+                                                <div ref={emojiRef} className={styles.emojiBox}>
+                                                <EmojiPicker onEmojiClick={handleEmojiClick} />
+                                                </div>
+                                            )}
+
                                             <button
-                                                className="btn btn-main"
+                                                className="btn btn-main ms-2"
                                                 onClick={sendMessage}
                                                 disabled={!selectedSupport}
                                             >

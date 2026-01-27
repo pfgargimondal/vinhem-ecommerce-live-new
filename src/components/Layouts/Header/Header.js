@@ -653,7 +653,7 @@ export const Header = ({ shouldHideHeader, shouldHideFullHeaderFooterRoutes, sho
                             <>
                               <li onClick={() => handleLoginModal()} className="DRhgbsxfnhbf"><i class="bi bi-heart"></i> &nbsp;Wishlist <span>0</span></li>
                               <li className="infrm-menu-divider">|</li>
-                              <li onClick={() => handleLoginModal()}><i class="bi bi-handbag"></i> Bag <span>0</span></li>
+                              <li onClick={() => handleLoginModal()}><i class="bi bi-handbag"></i> Cart <span>0</span></li>
                             </>
                           )}
 
