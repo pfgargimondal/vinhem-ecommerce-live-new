@@ -7,11 +7,11 @@ export const BlogItem = ({blog, imageBaseUrl}) => {
   return (
     <article className="fgfrfdrdtreere mb-5 pb-3">
         <div className="lolmdslkjflsdm position-relative d-flex align-items-center">
-            <div className="article-number p-2">
+            <div className="article-number p-3">
                 <h4 className="text-light text-center mb-0">{blogDate}</h4>
             </div>
 
-            <div className="oiajdoimewr col-lg-8 bg-white px-5 py-3">
+            <div className="oiajdoimewr col-lg-10 bg-white px-5 py-3">
                 <h2 className="article-title">{blog?.title}</h2>
                 
                 <ul className="dmlmljkf mb-0 ps-0 d-flex align-items-center">

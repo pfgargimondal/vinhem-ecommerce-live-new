@@ -26,6 +26,7 @@ export function CartProvider({ children }) {
     setCouponApplied(false);
 
     localStorage.removeItem("final_total");
+    localStorage.removeItem("gst_number");
   };
 
   // ✅ Fetch cart count from API

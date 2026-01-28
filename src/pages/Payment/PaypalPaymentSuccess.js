@@ -48,6 +48,7 @@ export const PaypalPaymentSuccess = () => {
         const coupon_code = localStorage.getItem("coupon_code");
         const coupon_discount = localStorage.getItem("coupon_discount");
         const is_gift = localStorage.getItem("is_gift");
+        const gstNumber = localStorage.getItem("gst_number");
 
         const placeOrderResponse = await placeOrderAPI({
           token,
@@ -61,6 +62,7 @@ export const PaypalPaymentSuccess = () => {
           amount_payable: amount,
           shipping_charge: shipping_charge,
           is_gift: is_gift ? 1 : 0,
+          gst_number: gstNumber,
         });
 
         if (placeOrderResponse?.success) {

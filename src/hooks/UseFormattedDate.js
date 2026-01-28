@@ -10,7 +10,8 @@ export const UseFormattedDate = (dateString) => {
 
     return date.toLocaleDateString("en-GB", {
         day: "2-digit",
-        month: "short"
+        month: "short",
+        year: "numeric",
     })
   }, [dateString]);
 

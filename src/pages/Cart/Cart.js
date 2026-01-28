@@ -25,6 +25,10 @@ export const Cart = () => {
   const { token } = useAuth();
   const { user } = useAuth();
 
+  const [gstNumber, setGstNumber] = useState("");
+  const [gstSaved, setGstSaved] = useState(false);
+  const [gstError, setGstError] = useState("");
+
   const [cartItems, setcartItems] = useState([]);
   const [totalPrice, settotalPrice] = useState([]);
     // eslint-disable-next-line
@@ -689,6 +693,40 @@ export const Cart = () => {
     setBillingAddress(null);
   };
 
+  const validateGST = (gst) => {
+    const regex =
+      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+
+    return regex.test(gst);
+  };
+
+  useEffect(() => {
+    const savedGst = localStorage.getItem("gst_number");
+
+    if (savedGst) {
+      setGstNumber(savedGst);
+      setGstSaved(true);
+    }
+  }, []);
+
+  const saveGstNumber = () => {
+    if (!gstNumber.trim()) {
+      setGstError("GST number is required");
+      return;
+    }
+
+    if (!validateGST(gstNumber)) {
+      setGstError("Invalid GST number");
+      return;
+    }
+
+    localStorage.setItem("gst_number", gstNumber);
+    setGstError("");
+    setGstSaved(true);
+  };
+
+
+
   // const finalTotal =
   // (
   //   (Number(totalPrice.total_selling_price) - appliedDiscount)+ 
@@ -854,6 +892,7 @@ export const Cart = () => {
 
     let shippingFinalAddress = localStorage.getItem("shipping_address");
     let billingFinalAddress = localStorage.getItem("billing_address");
+    let gstNumber = localStorage.getItem("gst_number");
 
     try {
       shippingFinalAddress = JSON.parse(shippingFinalAddress);
@@ -876,6 +915,7 @@ export const Cart = () => {
         amount_payable: finalTotal,
         shipping_charge: shippingCharge,
         is_gift: isGift ? 1 : 0,
+        gst_number: gstNumber,
       });
 
       // console.log(response, 'response_place_order');
@@ -1917,11 +1957,27 @@ export const Cart = () => {
 
                         <div className="adosejoifrjewrwer row">
                           <div className="col-lg-9">
-                            <input type="text" className="form-control" placeholder="Enter Your GST Number*" />
+                            <input type="text" className="form-control" 
+                              placeholder="Enter Your GST Number*"
+                              value={gstNumber}
+                              onChange={(e) => {
+                                setGstNumber(e.target.value.toUpperCase());
+                                setGstError("");
+                              }}
+                              maxLength={15}
+                              disabled={gstSaved} />
+
+                              
+                              {gstError && (
+                                <small className="text-danger">{gstError}</small>
+                              )}
                           </div>
 
+
                           <div className="col-lg-3 ps-0">
-                            <button className="btn w-100 scfsefweqwe btn-main">Submit</button>
+                            {!gstSaved && (
+                              <button className="btn w-100 scfsefweqwe btn-main" onClick={saveGstNumber}>Submit</button>
+                            )}
                           </div>
                         </div>
                       </div>

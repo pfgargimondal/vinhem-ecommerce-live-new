@@ -51,7 +51,7 @@
 }
 
 .lolmdslkjflsdm .article-number{
-    width: 4rem;
+    width: 7rem;
     background: var(--black-background-color);
 }
 
@@ -293,7 +293,7 @@ article.fgfrfdrdtreere:nth-child(even) .dosjifrjwer .diewhirwer{
 }
 
 article.fgfrfdrdtreere:nth-child(even) .lolmdslkjflsdm{
-    justify-content: end;
+    /* justify-content: end; */
 }
 
 @media only screen and (max-width: 991px){
