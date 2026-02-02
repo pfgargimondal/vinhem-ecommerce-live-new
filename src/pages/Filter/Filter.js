@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Css/Filter.css";
 import "./Css/FilterResponsive.css";
@@ -41,21 +41,6 @@ export const Filter = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageWindowStart, setPageWindowStart] = useState(1);
-
-
-  const filterOptionsItems = [
-    ...(Array.isArray(mainCategory) ? mainCategory.map(v => ({ type: "main", value: v })) : []),
-    ...(Array.isArray(subCategory) ? subCategory.map(v => ({ type: "sub", value: v })) : []),
-    ...(Array.isArray(filterCategoryCntxt) ? filterCategoryCntxt.map(v => ({ type: "filter", value: v })) : []),
-    ...(Array.isArray(color) ? color.map(v => ({ type: "color", value: v })) : []),
-    ...(Array.isArray(material) ? material.map(v => ({ type: "material", value: v })) : []),
-    ...(Array.isArray(designer) ? designer.map(v => ({ type: "designer", value: v })) : []),
-    ...(Array.isArray(plusSize) ? plusSize.map(v => ({ type: "plusSize", value: v })) : []),
-    ...(Array.isArray(occasion) ? occasion.map(v => ({ type: "occasion", value: v })) : []),
-    ...(Array.isArray(size) ? size.map(v => ({ type: "size", value: v })) : []),
-    ...(Array.isArray(celebrity) ? celebrity.map(v => ({ type: "celebrity", value: v })) : []),
-    ...(Array.isArray(shippingTime) ? shippingTime.map(v => ({ type: "shippingTime", value: v })) : []),
-  ];
 
   const DEFAULT_VISIBLE = 6;
 
@@ -190,6 +175,103 @@ export const Filter = () => {
     category = segments[0];
     subcategory = segments[1];
   }
+
+
+  const normalizeSlug = (value = "") =>
+    typeof value === "string"
+      ? value
+          .toLowerCase()
+          .trim()
+          .replace(/\s+/g, "-")
+          .replace(/,/g, "")
+      : "";
+
+  const filterOptionsItems = useMemo(() => [
+    ...(Array.isArray(mainCategory) ? mainCategory.map(v => ({ type: "main", value: v })) : []),
+    ...(Array.isArray(subCategory) ? subCategory.map(v => ({ type: "sub", value: v })) : []),
+    ...(Array.isArray(filterCategoryCntxt) ? filterCategoryCntxt.map(v => ({ type: "filter", value: v })) : []),
+    ...(Array.isArray(color) ? color.map(v => ({ type: "color", value: v })) : []),
+    ...(Array.isArray(material) ? material.map(v => ({ type: "material", value: v })) : []),
+    ...(Array.isArray(designer) ? designer.map(v => ({ type: "designer", value: v })) : []),
+    ...(Array.isArray(plusSize) ? plusSize.map(v => ({ type: "plusSize", value: v })) : []),
+    ...(Array.isArray(occasion) ? occasion.map(v => ({ type: "occasion", value: v })) : []),
+    ...(Array.isArray(size) ? size.map(v => ({ type: "size", value: v })) : []),
+    ...(Array.isArray(celebrity) ? celebrity.map(v => ({ type: "celebrity", value: v })) : []),
+    ...(Array.isArray(shippingTime) ? shippingTime.map(v => ({ type: "shippingTime", value: v })) : []),
+  ], [
+    mainCategory,
+    subCategory,
+    filterCategoryCntxt,
+    color,
+    material,
+    designer,
+    plusSize,
+    occasion,
+    size,
+    celebrity,
+    shippingTime,
+  ]);
+
+  const getBasePath = useCallback(() => {
+    const parts = location.pathname.split("/").filter(Boolean);
+
+    if (parts.length >= 2) return `/${parts[0]}/${parts[1]}`;
+    if (parts.length === 1) return `/${parts[0]}`;
+    return "/";
+  }, [location.pathname]);
+
+  const buildFilterSlug = useCallback(() => {
+    const categorySlug = normalizeSlug(category);
+    const subCategorySlug = normalizeSlug(subcategory);
+
+    return filterOptionsItems
+      .map(item => normalizeSlug(item.value))
+      .filter(slug =>
+        slug !== categorySlug &&
+        slug !== subCategorySlug
+      )
+      .join("_");
+  }, [filterOptionsItems, category, subcategory]);
+
+  useEffect(() => {
+    if (!filterOptionsItems.length) return;
+
+    const basePath = getBasePath();
+    const slug = buildFilterSlug();
+
+    navigate(
+      {
+        pathname: slug ? `${basePath}/${slug}` : basePath,
+        search: "?multiselect=true",
+      },
+      { replace: true }
+    );
+  }, [filterOptionsItems, getBasePath, buildFilterSlug, navigate]);
+
+
+  useEffect(() => {
+  const parts = location.pathname.split("/").filter(Boolean);
+  if (parts.length <= 2) return;
+
+  const slugPart = parts.slice(2).join("_");
+
+  slugPart.split("_").forEach(val => {
+      const value = val.replace(/-/g, " ");
+
+      removeMainCategory(value);
+      removeSubCategory(value);
+      removeFilterCategory(value);
+      removeColor(value);
+      removeSize(value);
+      removeMaterial(value);
+      removeDesigner(value);
+      removeOccasion(value);
+      removeCelebrity(value);
+      removePlusSize(value);
+      removeShippingTime(value);
+    });
+    // eslint-disable-next-line
+  }, []);
 
 
   useEffect(() => {

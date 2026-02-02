@@ -28,3 +28,36 @@
     margin-bottom: 0.8rem;
     user-select: none;
 }
+
+
+
+.footer-logo {
+    max-width: 180px;
+}
+
+.certification-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.certification-grid img {
+    width: 100%;
+    max-width: 80px;
+    /* background: #fff; */
+    filter: none;
+    /* padding: 6px; */
+    height: 60px;
+    border-radius: 8px;
+}
+
+.djhfdjh img
+{
+    filter: none;
+}
+
+.doiwqjejir_inner h6
+{
+  font-size: 22px;
+}

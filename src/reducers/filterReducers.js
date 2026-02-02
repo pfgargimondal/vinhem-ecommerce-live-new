@@ -17,13 +17,35 @@ export const filterReducer = (state, action) => {
             };
 
         /* ---------------- MAIN CATEGORY ---------------- */
-        case "MAIN_CATEGORY":
+        // case "MAIN_CATEGORY":
+        //     return {
+        //         ...state,
+        //         mainCategory: state.mainCategory.includes(action.payload.mainCategory)
+        //             ? state.mainCategory.filter(v => v !== action.payload.mainCategory)
+        //             : [...state.mainCategory, action.payload.mainCategory]
+        //     };
+
+        case "MAIN_CATEGORY": {
+            const selected = action.payload.mainCategory;
+
+            // if same category clicked again → unselect
+            if (state.mainCategory[0] === selected) {
+                return {
+                ...state,
+                mainCategory: [],
+                subCategory: [],
+                filterCategory: [],
+                };
+            }
+
+            // otherwise replace existing category
             return {
                 ...state,
-                mainCategory: state.mainCategory.includes(action.payload.mainCategory)
-                    ? state.mainCategory.filter(v => v !== action.payload.mainCategory)
-                    : [...state.mainCategory, action.payload.mainCategory]
+                mainCategory: [selected], // 👈 ONLY ONE
+                subCategory: [],          // reset dependent filters
+                filterCategory: [], 
             };
+        }
 
         case "REMOVE_MAIN_CATEGORY":
             return {
@@ -34,13 +56,33 @@ export const filterReducer = (state, action) => {
             };
 
         /* ---------------- SUB CATEGORY ---------------- */
-        case "SUB_CATEGORY":
+        // case "SUB_CATEGORY":
+        //     return {
+        //         ...state,
+        //         subCategory: state.subCategory.includes(action.payload.subCategory)
+        //             ? state.subCategory.filter(v => v !== action.payload.subCategory)
+        //             : [...state.subCategory, action.payload.subCategory]
+        //     };
+
+        case "SUB_CATEGORY": {
+            const selected = action.payload.subCategory;
+
+            // if same sub-category clicked again → unselect
+            if (state.subCategory[0] === selected) {
+                return {
+                ...state,
+                subCategory: [],
+                filterCategory: [],
+                };
+            }
+
+            // otherwise replace previous selection
             return {
                 ...state,
-                subCategory: state.subCategory.includes(action.payload.subCategory)
-                    ? state.subCategory.filter(v => v !== action.payload.subCategory)
-                    : [...state.subCategory, action.payload.subCategory]
+                subCategory: [selected], // 👈 ONLY ONE
+                filterCategory: [],      // reset dependent filter categories
             };
+        }
 
         case "REMOVE_SUB_CATEGORY":
             return {

@@ -319,13 +319,13 @@ export const FilterProvider = ({ children }) => {
         const selectedSizes = state.size || [];
         if (!selectedSizes.length) return products;
 
+
+
         return products.filter(product => {
-            const productSizes = product?.size?.split(",").map(s => s.trim().toLowerCase()) || [];
+            const productSizes = product?.product_size?.split(",").map(s => s.trim().toLowerCase()) || [];
             return selectedSizes.some(size => productSizes.includes(size));
         });
     }
-
-
 
     //celebrity
 

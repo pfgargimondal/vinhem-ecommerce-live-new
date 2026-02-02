@@ -59,6 +59,7 @@ export default function FilterSection({ setResFltrMenu, allFilterMappingdata, fi
         break;
 
       case "size":
+        case "sizes":
         setSize(value);
         break;
 
@@ -520,7 +521,7 @@ const applyPriceFilter = (min, max) => {
                           isChecked = plusSize.includes(trimmedValue);
                         } else if (filterKey === "occasion") {
                           isChecked = occasion.includes(trimmedValue);
-                        } else if (filterKey === "size") {
+                        } else if (filterKey === "size" || filterKey === "sizes") {
                           isChecked = size.includes(trimmedValue);
                         } else if (filterKey === "celebrity") {
                           isChecked = celebrity.includes(trimmedValue);

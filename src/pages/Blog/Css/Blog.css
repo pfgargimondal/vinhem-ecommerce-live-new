@@ -262,7 +262,7 @@
     color: #fff;
 }
 
-article.fgfrfdrdtreere:nth-child(even) .dosjifrjwer{
+article.fgfrfdrdtreere .dosjifrjwer{
     --bs-gutter-x: 1.5rem;
     --bs-gutter-y: 0;
     display: flex;
@@ -272,7 +272,7 @@ article.fgfrfdrdtreere:nth-child(even) .dosjifrjwer{
     margin-left: calc(-0.5 * var(--bs-gutter-x));
 }
 
-article.fgfrfdrdtreere:nth-child(even) .dosjifrjwer > *{
+article.fgfrfdrdtreere .dosjifrjwer > *{
     flex-shrink: 0;
     width: 100%;
     max-width: 100%;
@@ -281,12 +281,12 @@ article.fgfrfdrdtreere:nth-child(even) .dosjifrjwer > *{
     margin-top: var(--bs-gutter-y);
 }
 
-article.fgfrfdrdtreere:nth-child(even) .dosjifrjwer a{
+article.fgfrfdrdtreere .dosjifrjwer a{
     flex: 0 0 auto;
     width: 50% !important;
 }
 
-article.fgfrfdrdtreere:nth-child(even) .dosjifrjwer .diewhirwer{
+article.fgfrfdrdtreere .dosjifrjwer .diewhirwer{
     flex: 0 0 auto;
     width: 50%;
     padding-top: 2.5rem;
@@ -319,4 +319,52 @@ article.fgfrfdrdtreere:nth-child(even) .lolmdslkjflsdm{
 
 .doejiwrwer p:last-child{
     font-size: 0.8rem;
+}
+
+
+
+/* ===============================
+   BLOG LIST CONTROL (SAFE OVERRIDE)
+   =============================== */
+
+
+.video-sidebar-section{
+    width: 100%;
+    background: #000;
+    padding: 10px;
+}
+
+.video-wrapper{
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+}
+
+.video-wrapper iframe{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+.ffooter
+{
+    background-color: #8F2265;
+    text-align: center;
+    padding: 10px;
+}
+
+.ffooter p 
+{
+    margin-bottom: 0;
+    color: #fff;
+}
+
+.dsgbtgfewfrrr555
+{
+    width: 100%;
+    height: 2px;
+    margin: 10px 0;
+    border-bottom: 2px solid #e5dede;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 }

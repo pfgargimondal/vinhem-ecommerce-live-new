@@ -246,7 +246,7 @@ export const Footer = ({ shouldHideFullHeaderFooterRoutes }) => {
 
                         <li><Link to="/terms-&-condition"><i class="bi me-2 bi-caret-right-fill"></i> Terms & Condition</Link></li>
 
-                        <li><Link to="/blog"><i class="bi me-2 bi-caret-right-fill"></i> Blog</Link></li>
+                        <li><Link to="/blog" target="_blank"><i class="bi me-2 bi-caret-right-fill"></i> Blog</Link></li>
                       </ul>
 
                       <img src="/images/comodo.png" className="simg img-fluid" alt="" />

@@ -42,7 +42,7 @@ export const Blog = () => {
         urlTagLastSegment = pathName.split("/").filter(Boolean).pop();
     }
 
-    const blogsPerPage = 2;
+    const blogsPerPage = 3;
 
 
     useEffect(() => {
@@ -160,6 +160,8 @@ export const Blog = () => {
     return (
         <>
             <HeaderBlog />
+
+            <div className="dsgbtgfewfrrr555 container-fluid mb-4"></div>
             
             <section className="dsgbtgfewfrrr container-fluid mb-4">
                 <Swiper
@@ -307,7 +309,19 @@ export const Blog = () => {
                                         </a>
                                     </li>
                                 </ul>
-                            </div>                         
+                            </div>  
+
+                            <section className="video-sidebar-section">
+                                <div className="video-wrapper">
+                                    <iframe
+                                    src="https://www.youtube.com/embed/rDmCzM1jsYE?autoplay=1&mute=1&loop=1&playlist=rDmCzM1jsYE"
+                                    title="YouTube Shorts Video"
+                                    frameBorder="0"
+                                    allow="autoplay; encrypted-media; picture-in-picture"
+                                    allowFullScreen
+                                    ></iframe>
+                                </div>
+                            </section>                       
                         </div>
                     </aside>
                 </div>
