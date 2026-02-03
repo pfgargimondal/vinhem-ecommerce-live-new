@@ -1,4 +1,4 @@
-#footer-blog{
+.dweoriwenirjweoijrwer{
     background: var(--black-background-color);
 }
 
@@ -27,6 +27,23 @@
     display: block;
     margin-bottom: 0.8rem;
     user-select: none;
+}
+
+.sadfdfgeadetr{
+    background: var(--pink-main-color);
+}
+
+.sadfdfgeadetr p{
+    text-transform: uppercase;
+}
+
+.okasdnfknwer h4{
+    text-transform: uppercase;
+    font-weight: 400;
+}
+
+.okasdnfknwer img{
+    width: 3rem;
 }
 
 

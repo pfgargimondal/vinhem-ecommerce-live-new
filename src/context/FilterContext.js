@@ -1,4 +1,5 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { filterReducer } from "../reducers/filterReducers";
 
@@ -30,6 +31,51 @@ const FilterContext = createContext(filterInitialState);
 
 export const FilterProvider = ({ children }) => {
     const [state, dispatch] = useReducer(filterReducer, filterInitialState);
+    const navigate = useNavigate();
+    const location = useLocation();    
+
+
+
+    function updateURLWithFilters(newState) {
+        const searchParams = new URLSearchParams();
+
+        if (newState.mainCategory.length) searchParams.set("main", newState.mainCategory.join(","));
+        // CHANGE: Use subpaths and filterpaths for hierarchical support
+        if (newState.subCategory.length) searchParams.set("subpaths", newState.subCategory.join(","));
+        if (newState.filterCategory.length) searchParams.set("filterpaths", newState.filterCategory.join(","));
+        
+        // filterCategoryName stays flat
+        if (newState.filterCategoryName.length) searchParams.set("filter", newState.filterCategoryName.join(","));
+        
+        // Other filters unchanged...
+        if (newState.color.length) searchParams.set("color", newState.color.join(","));
+        // ... rest unchanged
+
+        navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
+    }
+
+
+    function restoreFiltersFromURL() {
+        const params = new URLSearchParams(location.search);
+
+        const newState = {
+            ...state,
+            mainCategory: params.get("main")?.split(",") || [],
+            // CHANGE: Parse hierarchical paths
+            subCategory: params.get("subpaths")?.split(",") || [],
+            filterCategory: params.get("filterpaths")?.split(",") || [],
+            filterCategoryName: params.get("filter")?.split(",") || [],
+            // ... rest unchanged
+        };
+
+        dispatch({ type: "RESTORE_FROM_URL", payload: newState });
+    }
+
+    useEffect(() => {
+        restoreFiltersFromURL();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
 
 
     //productlist
@@ -47,10 +93,9 @@ export const FilterProvider = ({ children }) => {
     //price
 
     function setPrice(min, max) {
-        dispatch({
-            type: "PRICE",
-            payload: { minPrice: min, maxPrice: max }
-        });
+        const newState = { ...state, minPrice: min, maxPrice: max };
+        dispatch({ type: "PRICE", payload: { minPrice: min, maxPrice: max } });
+        updateURLWithFilters(newState);
     }
 
     function filterPrice(products) {
@@ -64,12 +109,19 @@ export const FilterProvider = ({ children }) => {
     //main category
 
     function setMainCategory(mainCategory) {
+        const newState = {
+            ...state,
+            mainCategory: state.mainCategory.includes(mainCategory)
+                ? state.mainCategory.filter(v => v !== mainCategory)
+                : [...state.mainCategory, mainCategory]
+        };
+
         dispatch({
             type: "MAIN_CATEGORY",
-            payload: {
-                mainCategory: mainCategory
-            }
-        })
+            payload: { mainCategory }
+        });
+        
+        updateURLWithFilters(newState);
     }
 
     function filterMainCategory(products) {
@@ -86,26 +138,38 @@ export const FilterProvider = ({ children }) => {
 
     //sub category
 
-    function setSubCategory(mainCategory, subCategory) {
-        if (!subCategory) return;
+    function setSubCategory(mainCategory, subCategoryName) {
+        if (!mainCategory || !subCategoryName) return;
+
+        // BUILD FULL PATH: "women/kurta-sets"
+        const subPath = `${mainCategory}/${subCategoryName}`.toLowerCase().replace(/ /g, '-');
+        
+        const newState = {
+            ...state,
+            subCategory: state.subCategory.includes(subPath)
+                ? state.subCategory.filter(v => v !== subPath)
+                : [...state.subCategory, subPath]
+        };
+
         dispatch({
             type: "SUB_CATEGORY",
-            payload: { mainCategory, subCategory }
+            payload: { subPath }  // Pass full path to reducer
         });
+
+        updateURLWithFilters(newState);
     }
 
     function filterSubCategory(products) {
-        const selectedMain = state.mainCategory || [];
-        const selectedSub = state.subCategory || [];
+        const selectedSubs = state.subCategory || [];
+        if (!selectedSubs.length) return products;
 
         return products.filter(product => {
             const mainCat = product.product_category?.toLowerCase().trim();
             const subCat = product.product_sub_category?.toLowerCase().trim();
-
-            const mainMatch = selectedMain.length ? selectedMain.includes(mainCat) : true;
-            const subMatch = selectedSub.length ? selectedSub.includes(subCat) : true;
-
-            return mainMatch && subMatch;
+            if (!mainCat || !subCat) return false;
+            
+            const productSubPath = `${mainCat}/${subCat}`;
+            return selectedSubs.includes(productSubPath);
         });
     }
 
@@ -115,32 +179,40 @@ export const FilterProvider = ({ children }) => {
 
     //filter category
 
-    function setFilterCategory(mainCategory, subCategory, filterCategory) {
-        if (!mainCategory || !subCategory || !filterCategory) return;
+    function setFilterCategory(mainCategory, subCategoryName, filterCategoryName) {
+        if (!mainCategory || !subCategoryName || !filterCategoryName) return;
 
+        // BUILD FULL PATH: "women/kurta-sets/printed-kurta-sets"
+        const filterPath = `${mainCategory}/${subCategoryName}/${filterCategoryName}`.toLowerCase().replace(/ /g, '-');
+        
         dispatch({
             type: "FILTER_CATEGORY",
-            payload: {
-                filterCategory: filterCategory.toLowerCase(),
-            }
+            payload: { filterPath }  // Pass full path to reducer
         });
+        
+        // Update URL after dispatch
+        const newState = {
+            ...state,
+            filterCategory: state.filterCategory.includes(filterPath)
+                ? state.filterCategory.filter(v => v !== filterPath)
+                : [...state.filterCategory, filterPath]
+        };
+        updateURLWithFilters(newState);
     }
 
     function filterFilterCategory(products) {
         const selectedFilters = state.filterCategory || [];
-        const selectedMain = state.mainCategory || [];
-        const selectedSub = state.subCategory || [];
+        if (!selectedFilters.length) return products;
 
         return products.filter(product => {
             const mainCat = product.product_category?.toLowerCase().trim();
             const subCat = product.product_sub_category?.toLowerCase().trim();
             const filterCat = product.filter_categories?.toLowerCase().trim();
-
-            const mainMatch = selectedMain.length ? selectedMain.includes(mainCat) : true;
-            const subMatch = selectedSub.length ? selectedSub.includes(subCat) : true;
-            const filterMatch = selectedFilters.length ? selectedFilters.includes(filterCat) : true;
-
-            return mainMatch && subMatch && filterMatch;
+            
+            if (!mainCat || !subCat || !filterCat) return false;
+            
+            const productFilterPath = `${mainCat}/${subCat}/${filterCat}`;
+            return selectedFilters.includes(productFilterPath);
         });
     }
 
@@ -191,12 +263,19 @@ export const FilterProvider = ({ children }) => {
     function setColor(color) {
         if (!color) return;
 
+        const newState = {
+            ...state,
+            color: state.color.includes(color)
+                ? state.color.filter(v => v !== color)
+                : [...state.color, color]
+        };
+
         dispatch({
             type: "COLOR",
-            payload: {
-                color: color.toLowerCase()
-            }
+            payload: { color }
         });
+
+        updateURLWithFilters(newState);
     }
 
     function filterColor(products) {
@@ -210,12 +289,15 @@ export const FilterProvider = ({ children }) => {
     function setMaterial(material) {
         if (!material) return;
 
-        dispatch({
-            type: "MATERIAL",
-            payload: {
-                material: material.toLowerCase()
-            }
-        });
+        const newState = {
+            ...state,
+            material: state.material.includes(material)
+                ? state.material.filter(v => v !== material)
+                : [...state.material, material]
+        };
+
+        dispatch({ type: "MATERIAL", payload: { material } });
+        updateURLWithFilters(newState);
     }
 
     function filterMaterial(products) {
@@ -230,12 +312,15 @@ export const FilterProvider = ({ children }) => {
     function setDesigner(designer) {
         if (!designer) return;
 
-        dispatch({
-            type: "DESIGNER",
-            payload: {
-                designer: designer.toLowerCase()
-            }
-        });
+        const newState = {
+            ...state,
+            designer: state.designer.includes(designer)
+                ? state.designer.filter(v => v !== designer)
+                : [...state.designer, designer]
+        };
+
+        dispatch({ type: "DESIGNER", payload: { designer } });
+        updateURLWithFilters(newState);
     }
 
     function filterDesigner(products) {
@@ -249,12 +334,15 @@ export const FilterProvider = ({ children }) => {
     function setPlusSize(plusSize) {
         if (!plusSize) return;
 
-        dispatch({
-            type: "PLUS_SIZE",
-            payload: {
-                plusSize: plusSize.toLowerCase()
-            }
-        });
+        const newState = {
+            ...state,
+            plusSize: state.plusSize.includes(plusSize)
+                ? state.plusSize.filter(v => v !== plusSize)
+                : [...state.plusSize, plusSize]
+        };
+
+        dispatch({ type: "PLUS_SIZE", payload: { plusSize } });
+        updateURLWithFilters(newState);
     }
 
     function filterPlusSize(products) {
@@ -284,11 +372,17 @@ export const FilterProvider = ({ children }) => {
     function setOccasion(occasion) {
         if (!occasion) return;
 
-        dispatch({
-            type: "OCCASION",
-            payload: { occasion: occasion.toLowerCase() }
-        });
+        const newState = {
+            ...state,
+            occasion: state.occasion.includes(occasion)
+                ? state.occasion.filter(v => v !== occasion)
+                : [...state.occasion, occasion]
+        };
+
+        dispatch({ type: "OCCASION", payload: { occasion } });
+        updateURLWithFilters(newState);
     }
+
 
     function filterOccasion(products) {
         const selectedOccasions = state.occasion || [];
@@ -307,19 +401,20 @@ export const FilterProvider = ({ children }) => {
     function setSize(size) {
         if (!size) return;
 
-        dispatch({
-            type: "SIZE",
-            payload: {
-                size: size.toLowerCase()
-            }
-        });
+        const newState = {
+            ...state,
+            size: state.size.includes(size)
+                ? state.size.filter(v => v !== size)
+                : [...state.size, size]
+        };
+
+        dispatch({ type: "SIZE", payload: { size } });
+        updateURLWithFilters(newState);
     }
 
     function filterSize(products) {
         const selectedSizes = state.size || [];
         if (!selectedSizes.length) return products;
-
-
 
         return products.filter(product => {
             const productSizes = product?.product_size?.split(",").map(s => s.trim().toLowerCase()) || [];
@@ -327,17 +422,22 @@ export const FilterProvider = ({ children }) => {
         });
     }
 
+
+
     //celebrity
 
     function setCelebrity(celebrity) {
         if (!celebrity) return;
 
-        dispatch({
-            type: "CELEBRITY",
-            payload: {
-                celebrity: celebrity.toLowerCase()
-            }
-        });
+        const newState = {
+            ...state,
+            celebrity: state.celebrity.includes(celebrity)
+                ? state.celebrity.filter(v => v !== celebrity)
+                : [...state.celebrity, celebrity]
+        };
+
+        dispatch({ type: "CELEBRITY", payload: { celebrity } });
+        updateURLWithFilters(newState);
     }
 
     function filterCelebrity(products) {
@@ -357,12 +457,15 @@ export const FilterProvider = ({ children }) => {
     function setShippingTime(shippingTime) {
         if (!shippingTime) return;
 
-        dispatch({
-            type: "SHIPPING_TIME",
-            payload: {
-                shippingTime: shippingTime.toLowerCase()
-            }
-        });
+        const newState = {
+            ...state,
+            shippingTime: state.shippingTime.includes(shippingTime)
+                ? state.shippingTime.filter(v => v !== shippingTime)
+                : [...state.shippingTime, shippingTime]
+        };
+
+        dispatch({ type: "SHIPPING_TIME", payload: { shippingTime } });
+        updateURLWithFilters(newState);
     }
 
     function filterShippingTime(products) {
@@ -380,12 +483,9 @@ export const FilterProvider = ({ children }) => {
     //sortby
 
     function setSortBy(sortBy) {
-        dispatch({
-            type: "SORT_BY",
-            payload: {
-                sortBy: sortBy
-            }
-        })
+        const newState = { ...state, sortBy };
+        dispatch({ type: "SORT_BY", payload: { sortBy } });
+        updateURLWithFilters(newState);
     }
 
     function filterSortBy(products) {
@@ -411,12 +511,9 @@ export const FilterProvider = ({ children }) => {
     //new arrival
 
     function setNewArrival(value) {
-        dispatch({
-            type: "NEW_ARRIVAL",
-            payload: {
-                newIn: value
-            }
-        })
+        const newState = { ...state, newIn: value };
+        dispatch({ type: "NEW_ARRIVAL", payload: { newIn: value } });
+        updateURLWithFilters(newState);
     }
 
     function filterNewArrival(products) {
@@ -428,12 +525,9 @@ export const FilterProvider = ({ children }) => {
     //ready to ship
 
     function setReadyToShip(value) {
-        dispatch({
-            type: "READY_TO_SHIP",
-            payload: {
-                readyToShip: value
-            }
-        })
+        const newState = { ...state, readyToShip: value };
+        dispatch({ type: "READY_TO_SHIP", payload: { readyToShip: value } });
+        updateURLWithFilters(newState);
     }
 
     function filterReadyToShip(products) {
@@ -444,12 +538,9 @@ export const FilterProvider = ({ children }) => {
     // custom fit
 
     function setCstmFit(value) {
-        dispatch({
-            type: "CSTM_FIT",
-            payload: {
-                cstmFit: value,
-            },
-        });
+        const newState = { ...state, cstmFit: value };
+        dispatch({ type: "CSTM_FIT", payload: { cstmFit: value } });
+        updateURLWithFilters(newState);
     }
 
     function filterCstmFit(products) {
@@ -460,12 +551,9 @@ export const FilterProvider = ({ children }) => {
     //on sale
 
     function setOnSale(value) {
-        dispatch({
-            type: "ON_SALE",
-            payload: {
-                onSale: value
-            }
-        })
+        const newState = { ...state, onSale: value };
+        dispatch({ type: "ON_SALE", payload: { onSale: value } });
+        updateURLWithFilters(newState);
     }
 
     function filterOnSale(products) {
@@ -485,12 +573,12 @@ export const FilterProvider = ({ children }) => {
         dispatch({ type: "REMOVE_MAIN_CATEGORY", payload: value });
     }
 
-    function removeSubCategory(value) {
-        dispatch({ type: "REMOVE_SUB_CATEGORY", payload: value });
+    function removeSubCategory(subPath) {
+        dispatch({ type: "REMOVE_SUB_CATEGORY", payload: { subPath } });
     }
 
-    function removeFilterCategory(value) {
-        dispatch({ type: "REMOVE_FILTER_CATEGORY", payload: value });
+    function removeFilterCategory(filterPath) {
+        dispatch({ type: "REMOVE_FILTER_CATEGORY", payload: { filterPath } });
     }
 
     function removeColor(value) {

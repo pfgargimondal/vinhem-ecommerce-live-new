@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Css/Filter.css";
 import "./Css/FilterResponsive.css";
@@ -42,6 +42,21 @@ export const Filter = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageWindowStart, setPageWindowStart] = useState(1);
 
+
+  const filterOptionsItems = [
+    ...(Array.isArray(mainCategory) ? mainCategory.map(v => ({ type: "main", value: v })) : []),
+    ...(Array.isArray(subCategory) ? subCategory.map(v => ({ type: "sub", value: v })) : []),
+    ...(Array.isArray(filterCategoryCntxt) ? filterCategoryCntxt.map(v => ({ type: "filter", value: v })) : []),
+    ...(Array.isArray(color) ? color.map(v => ({ type: "color", value: v })) : []),
+    ...(Array.isArray(material) ? material.map(v => ({ type: "material", value: v })) : []),
+    ...(Array.isArray(designer) ? designer.map(v => ({ type: "designer", value: v })) : []),
+    ...(Array.isArray(plusSize) ? plusSize.map(v => ({ type: "plusSize", value: v })) : []),
+    ...(Array.isArray(occasion) ? occasion.map(v => ({ type: "occasion", value: v })) : []),
+    ...(Array.isArray(size) ? size.map(v => ({ type: "size", value: v })) : []),
+    ...(Array.isArray(celebrity) ? celebrity.map(v => ({ type: "celebrity", value: v })) : []),
+    ...(Array.isArray(shippingTime) ? shippingTime.map(v => ({ type: "shippingTime", value: v })) : []),
+  ];
+
   const DEFAULT_VISIBLE = 6;
 
   const [selectedFilterOptions, setSelectedFilterOptions] = useState(DEFAULT_VISIBLE);
@@ -58,20 +73,51 @@ export const Filter = () => {
 
 
   const handleFilterOptionRemove = ({ type, value }) => {
+    // 1. Remove from state
     switch (type) {
-      case "main": return removeMainCategory(value);
-      case "sub": return removeSubCategory(value);
-      case "filter": return removeFilterCategory(value);
-      case "color": return removeColor(value);
-      case "material": return removeMaterial(value);
-      case "designer": return removeDesigner(value);
-      case "plusSize": return removePlusSize(value);
-      case "occasion": return removeOccasion(value);
-      case "size": return removeSize(value);
-      case "celebrity": return removeCelebrity(value);
-      case "shippingTime": return removeShippingTime(value);
-      default: return;
+      case "main": removeMainCategory(value); break;
+      case "sub": removeSubCategory(value); break;
+      case "filter": removeFilterCategory(value); break;
+      case "color": removeColor(value); break;
+      case "material": removeMaterial(value); break;
+      case "designer": removeDesigner(value); break;
+      case "plusSize": removePlusSize(value); break;
+      case "occasion": removeOccasion(value); break;
+      case "size": removeSize(value); break;
+      case "celebrity": removeCelebrity(value); break;
+      case "shippingTime": removeShippingTime(value); break;
+      default: break;
     }
+
+    // 2. Update the URL after a tiny delay (to make sure state is updated)
+    setTimeout(() => {
+      const searchParams = new URLSearchParams(location.search);
+
+      // main
+      if (mainCategory.length > 0) searchParams.set("main", mainCategory.join(","));
+      else searchParams.delete("main");
+
+      // sub
+      if (subCategory.length > 0) searchParams.set("subpaths", subCategory.join(","));
+      else searchParams.delete("subpaths");  // ✅ Also delete subpaths
+
+      // filter
+      if (filterCategoryCntxt.length > 0) searchParams.set("filterpaths", filterCategoryCntxt.join(","));
+      else searchParams.delete("filterpaths");
+
+      // color, material, designer etc (if you want)
+      if (color.length > 0) searchParams.set("color", color.join(","));
+      else searchParams.delete("color");
+
+      if (material.length > 0) searchParams.set("material", material.join(","));
+      else searchParams.delete("material");
+
+      if (designer.length > 0) searchParams.set("designer", designer.join(","));
+      else searchParams.delete("designer");
+
+      // Push updated URL
+      navigate({ pathname: location.pathname, search: searchParams.toString() }, { replace: true });
+    }, 50);
   };
 
 
@@ -175,103 +221,6 @@ export const Filter = () => {
     category = segments[0];
     subcategory = segments[1];
   }
-
-
-  const normalizeSlug = (value = "") =>
-    typeof value === "string"
-      ? value
-          .toLowerCase()
-          .trim()
-          .replace(/\s+/g, "-")
-          .replace(/,/g, "")
-      : "";
-
-  const filterOptionsItems = useMemo(() => [
-    ...(Array.isArray(mainCategory) ? mainCategory.map(v => ({ type: "main", value: v })) : []),
-    ...(Array.isArray(subCategory) ? subCategory.map(v => ({ type: "sub", value: v })) : []),
-    ...(Array.isArray(filterCategoryCntxt) ? filterCategoryCntxt.map(v => ({ type: "filter", value: v })) : []),
-    ...(Array.isArray(color) ? color.map(v => ({ type: "color", value: v })) : []),
-    ...(Array.isArray(material) ? material.map(v => ({ type: "material", value: v })) : []),
-    ...(Array.isArray(designer) ? designer.map(v => ({ type: "designer", value: v })) : []),
-    ...(Array.isArray(plusSize) ? plusSize.map(v => ({ type: "plusSize", value: v })) : []),
-    ...(Array.isArray(occasion) ? occasion.map(v => ({ type: "occasion", value: v })) : []),
-    ...(Array.isArray(size) ? size.map(v => ({ type: "size", value: v })) : []),
-    ...(Array.isArray(celebrity) ? celebrity.map(v => ({ type: "celebrity", value: v })) : []),
-    ...(Array.isArray(shippingTime) ? shippingTime.map(v => ({ type: "shippingTime", value: v })) : []),
-  ], [
-    mainCategory,
-    subCategory,
-    filterCategoryCntxt,
-    color,
-    material,
-    designer,
-    plusSize,
-    occasion,
-    size,
-    celebrity,
-    shippingTime,
-  ]);
-
-  const getBasePath = useCallback(() => {
-    const parts = location.pathname.split("/").filter(Boolean);
-
-    if (parts.length >= 2) return `/${parts[0]}/${parts[1]}`;
-    if (parts.length === 1) return `/${parts[0]}`;
-    return "/";
-  }, [location.pathname]);
-
-  const buildFilterSlug = useCallback(() => {
-    const categorySlug = normalizeSlug(category);
-    const subCategorySlug = normalizeSlug(subcategory);
-
-    return filterOptionsItems
-      .map(item => normalizeSlug(item.value))
-      .filter(slug =>
-        slug !== categorySlug &&
-        slug !== subCategorySlug
-      )
-      .join("_");
-  }, [filterOptionsItems, category, subcategory]);
-
-  useEffect(() => {
-    if (!filterOptionsItems.length) return;
-
-    const basePath = getBasePath();
-    const slug = buildFilterSlug();
-
-    navigate(
-      {
-        pathname: slug ? `${basePath}/${slug}` : basePath,
-        search: "?multiselect=true",
-      },
-      { replace: true }
-    );
-  }, [filterOptionsItems, getBasePath, buildFilterSlug, navigate]);
-
-
-  useEffect(() => {
-  const parts = location.pathname.split("/").filter(Boolean);
-  if (parts.length <= 2) return;
-
-  const slugPart = parts.slice(2).join("_");
-
-  slugPart.split("_").forEach(val => {
-      const value = val.replace(/-/g, " ");
-
-      removeMainCategory(value);
-      removeSubCategory(value);
-      removeFilterCategory(value);
-      removeColor(value);
-      removeSize(value);
-      removeMaterial(value);
-      removeDesigner(value);
-      removeOccasion(value);
-      removeCelebrity(value);
-      removePlusSize(value);
-      removeShippingTime(value);
-    });
-    // eslint-disable-next-line
-  }, []);
 
 
   useEffect(() => {
@@ -483,15 +432,29 @@ export const Filter = () => {
             <div className="filter-options" style={category && !subcategory && !category.includes("all-products") ? { transform: "translateY(-18vw)" } : {}}>
               <div className="dweihrihwerwerwer pb-4">
                 <div className="doeihrmwerwer d-flex flex-wrap">
-                  {filterOptionsItems.slice(0, selectedFilterOptions).map(item => (
-                      <button
-                        key={`${item.type}-${item.value}`}
-                        onClick={() => handleFilterOptionRemove(item)}
+                  {filterOptionsItems.slice(0, selectedFilterOptions).map(item => {
+                    let displayValue = '';
+                    
+                    if (item.type === 'sub' || item.type === 'filter') {
+                      const pathParts = item.value.split('/');
+                      const mainCategory = pathParts[0]?.replace(/-/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                      const lastPart = pathParts[pathParts.length - 1]?.replace(/-/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                      displayValue = `${mainCategory} - ${lastPart}`;
+                    } else {
+                      // Other filters (color, size, etc.)
+                      displayValue = item.value.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                    }
+                    
+                    return (
+                      <button 
+                        key={`${item.type}-${item.value}`} 
+                        onClick={() => handleFilterOptionRemove(item)} 
                         className="btn btn-filter-tag p-2 bg-transparent rounded-0 text-dark btn-main"
                       >
-                        <i className="fa-solid fa-xmark"></i> {item.value.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
+                        <i className="fa-solid fa-xmark"></i> {displayValue}
                       </button>
-                    ))}
+                    );
+                  })}
                 </div>
 
                 {filterOptionsItems.length > DEFAULT_VISIBLE && (

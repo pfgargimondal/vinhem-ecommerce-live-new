@@ -1,6 +1,5 @@
 export const filterReducer = (state, action) => {
     switch (action.type) {
-
         /* ---------------- PRODUCT LIST ---------------- */
         case "PRODUCT_LIST":
             return {
@@ -17,35 +16,16 @@ export const filterReducer = (state, action) => {
             };
 
         /* ---------------- MAIN CATEGORY ---------------- */
-        // case "MAIN_CATEGORY":
-        //     return {
-        //         ...state,
-        //         mainCategory: state.mainCategory.includes(action.payload.mainCategory)
-        //             ? state.mainCategory.filter(v => v !== action.payload.mainCategory)
-        //             : [...state.mainCategory, action.payload.mainCategory]
-        //     };
-
-        case "MAIN_CATEGORY": {
-            const selected = action.payload.mainCategory;
-
-            // if same category clicked again → unselect
-            if (state.mainCategory[0] === selected) {
-                return {
-                ...state,
-                mainCategory: [],
-                subCategory: [],
-                filterCategory: [],
-                };
-            }
-
-            // otherwise replace existing category
+        case "MAIN_CATEGORY":
             return {
                 ...state,
-                mainCategory: [selected], // 👈 ONLY ONE
-                subCategory: [],          // reset dependent filters
-                filterCategory: [], 
+                mainCategory: state.mainCategory.includes(action.payload.mainCategory)
+                    ? state.mainCategory.filter(v => v !== action.payload.mainCategory)
+                    : [...state.mainCategory, action.payload.mainCategory],
+                // Reset children when main changes
+                subCategory: [],
+                filterCategory: []
             };
-        }
 
         case "REMOVE_MAIN_CATEGORY":
             return {
@@ -55,207 +35,114 @@ export const filterReducer = (state, action) => {
                 filterCategory: []
             };
 
-        /* ---------------- SUB CATEGORY ---------------- */
-        // case "SUB_CATEGORY":
-        //     return {
-        //         ...state,
-        //         subCategory: state.subCategory.includes(action.payload.subCategory)
-        //             ? state.subCategory.filter(v => v !== action.payload.subCategory)
-        //             : [...state.subCategory, action.payload.subCategory]
-        //     };
-
-        case "SUB_CATEGORY": {
-            const selected = action.payload.subCategory;
-
-            // if same sub-category clicked again → unselect
-            if (state.subCategory[0] === selected) {
-                return {
-                ...state,
-                subCategory: [],
-                filterCategory: [],
-                };
-            }
-
-            // otherwise replace previous selection
+        /* ---------------- SUB CATEGORY (HIERARCHICAL PATH) ---------------- */
+        case "SUB_CATEGORY":
+            const subPath = action.payload.subPath; // "women/kurta-sets"
             return {
                 ...state,
-                subCategory: [selected], // 👈 ONLY ONE
-                filterCategory: [],      // reset dependent filter categories
+                subCategory: state.subCategory.includes(subPath)
+                    ? state.subCategory.filter(v => v !== subPath)
+                    : [...state.subCategory, subPath],
+                // Reset filter categories under this sub
+                filterCategory: state.filterCategory.filter(fc => !fc.startsWith(subPath + '/'))
             };
-        }
 
         case "REMOVE_SUB_CATEGORY":
+            const removeSubPath = action.payload.subPath;
             return {
                 ...state,
-                subCategory: state.subCategory.filter(v => v !== action.payload),
-                filterCategory: []
+                subCategory: state.subCategory.filter(v => v !== removeSubPath),
+                filterCategory: state.filterCategory.filter(fc => !fc.startsWith(removeSubPath + '/'))
             };
 
-        /* ---------------- FILTER CATEGORY ---------------- */
+        /* ---------------- FILTER CATEGORY (FULL PATH: main/sub/filter) ---------------- */
         case "FILTER_CATEGORY":
+            const filterPath = action.payload.filterPath; // "women/kurta-sets/printed"
             return {
                 ...state,
-                filterCategory: state.filterCategory.includes(action.payload.filterCategory)
-                    ? state.filterCategory.filter(v => v !== action.payload.filterCategory)
-                    : [...state.filterCategory, action.payload.filterCategory]
+                filterCategory: state.filterCategory.includes(filterPath)
+                    ? state.filterCategory.filter(v => v !== filterPath)
+                    : [...state.filterCategory, filterPath]
             };
 
         case "REMOVE_FILTER_CATEGORY":
             return {
                 ...state,
-                filterCategory: state.filterCategory.filter(v => v !== action.payload)
+                filterCategory: state.filterCategory.filter(v => v !== action.payload.filterPath)
             };
 
-        /* ---------------- FILTER CATEGORY NAME ---------------- */
+        /* ---------------- OTHER FILTERS (unchanged) ---------------- */
         case "FILTER_CATEGORY_NAME":
-            return {
-                ...state,
-                filterCategoryName: state.filterCategoryName.includes(action.payload)
-                    ? state.filterCategoryName.filter(v => v !== action.payload)
-                    : [...state.filterCategoryName, action.payload]
-            };
-
-        /* ---------------- COLOR ---------------- */
         case "COLOR":
-            return {
-                ...state,
-                color: state.color.includes(action.payload.color)
-                    ? state.color.filter(v => v !== action.payload.color)
-                    : [...state.color, action.payload.color]
-            };
-
-        case "REMOVE_COLOR":
-            return {
-                ...state,
-                color: state.color.filter(v => v !== action.payload)
-            };
-
-        /* ---------------- MATERIAL ---------------- */
         case "MATERIAL":
-            return {
-                ...state,
-                material: state.material.includes(action.payload.material)
-                    ? state.material.filter(v => v !== action.payload.material)
-                    : [...state.material, action.payload.material]
-            };
-
-        case "REMOVE_MATERIAL":
-            return {
-                ...state,
-                material: state.material.filter(v => v !== action.payload)
-            };
-
-        /* ---------------- DESIGNER ---------------- */
         case "DESIGNER":
-            return {
-                ...state,
-                designer: state.designer.includes(action.payload.designer)
-                    ? state.designer.filter(v => v !== action.payload.designer)
-                    : [...state.designer, action.payload.designer]
-            };
-
-        case "REMOVE_DESIGNER":
-            return {
-                ...state,
-                designer: state.designer.filter(v => v !== action.payload)
-            };
-
-        /* ---------------- PLUS SIZE ---------------- */
         case "PLUS_SIZE":
-            return {
-                ...state,
-                plusSize: state.plusSize.includes(action.payload.plusSize)
-                    ? state.plusSize.filter(v => v !== action.payload.plusSize)
-                    : [...state.plusSize, action.payload.plusSize]
-            };
-
-        case "REMOVE_PLUS_SIZE":
-            return {
-                ...state,
-                plusSize: state.plusSize.filter(v => v !== action.payload)
-            };
-
-        /* ---------------- OCCASION ---------------- */
         case "OCCASION":
-            return {
-                ...state,
-                occasion: state.occasion.includes(action.payload.occasion)
-                    ? state.occasion.filter(v => v !== action.payload.occasion)
-                    : [...state.occasion, action.payload.occasion]
-            };
-
-        case "REMOVE_OCCASION":
-            return {
-                ...state,
-                occasion: state.occasion.filter(v => v !== action.payload)
-            };
-
-        /* ---------------- SIZE ---------------- */
         case "SIZE":
-            return {
-                ...state,
-                size: state.size.includes(action.payload.size)
-                    ? state.size.filter(v => v !== action.payload.size)
-                    : [...state.size, action.payload.size]
-            };
-
-        case "REMOVE_SIZE":
-            return {
-                ...state,
-                size: state.size.filter(v => v !== action.payload)
-            };
-
-        /* ---------------- CELEBRITY ---------------- */
         case "CELEBRITY":
-            return {
-                ...state,
-                celebrity: state.celebrity.includes(action.payload.celebrity)
-                    ? state.celebrity.filter(v => v !== action.payload.celebrity)
-                    : [...state.celebrity, action.payload.celebrity]
-            };
-
-        case "REMOVE_CELEBRITY":
-            return {
-                ...state,
-                celebrity: state.celebrity.filter(v => v !== action.payload)
-            };
-
-        /* ---------------- SHIPPING TIME ---------------- */
         case "SHIPPING_TIME":
+            const keyMap = {
+                "FILTER_CATEGORY_NAME": "filterCategoryName",
+                "COLOR": "color",
+                "MATERIAL": "material",
+                "DESIGNER": "designer", 
+                "PLUS_SIZE": "plusSize",
+                "OCCASION": "occasion",
+                "SIZE": "size",
+                "CELEBRITY": "celebrity",
+                "SHIPPING_TIME": "shippingTime"
+            };
+            const field = keyMap[action.type];
+            const value = action.type === "FILTER_CATEGORY_NAME" ? action.payload : action.payload[action.type.toLowerCase().replace('_', '')];
+            
             return {
                 ...state,
-                shippingTime: state.shippingTime.includes(action.payload.shippingTime)
-                    ? state.shippingTime.filter(v => v !== action.payload.shippingTime)
-                    : [...state.shippingTime, action.payload.shippingTime]
+                [field]: state[field].includes(value)
+                    ? state[field].filter(v => v !== value)
+                    : [...state[field], value]
             };
 
+        /* ---------------- REMOVE OTHER FILTERS ---------------- */
+        case "REMOVE_COLOR":
+        case "REMOVE_MATERIAL":
+        case "REMOVE_DESIGNER":
+        case "REMOVE_PLUS_SIZE":
+        case "REMOVE_OCCASION":
+        case "REMOVE_SIZE":
+        case "REMOVE_CELEBRITY":
         case "REMOVE_SHIPPING_TIME":
+            const removeKeyMap = {
+                "REMOVE_COLOR": "color",
+                "REMOVE_MATERIAL": "material",
+                "REMOVE_DESIGNER": "designer",
+                "REMOVE_PLUS_SIZE": "plusSize",
+                "REMOVE_OCCASION": "occasion",
+                "REMOVE_SIZE": "size",
+                "REMOVE_CELEBRITY": "celebrity",
+                "REMOVE_SHIPPING_TIME": "shippingTime"
+            };
+            const removeField = removeKeyMap[action.type];
             return {
                 ...state,
-                shippingTime: state.shippingTime.filter(v => v !== action.payload)
+                [removeField]: state[removeField].filter(v => v !== action.payload)
             };
 
-        /* ---------------- SORT ---------------- */
+        /* ---------------- SORT & FLAGS (unchanged) ---------------- */
         case "SORT_BY":
-            return {
-                ...state,
-                sortBy: action.payload.sortBy
-            };
+            return { ...state, sortBy: action.payload.sortBy };
 
-        /* ---------------- FLAGS ---------------- */
         case "NEW_ARRIVAL":
             return { ...state, newIn: action.payload.newIn };
-
         case "READY_TO_SHIP":
             return { ...state, readyToShip: action.payload.readyToShip };
-
         case "CSTM_FIT":
             return { ...state, cstmFit: action.payload.cstmFit };
-
         case "ON_SALE":
             return { ...state, onSale: action.payload.onSale };
 
-        /* ---------------- RESET ---------------- */
+        case "RESTORE_FROM_URL":
+            return { ...state, ...action.payload };
+
         case "REST_FILTER":
             return {
                 ...state,
@@ -281,6 +168,6 @@ export const filterReducer = (state, action) => {
             };
 
         default:
-            throw new Error("No product found!");
+            throw new Error("No matching action type!");
     }
 };

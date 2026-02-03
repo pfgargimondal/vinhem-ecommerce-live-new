@@ -157,7 +157,7 @@ export const BlogDetails = () => {
                                     <h4 className="text-light text-center mb-0">{blogDate}</h4>
                                 </div>
 
-                                <div className="oiajdoimewr col-lg-8 bg-white px-5 py-3">
+                                <div className="oiajdoimewr w-100 bg-white px-5 py-3">
                                     <h2 className="article-title">{blogs?.title}</h2>
                                     <ul className="dmlmljkf mb-0 ps-0 d-flex align-items-center">
                                         <li>
@@ -329,37 +329,37 @@ export const BlogDetails = () => {
                         <div className="mb-5">
                           <h5 className="olkdflmroij py-3 px-4 mb-0 text-light section-title">Follow Us On</h5>
 
-                          <ul className="dgfbfdscswsxddas follow-card list-inline py-3 mx-4">
-                              <li className="list-inline-item mb-3">
-                                  <a href="/" className="d-flex w-100 align-items-center">
-                                      <i class="fa-brands p-2 text-light fa-facebook-f"></i> <span>Facebook</span>
-                                  </a>
-                              </li>
+                          <ul className="opsdjfopsdjkfopsdkof d-flex align-items-center justify-content-around follow-card list-inline py-3 mx-4">
+                            <li className="list-inline-item">
+                                <a href="/">
+                                    <i class="fa-brands p-2 text-light fa-facebook-f"></i>
+                                </a>
+                            </li>
 
-                              <li className="list-inline-item mb-3">
-                                  <a href="/" className="d-flex align-items-center">
-                                      <i class="fa-brands p-2 text-light fa-x"></i> <span>Twitter</span>
-                                  </a>
-                              </li>
+                            <li className="list-inline-item">
+                                <a href="/">
+                                    <i class="fa-brands p-2 text-light fa-x"></i>
+                                </a>
+                            </li>
 
-                              <li className="list-inline-item mb-3">
-                                  <a href="/" className="d-flex align-items-center">
-                                      <i class="fa-brands p-2 text-light fa-instagram"></i> <span>Instagram</span>
-                                  </a>
-                              </li>
+                            <li className="list-inline-item">
+                                <a href="/">
+                                    <i class="fa-brands p-2 text-light fa-instagram"></i>
+                                </a>
+                            </li>
 
-                              <li className="list-inline-item mb-3">
-                                  <a href="/" className="d-flex align-items-center">
-                                      <i class="fa-brands p-2 text-light fa-linkedin-in"></i> <span>Linked In</span>
-                                  </a>
-                              </li>
+                            <li className="list-inline-item">
+                                <a href="/">
+                                    <i class="fa-brands p-2 text-light fa-linkedin-in"></i>
+                                </a>
+                            </li>
 
-                              <li className="list-inline-item">
-                                  <a href="/" className="d-flex align-items-center">
-                                      <i class="fa-brands p-2 text-light fa-youtube"></i> <span>Youtube</span>
-                                  </a>
-                              </li>
-                          </ul>
+                            <li className="list-inline-item">
+                                <a href="/">
+                                    <i class="fa-brands p-2 text-light fa-youtube"></i>
+                                </a>
+                            </li>
+                        </ul>
                       </div> 
                     </div>
                 </aside>

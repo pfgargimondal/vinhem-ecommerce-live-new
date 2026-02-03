@@ -25,6 +25,7 @@ export const Blog = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [blogCategories, setBlogCategories] = useState([]);
     const [blogTags, setBlogTags] = useState([]);
+    const [blogvedio, setBlogVedio] = useState("");
 
     const [blogBanner, setBlogBanner] = useState([]);
     const [blogBannerimageBaseUrl, setBlogBannerImageBaseUrl] = useState("");
@@ -86,6 +87,8 @@ export const Blog = () => {
 
             setBlogBanner(dataBlogs.blog_banner);
             setBlogBannerImageBaseUrl(dataBlogs.banner_image_url);
+
+            setBlogVedio(dataBlogs.blog_vedio);
 
         } catch (error) {
             console.error("Error fetching blogs:", error);
@@ -278,34 +281,34 @@ export const Blog = () => {
                             <div className="mb-5">
                                 <h5 className="olkdflmroij py-3 px-4 mb-0 text-light section-title">Follow Us On</h5>
 
-                                <ul className="dgfbfdscswsxddas follow-card list-inline py-3 mx-4">
-                                    <li className="list-inline-item mb-3">
-                                        <a href="/" className="d-flex w-100 align-items-center">
-                                            <i class="fa-brands p-2 text-light fa-facebook-f"></i> <span>Facebook</span>
-                                        </a>
-                                    </li>
-
-                                    <li className="list-inline-item mb-3">
-                                        <a href="/" className="d-flex align-items-center">
-                                            <i class="fa-brands p-2 text-light fa-x"></i> <span>Twitter</span>
-                                        </a>
-                                    </li>
-
-                                    <li className="list-inline-item mb-3">
-                                        <a href="/" className="d-flex align-items-center">
-                                            <i class="fa-brands p-2 text-light fa-instagram"></i> <span>Instagram</span>
-                                        </a>
-                                    </li>
-
-                                    <li className="list-inline-item mb-3">
-                                        <a href="/" className="d-flex align-items-center">
-                                            <i class="fa-brands p-2 text-light fa-linkedin-in"></i> <span>Linked In</span>
+                                <ul className="opsdjfopsdjkfopsdkof d-flex align-items-center justify-content-around follow-card list-inline py-3 mx-4">
+                                    <li className="list-inline-item">
+                                        <a href="/">
+                                            <i class="fa-brands p-2 text-light fa-facebook-f"></i>
                                         </a>
                                     </li>
 
                                     <li className="list-inline-item">
-                                        <a href="/" className="d-flex align-items-center">
-                                            <i class="fa-brands p-2 text-light fa-youtube"></i> <span>Youtube</span>
+                                        <a href="/">
+                                            <i class="fa-brands p-2 text-light fa-x"></i>
+                                        </a>
+                                    </li>
+
+                                    <li className="list-inline-item">
+                                        <a href="/">
+                                            <i class="fa-brands p-2 text-light fa-instagram"></i>
+                                        </a>
+                                    </li>
+
+                                    <li className="list-inline-item">
+                                        <a href="/">
+                                            <i class="fa-brands p-2 text-light fa-linkedin-in"></i>
+                                        </a>
+                                    </li>
+
+                                    <li className="list-inline-item">
+                                        <a href="/">
+                                            <i class="fa-brands p-2 text-light fa-youtube"></i>
                                         </a>
                                     </li>
                                 </ul>
@@ -313,13 +316,17 @@ export const Blog = () => {
 
                             <section className="video-sidebar-section">
                                 <div className="video-wrapper">
-                                    <iframe
-                                    src="https://www.youtube.com/embed/rDmCzM1jsYE?autoplay=1&mute=1&loop=1&playlist=rDmCzM1jsYE"
-                                    title="YouTube Shorts Video"
-                                    frameBorder="0"
-                                    allow="autoplay; encrypted-media; picture-in-picture"
-                                    allowFullScreen
-                                    ></iframe>
+                                    {blogvedio?.vedio_url && (
+                                        <iframe
+                                            width="100%"
+                                            height="400"
+                                            src={blogvedio.vedio_url.replace('shorts/', 'embed/')}
+                                            title="YouTube Shorts Video"
+                                            frameBorder="0"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowFullScreen
+                                        ></iframe>
+                                    )}
                                 </div>
                             </section>                       
                         </div>
