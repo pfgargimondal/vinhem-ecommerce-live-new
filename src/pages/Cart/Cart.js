@@ -323,6 +323,7 @@ export const Cart = () => {
     shipping_street_address: "",
     shipping_city: "",
     shipping_state: "",
+    shipping_landmark: "",
     shipping_mobileCode: "+91",
     shipping_mobile_number: "",
     shipping_email: "",
@@ -339,6 +340,7 @@ export const Cart = () => {
     shippingCity: data.shipping_city,
     shippingPinCode: data.shipping_pincode,
     shippingState: data.shipping_state,
+    shippingLandmark: data.shipping_landmark,
     shippingCountry: data.shipping_country,
     shippingNumber: `${data.shipping_mobileCode} ${data.shipping_mobile_number}`,
     shippingEmail: data.shipping_email,
@@ -482,6 +484,9 @@ export const Cart = () => {
     if (!shippingData.shipping_state.trim())
       newErrors.shipping_state = "State is required";
 
+    if (!shippingData.shipping_landmark.trim())
+      newErrors.shipping_landmark = "Landmark is required";
+
     if (!shippingData.shipping_address_as)
       newErrors.shipping_address_as = "Select address type";
 
@@ -542,6 +547,7 @@ export const Cart = () => {
       shipping_aptNo: shippingAddress.shippingFullAddress.split(",")[0] || "",
       shipping_street_address: shippingAddress.shippingFullAddress.split(",")[1] || "",
       shipping_city: shippingAddress.shippingCity,
+      shipping_landmark: shippingAddress.shippingLandmark,
       shipping_state: shippingAddress.shippingState,
       shipping_mobileCode: shippingAddress.shippingNumber.split(" ")[0],
       shipping_mobile_number: shippingAddress.shippingNumber.split(" ")[1],
@@ -565,6 +571,7 @@ export const Cart = () => {
     billing_street_address: "",
     billing_city: "",
     billing_state: "",
+    billing_landmark: "",
     billing_mobileCode: "+91",
     billing_mobile_number: "",
     billing_email: "",
@@ -579,6 +586,7 @@ export const Cart = () => {
       shippingCity: data.billing_city,
       shippingPinCode: data.billing_pincode,
       shippingState: data.billing_state,
+      shippingLandmark: data.billing_landmark,
       shippingCountry: data.billing_country,
       shippingNumber: `${data.billing_mobileCode} ${data.billing_mobile_number}`,
       shippingEmail: data.billing_email,
@@ -630,6 +638,9 @@ export const Cart = () => {
     if (!billingData.billing_state.trim())
       newErrors.billing_state = "State is required";
 
+    if (!billingData.billing_landmark.trim())
+      newErrors.billing_landmark = "Landmark is required";
+
     if (!billingData.billing_address_as)
       newErrors.billing_address_as = "Select address type";
 
@@ -679,6 +690,7 @@ export const Cart = () => {
         billing_street_address: billingAddress.shippingFullAddress.split(",")[1] || "",
         billing_city: billingAddress.shippingCity,
         billing_state: billingAddress.shippingState,
+        billing_landmark: billingAddress.shippingLandmark,
         billing_mobileCode: billingAddress.shippingNumber.split(" ")[0],
         billing_mobile_number: billingAddress.shippingNumber.split(" ")[1],
         billing_email: billingAddress.shippingEmail,
@@ -2826,6 +2838,18 @@ export const Cart = () => {
                 {errors.shipping_street_address && <small className="text-danger">{errors.shipping_street_address}</small>}
               </div>
 
+              <div className="col-lg-12 mb-2">
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  name="shipping_landmark"
+                  placeholder="Landmark*"
+                  value={shippingData.shipping_landmark}
+                  onChange={handleInputChange}
+                />
+                {errors.shipping_landmark && <small className="text-danger">{errors.shipping_landmark}</small>}
+              </div>
+
               <div className="col-lg-6 mb-2">
                 <input 
                   type="text" 
@@ -3072,6 +3096,18 @@ export const Cart = () => {
                   value={billingData.billing_state}
                   onChange={handleInputChangeBilling} />
                 {errors.billing_state && <small className="text-danger">{errors.billing_state}</small>}
+              </div>
+
+              <div className="col-lg-12 mb-2">
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  name="billing_landmark"
+                  placeholder="Landmark*"
+                  value={billingData.billing_landmark}
+                  onChange={handleInputChangeBilling}
+                />
+                {errors.billing_landmark && <small className="text-danger">{errors.billing_landmark}</small>}
               </div>
 
               <div className="col-lg-12 mb-2">

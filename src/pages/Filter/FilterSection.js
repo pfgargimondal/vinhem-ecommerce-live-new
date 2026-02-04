@@ -51,7 +51,11 @@ export default function FilterSection({ setResFltrMenu, allFilterMappingdata, fi
         break;
 
       case "plus_sizes":
-        setPlusSize(value);
+        // setPlusSize(value);
+        // break;
+        if (typeof value === "string") {
+          setPlusSize(value.trim().toLowerCase());
+        }
         break;
 
       case "occasion":
@@ -308,7 +312,8 @@ export default function FilterSection({ setResFltrMenu, allFilterMappingdata, fi
                                           <input
                                             id={`mnctgry-${filterCategory.id}`}
                                             onChange={() => setMainCategory(filterCategory.mainCategory_name.toLowerCase())}
-                                            checked={mainCategory.includes(filterCategory.mainCategory_name.toLowerCase())}
+                                            // checked={mainCategory.includes(filterCategory.mainCategory_name.toLowerCase())}
+                                            checked={mainCategory === filterCategory.mainCategory_name.toLowerCase()}
                                             value={filterCategory.mainCategory_name.toLowerCase()}
                                             className="checkbox__trigger visuallyhidden"
                                             type="checkbox"
@@ -351,7 +356,8 @@ export default function FilterSection({ setResFltrMenu, allFilterMappingdata, fi
 
                                   const exactPath = `${mainSlug}/${subSlug}`;
 
-                                  const isChecked = subCategory?.includes(exactPath);
+                                  // const isChecked = subCategory?.includes(exactPath);
+                                  const isChecked = subCategory === exactPath;
 
                                   return (
                                     <div className="doewjroijwerwer mb-3" key={sub_category?.id || index}>
@@ -524,7 +530,10 @@ export default function FilterSection({ setResFltrMenu, allFilterMappingdata, fi
                       .split(",")
                       .slice(0, valuesToShow)
                       .map((item, indexdsvd) => {
-                        const trimmedValue = (item || "").trim().toLowerCase();
+                        // const trimmedValue = (item || "").trim().toLowerCase();
+                        if (typeof item !== "string") return null;
+
+                        const trimmedValue = item.trim().toLowerCase();
                         const safeId = `${FilterMappingdata.filter_option}-${trimmedValue}-${indexdsvd}`;
 
                         let isChecked = false;
@@ -537,7 +546,8 @@ export default function FilterSection({ setResFltrMenu, allFilterMappingdata, fi
                         } else if (filterKey === "designers") {
                           isChecked = designer.includes(trimmedValue);
                         } else if (filterKey === "plus_sizes") {
-                          isChecked = plusSize.includes(trimmedValue);
+                          // isChecked = plusSize.includes(trimmedValue);
+                          isChecked = Array.isArray(plusSize) && plusSize.includes(trimmedValue);
                         } else if (filterKey === "occasion") {
                           isChecked = occasion.includes(trimmedValue);
                         } else if (filterKey === "size" || filterKey === "sizes") {

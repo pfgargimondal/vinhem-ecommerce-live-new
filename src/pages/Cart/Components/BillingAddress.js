@@ -12,7 +12,7 @@ export const BillingAddress = ({ data, onEdit, onRemove }) => (
         <label className="cdsfedere">ADDRESS:</label>
 
         <p className="col-lg-7 sfvsedweqqwe">
-            {data?.shippingFullAddress} <br />
+            {data?.shippingFullAddress}, {data?.shippingLandmark} <br />
             {data?.shippingCity} - {data?.shippingPinCode}, {data?.shippingState}, <br /> {data?.shippingCountry}
         </p>
 

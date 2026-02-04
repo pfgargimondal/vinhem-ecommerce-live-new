@@ -7,8 +7,10 @@ const filterInitialState = {
     productList: [],
     minPrice: 0,
     maxPrice: 1000000,
-    mainCategory: [],
-    subCategory: [],
+    // mainCategory: [],
+    // subCategory: [],
+    mainCategory: null,
+    subCategory: null,
     filterCategory: [],
     filterCategoryName: [],
     color: [],
@@ -39,9 +41,15 @@ export const FilterProvider = ({ children }) => {
     function updateURLWithFilters(newState) {
         const searchParams = new URLSearchParams();
 
-        if (newState.mainCategory.length) searchParams.set("main", newState.mainCategory.join(","));
+        // if (newState.mainCategory.length) searchParams.set("main", newState.mainCategory.join(","));
+
+        if (newState.mainCategory) searchParams.set("main", newState.mainCategory);
+
         // CHANGE: Use subpaths and filterpaths for hierarchical support
-        if (newState.subCategory.length) searchParams.set("subpaths", newState.subCategory.join(","));
+        // if (newState.subCategory.length) searchParams.set("subpaths", newState.subCategory.join(","));
+
+        if (newState.subCategory) searchParams.set("subpaths", newState.subCategory);
+
         if (newState.filterCategory.length) searchParams.set("filterpaths", newState.filterCategory.join(","));
         
         // filterCategoryName stays flat
@@ -55,21 +63,69 @@ export const FilterProvider = ({ children }) => {
     }
 
 
+    // function restoreFiltersFromURL() {
+    //     const params = new URLSearchParams(location.search);
+
+    //     const newState = {
+    //         ...state,
+    //         // mainCategory: params.get("main")?.split(",") || [],
+    //         // subCategory: params.get("subpaths")?.split(",") || [],
+
+    //         mainCategory: params.get("main") || null,
+    //         subCategory: params.get("subpaths") || null,
+
+    //         filterCategory: params.get("filterpaths")?.split(",") || [],
+    //         filterCategoryName: params.get("filter")?.split(",") || [],
+
+    //         // ✅ ADD THIS
+    //         plusSize: params.get("plusSize")
+    //             ? params.get("plusSize").split(",")
+    //             : [],
+
+    //         // (optional but recommended)
+    //         color: params.get("color")?.split(",") || [],
+    //         material: params.get("material")?.split(",") || [],
+    //         designer: params.get("designer")?.split(",") || [],
+    //         occasion: params.get("occasion")?.split(",") || [],
+    //         size: params.get("size")?.split(",") || [],
+    //         celebrity: params.get("celebrity")?.split(",") || [],
+    //         shippingTime: params.get("shippingTime")?.split(",") || [],
+    //     };
+
+
+    //     dispatch({ type: "RESTORE_FROM_URL", payload: newState });
+    // }
+
+
     function restoreFiltersFromURL() {
-        const params = new URLSearchParams(location.search);
+    const params = new URLSearchParams(location.search);
 
-        const newState = {
-            ...state,
-            mainCategory: params.get("main")?.split(",") || [],
-            // CHANGE: Parse hierarchical paths
-            subCategory: params.get("subpaths")?.split(",") || [],
-            filterCategory: params.get("filterpaths")?.split(",") || [],
-            filterCategoryName: params.get("filter")?.split(",") || [],
-            // ... rest unchanged
-        };
+    const getArray = (key) => {
+        const value = params.get(key);
+        return value ? value.split(",").filter(Boolean) : [];
+    };
 
-        dispatch({ type: "RESTORE_FROM_URL", payload: newState });
-    }
+    dispatch({
+        type: "RESTORE_FROM_URL",
+        payload: {
+            mainCategory: params.get("main") || null,
+            subCategory: params.get("subpaths") || null,
+
+            filterCategory: getArray("filterpaths"),
+            filterCategoryName: getArray("filter"),
+
+            color: getArray("color"),
+            material: getArray("material"),
+            designer: getArray("designer"),
+            plusSize: getArray("plusSize"),   // ✅ FIXED
+            occasion: getArray("occasion"),
+            size: getArray("size"),
+            celebrity: getArray("celebrity"),
+            shippingTime: getArray("shippingTime"),
+        }
+    });
+}
+
 
     useEffect(() => {
         restoreFiltersFromURL();
@@ -108,68 +164,123 @@ export const FilterProvider = ({ children }) => {
 
     //main category
 
+    // function setMainCategory(mainCategory) {
+    //     const newState = {
+    //         ...state,
+    //         mainCategory: state.mainCategory.includes(mainCategory)
+    //             ? state.mainCategory.filter(v => v !== mainCategory)
+    //             : [...state.mainCategory, mainCategory]
+    //     };
+
+    //     dispatch({
+    //         type: "MAIN_CATEGORY",
+    //         payload: { mainCategory }
+    //     });
+        
+    //     updateURLWithFilters(newState);
+    // }
+
     function setMainCategory(mainCategory) {
+        if (!mainCategory) return;
+
         const newState = {
             ...state,
-            mainCategory: state.mainCategory.includes(mainCategory)
-                ? state.mainCategory.filter(v => v !== mainCategory)
-                : [...state.mainCategory, mainCategory]
+            mainCategory,
+            subCategory: null,      // 🔥 auto clear subcategory
+            filterCategory: []      // optional but recommended
         };
 
         dispatch({
             type: "MAIN_CATEGORY",
             payload: { mainCategory }
         });
-        
+
         updateURLWithFilters(newState);
     }
 
     function filterMainCategory(products) {
-        if (!state.mainCategory || state.mainCategory.length === 0) {
-            return products;
-        }
+        // if (!state.mainCategory || state.mainCategory.length === 0) {
+        //     return products;
+        // }
 
-        return products.filter(product => {
-            const productCategory = product?.product_category?.toLowerCase();
-            return state.mainCategory.includes(productCategory);
-        });
+        // return products.filter(product => {
+        //     const productCategory = product?.product_category?.toLowerCase();
+        //     return state.mainCategory.includes(productCategory);
+        // });
+
+        if (!state.mainCategory) return products;
+
+        return products.filter(product =>
+            product?.product_category?.toLowerCase() === state.mainCategory
+        );
     }
 
 
     //sub category
 
+    // function setSubCategory(mainCategory, subCategoryName) {
+    //     if (!mainCategory || !subCategoryName) return;
+
+    //     // BUILD FULL PATH: "women/kurta-sets"
+    //     const subPath = `${mainCategory}/${subCategoryName}`.toLowerCase().replace(/ /g, '-');
+        
+    //     const newState = {
+    //         ...state,
+    //         subCategory: state.subCategory.includes(subPath)
+    //             ? state.subCategory.filter(v => v !== subPath)
+    //             : [...state.subCategory, subPath]
+    //     };
+
+    //     dispatch({
+    //         type: "SUB_CATEGORY",
+    //         payload: { subPath }  // Pass full path to reducer
+    //     });
+
+    //     updateURLWithFilters(newState);
+    // }
+
     function setSubCategory(mainCategory, subCategoryName) {
         if (!mainCategory || !subCategoryName) return;
 
-        // BUILD FULL PATH: "women/kurta-sets"
-        const subPath = `${mainCategory}/${subCategoryName}`.toLowerCase().replace(/ /g, '-');
-        
+        const subPath = `${mainCategory}/${subCategoryName}`
+            .toLowerCase()
+            .replace(/ /g, "-");
+
         const newState = {
             ...state,
-            subCategory: state.subCategory.includes(subPath)
-                ? state.subCategory.filter(v => v !== subPath)
-                : [...state.subCategory, subPath]
+            subCategory: subPath,
+            filterCategory: []   // clear deeper filters
         };
 
         dispatch({
             type: "SUB_CATEGORY",
-            payload: { subPath }  // Pass full path to reducer
+            payload: { subPath }
         });
 
         updateURLWithFilters(newState);
     }
 
     function filterSubCategory(products) {
-        const selectedSubs = state.subCategory || [];
-        if (!selectedSubs.length) return products;
+        // const selectedSubs = state.subCategory || [];
+        // if (!selectedSubs.length) return products;
+
+        // return products.filter(product => {
+        //     const mainCat = product.product_category?.toLowerCase().trim();
+        //     const subCat = product.product_sub_category?.toLowerCase().trim();
+        //     if (!mainCat || !subCat) return false;
+            
+        //     const productSubPath = `${mainCat}/${subCat}`;
+        //     return selectedSubs.includes(productSubPath);
+        // });
+
+        if (!state.subCategory) return products;
 
         return products.filter(product => {
-            const mainCat = product.product_category?.toLowerCase().trim();
-            const subCat = product.product_sub_category?.toLowerCase().trim();
+            const mainCat = product.product_category?.toLowerCase();
+            const subCat = product.product_sub_category?.toLowerCase();
             if (!mainCat || !subCat) return false;
-            
-            const productSubPath = `${mainCat}/${subCat}`;
-            return selectedSubs.includes(productSubPath);
+
+            return `${mainCat}/${subCat}` === state.subCategory;
         });
     }
 
@@ -331,43 +442,87 @@ export const FilterProvider = ({ children }) => {
 
     //plus size
 
+    // function setPlusSize(plusSize) {
+    //     if (!plusSize) return;
+
+    //     const newState = {
+    //         ...state,
+    //         plusSize: state.plusSize.includes(plusSize)
+    //             ? state.plusSize.filter(v => v !== plusSize)
+    //             : [...state.plusSize, plusSize]
+    //     };
+
+    //     dispatch({ type: "PLUS_SIZE", payload: { plusSize } });
+    //     updateURLWithFilters(newState);
+    // }
+
     function setPlusSize(plusSize) {
-        if (!plusSize) return;
+        if (typeof plusSize !== "string") return; // 🚨 GUARD
+
+        const value = plusSize.trim().toLowerCase();
+
+        if (!value) return;
 
         const newState = {
             ...state,
-            plusSize: state.plusSize.includes(plusSize)
-                ? state.plusSize.filter(v => v !== plusSize)
-                : [...state.plusSize, plusSize]
+            plusSize: state.plusSize.includes(value)
+                ? state.plusSize.filter(v => v !== value)
+                : [...state.plusSize, value]
         };
 
-        dispatch({ type: "PLUS_SIZE", payload: { plusSize } });
+        dispatch({ type: "PLUS_SIZE", payload: { plusSize: value } });
         updateURLWithFilters(newState);
     }
+
+
+
+    // function filterPlusSize(products) {
+    //     const selectedSizes = state.plusSize || [];
+    //     if (!selectedSizes.length) return products;
+
+    //     return products.filter(product => {
+    //         const sizes = product.product_plus_size;
+
+    //         if (Array.isArray(sizes)) {
+    //             return selectedSizes.some(size => sizes.map(s => s.toLowerCase()).includes(size));
+    //         }
+
+    //         if (typeof sizes === "string") {
+    //             const sizeArray = sizes.split(",").map(s => s.trim().toLowerCase());
+    //             return selectedSizes.some(size => sizeArray.includes(size));
+    //         }
+
+    //         return false;
+    //     });
+    // }
+
+
+
+    //occasion
 
     function filterPlusSize(products) {
         const selectedSizes = state.plusSize || [];
         if (!selectedSizes.length) return products;
 
         return products.filter(product => {
-            const sizes = product.product_plus_size;
+            const rawSizes = product?.product_plus_size;
 
-            if (Array.isArray(sizes)) {
-                return selectedSizes.some(size => sizes.map(s => s.toLowerCase()).includes(size));
-            }
+            // 🚨 CRITICAL GUARD
+            if (!rawSizes || typeof rawSizes !== "string") return false;
 
-            if (typeof sizes === "string") {
-                const sizeArray = sizes.split(",").map(s => s.trim().toLowerCase());
-                return selectedSizes.some(size => sizeArray.includes(size));
-            }
+            const sizeArray = rawSizes
+                .split(",")
+                .map(s => s.trim().toLowerCase())
+                .filter(Boolean);
 
-            return false;
+            return selectedSizes
+            .filter(size => typeof size === "string")
+            .some(size =>
+                sizeArray.includes(size.toLowerCase())
+            );
         });
     }
 
-
-
-    //occasion
 
     function setOccasion(occasion) {
         if (!occasion) return;
@@ -412,12 +567,26 @@ export const FilterProvider = ({ children }) => {
         updateURLWithFilters(newState);
     }
 
+    // function filterSize(products) {
+    //     const selectedSizes = state.size || [];
+    //     if (!selectedSizes.length) return products;
+
+    //     return products.filter(product => {
+    //         const productSizes = product?.product_size?.split(",").map(s => s.trim().toLowerCase()) || [];
+    //         return selectedSizes.some(size => productSizes.includes(size));
+    //     });
+    // }
+
     function filterSize(products) {
         const selectedSizes = state.size || [];
         if (!selectedSizes.length) return products;
 
         return products.filter(product => {
-            const productSizes = product?.product_size?.split(",").map(s => s.trim().toLowerCase()) || [];
+            const productSizes =
+                typeof product?.product_size === "string"
+                    ? product.product_size.split(",").map(s => s.trim().toLowerCase())
+                    : [];
+
             return selectedSizes.some(size => productSizes.includes(size));
         });
     }

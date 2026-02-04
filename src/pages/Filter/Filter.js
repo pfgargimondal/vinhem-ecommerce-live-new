@@ -120,6 +120,58 @@ export const Filter = () => {
     }, 50);
   };
 
+  useEffect(() => {
+    const searchParams = new URLSearchParams();
+
+    // MAIN CATEGORY (single)
+    if (mainCategory) {
+      searchParams.set("main", mainCategory);
+    }
+
+    // SUB CATEGORY (single)
+    if (subCategory) {
+      searchParams.set("subpaths", subCategory);
+    }
+
+    // FILTER CATEGORY (multi)
+    if (filterCategoryCntxt?.length) {
+      searchParams.set("filterpaths", filterCategoryCntxt.join(","));
+    }
+
+    // OTHER FILTERS (multi)
+    if (color?.length) searchParams.set("color", color.join(","));
+    if (material?.length) searchParams.set("material", material.join(","));
+    if (designer?.length) searchParams.set("designer", designer.join(","));
+    if (plusSize?.length) searchParams.set("plusSize", plusSize.join(","));
+    if (occasion?.length) searchParams.set("occasion", occasion.join(","));
+    if (size?.length) searchParams.set("size", size.join(","));
+    if (celebrity?.length) searchParams.set("celebrity", celebrity.join(","));
+    if (shippingTime?.length) searchParams.set("shippingTime", shippingTime.join(","));
+
+    navigate(
+      {
+        pathname: location.pathname,
+        search: searchParams.toString()
+      },
+      { replace: true }
+    );
+  }, [
+    mainCategory,
+    subCategory,
+    filterCategoryCntxt,
+    color,
+    material,
+    designer,
+    plusSize,
+    occasion,
+    size,
+    celebrity,
+    shippingTime,
+    location.pathname,
+    navigate
+  ]);
+
+
 
   const productsPerPage = 24;
   const visibleCount = 5;

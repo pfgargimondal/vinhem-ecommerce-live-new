@@ -16,43 +16,73 @@ export const filterReducer = (state, action) => {
             };
 
         /* ---------------- MAIN CATEGORY ---------------- */
+        // case "MAIN_CATEGORY":
+        //     return {
+        //         ...state,
+        //         mainCategory: state.mainCategory.includes(action.payload.mainCategory)
+        //             ? state.mainCategory.filter(v => v !== action.payload.mainCategory)
+        //             : [...state.mainCategory, action.payload.mainCategory],
+        //         // Reset children when main changes
+        //         subCategory: [],
+        //         filterCategory: []
+        //     };
+
         case "MAIN_CATEGORY":
             return {
                 ...state,
-                mainCategory: state.mainCategory.includes(action.payload.mainCategory)
-                    ? state.mainCategory.filter(v => v !== action.payload.mainCategory)
-                    : [...state.mainCategory, action.payload.mainCategory],
-                // Reset children when main changes
-                subCategory: [],
+                mainCategory: action.payload.mainCategory, // single value
+                subCategory: null,
                 filterCategory: []
             };
+
+        // case "REMOVE_MAIN_CATEGORY":
+        //     return {
+        //         ...state,
+        //         mainCategory: state.mainCategory.filter(v => v !== action.payload),
+        //         subCategory: [],
+        //         filterCategory: []
+        //     };
 
         case "REMOVE_MAIN_CATEGORY":
             return {
                 ...state,
-                mainCategory: state.mainCategory.filter(v => v !== action.payload),
-                subCategory: [],
+                mainCategory: null,
+                subCategory: null,
                 filterCategory: []
             };
 
         /* ---------------- SUB CATEGORY (HIERARCHICAL PATH) ---------------- */
+        // case "SUB_CATEGORY":
+        //     const subPath = action.payload.subPath; // "women/kurta-sets"
+        //     return {
+        //         ...state,
+        //         subCategory: state.subCategory.includes(subPath)
+        //             ? state.subCategory.filter(v => v !== subPath)
+        //             : [...state.subCategory, subPath],
+        //         // Reset filter categories under this sub
+        //         filterCategory: state.filterCategory.filter(fc => !fc.startsWith(subPath + '/'))
+        //     };
+
         case "SUB_CATEGORY":
-            const subPath = action.payload.subPath; // "women/kurta-sets"
             return {
                 ...state,
-                subCategory: state.subCategory.includes(subPath)
-                    ? state.subCategory.filter(v => v !== subPath)
-                    : [...state.subCategory, subPath],
-                // Reset filter categories under this sub
-                filterCategory: state.filterCategory.filter(fc => !fc.startsWith(subPath + '/'))
+                subCategory: action.payload.subPath, // single value
+                filterCategory: []
             };
 
+        // case "REMOVE_SUB_CATEGORY":
+        //     const removeSubPath = action.payload.subPath;
+        //     return {
+        //         ...state,
+        //         subCategory: state.subCategory.filter(v => v !== removeSubPath),
+        //         filterCategory: state.filterCategory.filter(fc => !fc.startsWith(removeSubPath + '/'))
+        //     };
+
         case "REMOVE_SUB_CATEGORY":
-            const removeSubPath = action.payload.subPath;
             return {
                 ...state,
-                subCategory: state.subCategory.filter(v => v !== removeSubPath),
-                filterCategory: state.filterCategory.filter(fc => !fc.startsWith(removeSubPath + '/'))
+                subCategory: null,
+                filterCategory: []
             };
 
         /* ---------------- FILTER CATEGORY (FULL PATH: main/sub/filter) ---------------- */
@@ -148,8 +178,10 @@ export const filterReducer = (state, action) => {
                 ...state,
                 minPrice: 0,
                 maxPrice: 1000000,
-                mainCategory: [],
-                subCategory: [],
+                // mainCategory: [],
+                // subCategory: [],
+                mainCategory: null,
+                subCategory: null,
                 filterCategory: [],
                 filterCategoryName: [],
                 color: [],

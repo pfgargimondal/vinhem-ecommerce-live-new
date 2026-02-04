@@ -41,7 +41,7 @@ export const ShippingAddress = ({ address, onEdit, onRemove, onInvalidMobile }) 
 
         <label className="cdsfedere">ADDRESS:</label>
         <p className="col-lg-7 sfvsedweqqwe">
-          {address?.shippingFullAddress} <br />
+          {address?.shippingFullAddress}, {address?.shippingLandmark}<br />
           {address?.shippingCity} - {address?.shippingPinCode}, {address?.shippingState}, <br />
           {address?.shippingCountry}
         </p>
