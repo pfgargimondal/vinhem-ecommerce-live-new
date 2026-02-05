@@ -38,7 +38,7 @@
 }
 
 .nw-arrvl{
-  left: 0%;
+  left: -1%;
   position: absolute;
   top: 3%;
   background-image: url("/public/images/ni.png");

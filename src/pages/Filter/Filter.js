@@ -21,7 +21,7 @@ export const Filter = () => {
   // eslint-disable-next-line
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const { products, initialProductList, mainCategory, subCategory, filterCategory, filterCategoryCntxt, color, material, designer, plusSize, occasion, size, celebrity, shippingTime, sortBy, setSortBy, setNewArrival, setReadyToShip, setCstmFit, setOnSale, resetFilter, onSale, newIn, readyToShip, removeMainCategory, removeSubCategory, removeFilterCategory, removeColor, removeMaterial, removeDesigner, removePlusSize, removeOccasion, removeSize, removeCelebrity, removeShippingTime, cstmFit } = useFilter();
+  const { products, initialProductList, mainCategory, subCategory, filterCategory, filterCategoryCntxt, color, material, designer, plusSize, occasion, size, celebrity, discount,  shippingTime, sortBy, setSortBy, setNewArrival, setReadyToShip, setCstmFit, setOnSale, resetFilter, onSale, newIn, readyToShip, removeMainCategory, removeSubCategory, removeFilterCategory, removeColor, removeMaterial, removeDesigner, removePlusSize, removeOccasion, removeSize, removeCelebrity, removeDiscount, removeShippingTime, cstmFit } = useFilter();
   // eslint-disable-next-line
   const [viewType, setViewType] = useState(false);
   const [resFltrMenu, setResFltrMenu] = useState(false);
@@ -54,6 +54,7 @@ export const Filter = () => {
     ...(Array.isArray(occasion) ? occasion.map(v => ({ type: "occasion", value: v })) : []),
     ...(Array.isArray(size) ? size.map(v => ({ type: "size", value: v })) : []),
     ...(Array.isArray(celebrity) ? celebrity.map(v => ({ type: "celebrity", value: v })) : []),
+    ...(Array.isArray(discount) ? discount.map(v => ({ type: "discount", value: v })) : []),
     ...(Array.isArray(shippingTime) ? shippingTime.map(v => ({ type: "shippingTime", value: v })) : []),
   ];
 
@@ -85,6 +86,7 @@ export const Filter = () => {
       case "occasion": removeOccasion(value); break;
       case "size": removeSize(value); break;
       case "celebrity": removeCelebrity(value); break;
+      case "discount": removeDiscount(value); break;
       case "shippingTime": removeShippingTime(value); break;
       default: break;
     }
@@ -152,6 +154,7 @@ export const Filter = () => {
     if (occasion?.length) searchParams.set("occasion", occasion.join(","));
     if (size?.length) searchParams.set("size", size.join(","));
     if (celebrity?.length) searchParams.set("celebrity", celebrity.join(","));
+    if (discount?.length) searchParams.set("discount", discount.join(","));
     if (shippingTime?.length) searchParams.set("shippingTime", shippingTime.join(","));
 
     navigate(
@@ -172,6 +175,7 @@ export const Filter = () => {
     occasion,
     size,
     celebrity,
+    discount,
     shippingTime,
     location.pathname,
     navigate

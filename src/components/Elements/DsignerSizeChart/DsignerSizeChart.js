@@ -351,7 +351,7 @@ export const DesignerSizeChart = ({ productDetails }) => {
           <div className="oijdkejwjewr p-4">
             <h6>
               <i class="fa-brands me-1 fa-whatsapp"></i> Whatsapp Us at{" "}
-              <span>+91 84880 70070</span> if you are unsure of your size.
+              <span>+91 7003672926</span> if you are unsure of your size.
             </h6>
 
             <p className="mb-0">

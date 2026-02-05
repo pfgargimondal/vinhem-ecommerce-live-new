@@ -21,6 +21,7 @@ const filterInitialState = {
     occasion: [],
     size: [],
     celebrity: [],
+    discount: [],
     shippingTime: [],
     sortBy: null,
     newIn: false,
@@ -80,6 +81,9 @@ export const FilterProvider = ({ children }) => {
 
         if (newState.celebrity.length)
             searchParams.set("celebrity", newState.celebrity.join(","));
+
+        if(newState.discount.length)
+            searchParams.set("discount", newState.discount.join(","));
 
         if (newState.shippingTime.length)
             searchParams.set("shippingTime", newState.shippingTime.join(","));
@@ -155,6 +159,7 @@ export const FilterProvider = ({ children }) => {
                 occasion: getArray("occasion"),
                 size: getArray("size"),
                 celebrity: getArray("celebrity"),
+                discount: getArray("discount"),
                 shippingTime: getArray("shippingTime"),
             }
         });
@@ -412,8 +417,30 @@ export const FilterProvider = ({ children }) => {
         });
     }
 
+    //designer
 
+    function setDiscount(discount) {
+        if (!discount) return;
 
+        const newState = {
+            ...state,
+            discount: state.discount.includes(discount)
+                ? state.discount.filter(v => v !== discount)
+                : [...state.discount, discount]
+        };
+
+        dispatch({
+            type: "DISCOUNT",
+            payload: { discount }
+        });
+
+        updateURLWithFilters(newState);
+    }
+
+    function filterDiscount(products) {
+        const selectedDiscount = state.discount || [];
+        return selectedDiscount.length ? products.filter(product => selectedDiscount.includes(product.filter_discount?.toLowerCase())) : products;
+    }
 
     //color
 
@@ -851,6 +878,10 @@ export const FilterProvider = ({ children }) => {
         dispatch({ type: "REMOVE_CELEBRITY", payload: value });
     }
 
+    function removeDiscount(value) {
+        dispatch({ type: "REMOVE_DISCOUNT", payload: value });
+    }
+
     function removeShippingTime(value) {
         dispatch({ type: "REMOVE_SHIPPING_TIME", payload: value });
     }
@@ -862,18 +893,20 @@ export const FilterProvider = ({ children }) => {
                 filterCstmFit(
                     filterSortBy(
                         filterShippingTime(
-                            filterCelebrity(
-                                filterSize(
-                                    filterOccasion(
-                                        filterPlusSize(
-                                            filterDesigner(
-                                                filterMaterial(
-                                                    filterColor(
-                                                        filterFilterCategoryName(
-                                                            filterFilterCategory(
-                                                                filterSubCategory(
-                                                                    filterMainCategory(
-                                                                        filterPrice(state.productList)
+                            filterDiscount(
+                                filterCelebrity(
+                                    filterSize(
+                                        filterOccasion(
+                                            filterPlusSize(
+                                                filterDesigner(
+                                                    filterMaterial(
+                                                        filterColor(
+                                                            filterFilterCategoryName(
+                                                                filterFilterCategory(
+                                                                    filterSubCategory(
+                                                                        filterMainCategory(
+                                                                            filterPrice(state.productList)
+                                                                        )
                                                                     )
                                                                 )
                                                             )
@@ -941,6 +974,9 @@ export const FilterProvider = ({ children }) => {
         celebrity: state.celebrity,
         setCelebrity,
 
+        discount: state.discount,
+        setDiscount,
+
         shippingTime: state.shippingTime,
         setShippingTime,
 
@@ -963,6 +999,7 @@ export const FilterProvider = ({ children }) => {
         removeOccasion,
         removeSize,
         removeCelebrity,
+        removeDiscount,
         removeShippingTime,
 
         resetFilter

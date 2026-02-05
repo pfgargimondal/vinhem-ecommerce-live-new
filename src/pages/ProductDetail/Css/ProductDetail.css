@@ -475,6 +475,11 @@ p.sidifsdiyhr{
   font-size: 1.4rem;
 }
 
+.dlowenjkrnwkeh li
+{
+  text-align: justify;
+}
+
 
 /*pd image gallery zoom*/
 
@@ -1581,12 +1586,17 @@ h4.oijiwuihfih-eiuheir{
 
 .dkewhknewhirwer h6{
   font-weight: 400;
-  font-size: 0.8rem;
+  font-size: 1rem;
   letter-spacing: 1px;
 }
 
 .jnmkjhihewirwer{
   text-align: center;
+}
+
+.dfghjdfgdfgf 
+{
+  margin-left: -50px;
 }
 
 .dkewhrwerwer{
@@ -1612,6 +1622,11 @@ h4.oijiwuihfih-eiuheir{
 
 .oijdkejwjewr h6 span{
   color: var(--pink-main-color);
+}
+
+.oijdkejwjewr  p
+{
+  text-align: justify;
 }
 
 .oijdkejwjewr h6 i{
@@ -1861,12 +1876,13 @@ h4.oijiwuihfih-eiuheir{
 /**/
 
 .select-form-drpdwn.weqwthyuytredfgw{
-  width: 30%;
+  width: 20%;
 }
 
 .select-form-drpdwn.weqwthyuytredfgw select.form-select,
 .select-form-drpdwn.weqwthyuytredfgw{
   font-weight: 500;
+  text-align: center;
 }
 
 .select-form-drpdwn.dfgsfsfggfrfreerr{

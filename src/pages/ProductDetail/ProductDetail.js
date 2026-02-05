@@ -1920,7 +1920,7 @@ export const ProductDetail = () => {
 
                       <div className="diwenjrbwebrwehgrwer mt-5">
                         <p className="sidifsdiyhr pb-2 me-2 mb-0">
-                          <b style={{ fontSize: "1.3rem" }}>Offers - </b> Coupon
+                          <b style={{ fontSize: "20px" }}>Offers - </b> Coupon
                           are visible on checkout page do not forget "Tap To
                           Apply"
                         </p>
@@ -2597,13 +2597,13 @@ export const ProductDetail = () => {
         <div className="dkewhrwerwer px-4 py-3">
           <div className="dkjjenwjknkweh">
             <div className="row align-items-center">
-              <div className="col-lg-3 mb-3">
+              <div className="col-lg-2 mb-3">
                 <div className="diewnrjhwerwer">
                   <img src={productDetails?.data?.encoded_image_url_1} alt="" />
                 </div>
               </div>
 
-              <div className="col-lg-9">
+              <div className="col-lg-10">
                 <div className="dlowenjkrnwkeh">
                   <ul>
                     <li className="mb-3">
@@ -2784,7 +2784,7 @@ export const ProductDetail = () => {
         } position-fixed bg-white`}
       >
         <div className="s-s-m-header d-flex align-items-center justify-content-between p-3 border-bottom">
-          <h4 className="mb-0">Turbon Chart Size</h4>
+          <h4 className="mb-0">Turbon Chart Size & Mojri Size Chart </h4>
 
           <i class="bi bi-x-lg" onClick={() => setTurbanModal(false)}></i>
         </div>
@@ -2817,7 +2817,7 @@ export const ProductDetail = () => {
           <i class="bi bi-x-lg" onClick={() => setMojriModal(false)}></i>
         </div>
 
-        <div className="s-s-m-options p-3 align-items-center justify-content-center">
+        <div className="">
           <img src="/images/Mojri.png" className="img-fluid w-100" alt="" />
         </div>
       </div>

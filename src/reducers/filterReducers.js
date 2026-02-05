@@ -120,6 +120,7 @@ export const filterReducer = (state, action) => {
         case "OCCASION":
         case "SIZE":
         case "CELEBRITY":
+        case "DISCOUNT":
         case "SHIPPING_TIME": {
         const keyMap = {
             FILTER_CATEGORY_NAME: "filterCategoryName",
@@ -130,6 +131,7 @@ export const filterReducer = (state, action) => {
             OCCASION: "occasion",
             SIZE: "size",
             CELEBRITY: "celebrity",
+            DISCOUNT: "discount",
             SHIPPING_TIME: "shippingTime",
         };
 
@@ -154,6 +156,7 @@ export const filterReducer = (state, action) => {
         case "REMOVE_OCCASION":
         case "REMOVE_SIZE":
         case "REMOVE_CELEBRITY":
+        case "REMOVE_DISCOUNT":
         case "REMOVE_SHIPPING_TIME":
             const removeKeyMap = {
                 "REMOVE_COLOR": "color",
@@ -163,6 +166,7 @@ export const filterReducer = (state, action) => {
                 "REMOVE_OCCASION": "occasion",
                 "REMOVE_SIZE": "size",
                 "REMOVE_CELEBRITY": "celebrity",
+                "REMOVE_DISCOUNT": "discount",
                 "REMOVE_SHIPPING_TIME": "shippingTime"
             };
             const removeField = removeKeyMap[action.type];
@@ -206,6 +210,7 @@ export const filterReducer = (state, action) => {
                 occasion: [],
                 size: [],
                 celebrity: [],
+                discount: [],
                 shippingTime: [],
                 sortBy: null,
                 newIn: false,

@@ -9,7 +9,7 @@ import Loader from "../../components/Loader/Loader";
 
 
 export default function FilterSection({ setResFltrMenu, allFilterMappingdata, filterCategories, category, subcategory }) {
-  const { minPrice, maxPrice, setPrice, mainCategory, setMainCategory, subCategory, setSubCategory, filterCategoryCntxt, setFilterCategory, setFilterCategoryName, color, setColor, material, setMaterial, designer, setDesigner, plusSize, setPlusSize, occasion, setOccasion, size, setSize, celebrity, setCelebrity, shippingTime, setShippingTime, resetFilter } = useFilter();
+  const { minPrice, maxPrice, setPrice, mainCategory, setMainCategory, subCategory, setSubCategory, filterCategoryCntxt, setFilterCategory, setFilterCategoryName, color, setColor, material, setMaterial, designer, setDesigner, plusSize, setPlusSize, occasion, setOccasion, size, setSize, celebrity, setCelebrity, discount, setDiscount, shippingTime, setShippingTime, resetFilter } = useFilter();
   const [selectedTheme, setSelectedTheme] = useState("");
   const [sbctgry, setSbctgry] = useState(null);
   const [insdSbctgry, setInsdSbctgry] = useState(null);
@@ -71,6 +71,10 @@ export default function FilterSection({ setResFltrMenu, allFilterMappingdata, fi
 
       case "shipping_time":
         setShippingTime(value);
+        break;
+
+      case "discount":
+        setDiscount(value);
         break;
 
       case "filter_category_name":
@@ -553,6 +557,8 @@ export default function FilterSection({ setResFltrMenu, allFilterMappingdata, fi
                           isChecked = size.includes(trimmedValue);
                         } else if (filterKey === "celebrity") {
                           isChecked = celebrity.includes(trimmedValue);
+                        } else if(filterKey === "discount") {
+                          isChecked = discount.includes(trimmedValue);
                         } else if (filterKey === "shipping_time") {
                           isChecked = shippingTime.includes(trimmedValue);
                         }
