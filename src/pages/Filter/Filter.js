@@ -497,7 +497,7 @@ export const Filter = () => {
 
                       if (item.type === "sub" || item.type === "filter") {
                         const pathParts = item.value.split("/");
-
+                        // eslint-disable-next-line
                         const mainCategory = pathParts[0]
                           ?.replace(/-/g, " ")
                           ?.split(" ")

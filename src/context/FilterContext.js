@@ -9,7 +9,7 @@ const filterInitialState = {
     maxPrice: 1000000,
     // mainCategory: [],
     // subCategory: [],
-    filterCategory: [],
+    // filterCategory: [],
     mainCategory: null,
     subCategory: null,
     filterCategory: null,
