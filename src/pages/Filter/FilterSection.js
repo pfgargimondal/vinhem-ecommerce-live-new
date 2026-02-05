@@ -53,9 +53,7 @@ export default function FilterSection({ setResFltrMenu, allFilterMappingdata, fi
       case "plus_sizes":
         // setPlusSize(value);
         // break;
-        if (typeof value === "string") {
-          setPlusSize(value.trim().toLowerCase());
-        }
+        setPlusSize(value);
         break;
 
       case "occasion":

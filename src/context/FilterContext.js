@@ -71,8 +71,6 @@ export const FilterProvider = ({ children }) => {
         // ✅🔥 ADD THIS (MOST IMPORTANT)
         if (newState.plusSize.length)
             searchParams.set("plusSize", newState.plusSize.join(","));
-        else
-            searchParams.delete("plusSize");
 
         if (newState.occasion.length)
             searchParams.set("occasion", newState.occasion.join(","));
@@ -85,6 +83,7 @@ export const FilterProvider = ({ children }) => {
 
         if (newState.shippingTime.length)
             searchParams.set("shippingTime", newState.shippingTime.join(","));
+
 
         navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
     }
@@ -129,7 +128,10 @@ export const FilterProvider = ({ children }) => {
         const params = new URLSearchParams(location.search);
 
         const plusSizeFromUrl = params.get("plusSize")
-            ? params.get("plusSize").split(",").filter(v => v.trim() !== "")
+            ? params.get("plusSize")
+                .split(",")
+                .map(v => v.trim().toLowerCase())  // trim & lowercase
+                .filter(Boolean)                   // remove empty strings
             : [];
 
         const getArray = (key) => {
@@ -500,23 +502,40 @@ export const FilterProvider = ({ children }) => {
     //     updateURLWithFilters(newState);
     // }
 
+
     function setPlusSize(plusSize) {
-        if (typeof plusSize !== "string") return; // 🚨 GUARD
+        if (!plusSize || typeof plusSize !== "string") return;
 
-        const value = plusSize.trim().toLowerCase();
+        // const normalizedSize = plusSize.trim().toLowerCase();
+        // if (!normalizedSize) return;
 
-        if (!value) return;
+        // const updatedPlusSize = state.plusSize.includes(normalizedSize)
+        //     ? state.plusSize.filter(v => v !== normalizedSize)
+        //     : [...state.plusSize, normalizedSize];
+
+        // // Dispatch
+        // dispatch({ type: "PLUS_SIZE", payload: { plusSize } });
+
+        // // Update URL
+        // updateURLWithFilters({
+        //     ...state,
+        //     plusSize: updatedPlusSize.filter(Boolean)  // ✅ clean array
+        // });
 
         const newState = {
             ...state,
-            plusSize: state.plusSize.includes(value)
-                ? state.plusSize.filter(v => v !== value)
-                : [...state.plusSize, value]
+            plusSize: state.plusSize.includes(plusSize)
+                ? state.plusSize.filter(v => v !== plusSize)
+                : [...state.plusSize, plusSize]
         };
 
-        dispatch({ type: "PLUS_SIZE", payload: { plusSize: value } });
+        dispatch({ type: "PLUS_SIZE", payload: { plusSize } });
         updateURLWithFilters(newState);
     }
+
+
+
+
 
 
 
@@ -548,24 +567,34 @@ export const FilterProvider = ({ children }) => {
         const selectedSizes = state.plusSize || [];
         if (!selectedSizes.length) return products;
 
+        // return products.filter(product => {
+        //     const rawSizes = product?.product_plus_size;
+
+        //     // 🚨 CRITICAL GUARD
+        //     if (!rawSizes || typeof rawSizes !== "string") return false;
+
+        //     const sizeArray = rawSizes
+        //         .split(",")
+        //         .map(s => s.trim().toLowerCase())
+        //         .filter(Boolean);
+
+        //     return selectedSizes
+        //     .filter(size => typeof size === "string")
+        //     .some(size =>
+        //         sizeArray.includes(size.toLowerCase())
+        //     );
+        // });
+
         return products.filter(product => {
-            const rawSizes = product?.product_plus_size;
+            const productSizes =
+                typeof product?.product_plus_size === "string"
+                    ? product.product_plus_size.split(",").map(s => s.trim().toLowerCase())
+                    : [];
 
-            // 🚨 CRITICAL GUARD
-            if (!rawSizes || typeof rawSizes !== "string") return false;
-
-            const sizeArray = rawSizes
-                .split(",")
-                .map(s => s.trim().toLowerCase())
-                .filter(Boolean);
-
-            return selectedSizes
-            .filter(size => typeof size === "string")
-            .some(size =>
-                sizeArray.includes(size.toLowerCase())
-            );
+            return selectedSizes.some(size => productSizes.includes(size));
         });
     }
+
 
 
     function setOccasion(occasion) {

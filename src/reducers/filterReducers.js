@@ -120,27 +120,31 @@ export const filterReducer = (state, action) => {
         case "OCCASION":
         case "SIZE":
         case "CELEBRITY":
-        case "SHIPPING_TIME":
-            const keyMap = {
-                "FILTER_CATEGORY_NAME": "filterCategoryName",
-                "COLOR": "color",
-                "MATERIAL": "material",
-                "DESIGNER": "designer", 
-                "PLUS_SIZE": "plusSize",
-                "OCCASION": "occasion",
-                "SIZE": "size",
-                "CELEBRITY": "celebrity",
-                "SHIPPING_TIME": "shippingTime"
-            };
-            const field = keyMap[action.type];
-            const value = action.type === "FILTER_CATEGORY_NAME" ? action.payload : action.payload[action.type.toLowerCase().replace('_', '')];
-            
-            return {
-                ...state,
-                [field]: state[field].includes(value)
-                    ? state[field].filter(v => v !== value)
-                    : [...state[field], value]
-            };
+        case "SHIPPING_TIME": {
+        const keyMap = {
+            FILTER_CATEGORY_NAME: "filterCategoryName",
+            COLOR: "color",
+            MATERIAL: "material",
+            DESIGNER: "designer",
+            PLUS_SIZE: "plusSize",
+            OCCASION: "occasion",
+            SIZE: "size",
+            CELEBRITY: "celebrity",
+            SHIPPING_TIME: "shippingTime",
+        };
+
+        const field = keyMap[action.type];
+        const value = action.payload?.[field];
+
+        if (!value) return state; // 🔒 stops undefined forever
+
+        return {
+            ...state,
+            [field]: state[field].includes(value)
+            ? state[field].filter(v => v !== value)
+            : [...state[field], value],
+        };
+        }
 
         /* ---------------- REMOVE OTHER FILTERS ---------------- */
         case "REMOVE_COLOR":
