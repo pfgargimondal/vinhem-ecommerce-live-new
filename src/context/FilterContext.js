@@ -9,9 +9,10 @@ const filterInitialState = {
     maxPrice: 1000000,
     // mainCategory: [],
     // subCategory: [],
+    filterCategory: [],
     mainCategory: null,
     subCategory: null,
-    filterCategory: [],
+    filterCategory: null,
     filterCategoryName: [],
     color: [],
     material: [],
@@ -41,26 +42,53 @@ export const FilterProvider = ({ children }) => {
     function updateURLWithFilters(newState) {
         const searchParams = new URLSearchParams();
 
-        // if (newState.mainCategory.length) searchParams.set("main", newState.mainCategory.join(","));
+        if (newState.mainCategory)
+            searchParams.set("main", newState.mainCategory);
 
-        if (newState.mainCategory) searchParams.set("main", newState.mainCategory);
+        if (newState.subCategory)
+            searchParams.set("subpaths", newState.subCategory);
 
-        // CHANGE: Use subpaths and filterpaths for hierarchical support
-        // if (newState.subCategory.length) searchParams.set("subpaths", newState.subCategory.join(","));
+        if (newState.filterCategory) {
+            searchParams.set("filterpaths", newState.filterCategory);
+        } else {
+            searchParams.delete("filterpaths");
+        }
+        // if (newState.filterCategory.length)
+        //     searchParams.set("filterpaths", newState.filterCategory.join(","));
 
-        if (newState.subCategory) searchParams.set("subpaths", newState.subCategory);
+        if (newState.filterCategoryName.length)
+            searchParams.set("filter", newState.filterCategoryName.join(","));
 
-        if (newState.filterCategory.length) searchParams.set("filterpaths", newState.filterCategory.join(","));
-        
-        // filterCategoryName stays flat
-        if (newState.filterCategoryName.length) searchParams.set("filter", newState.filterCategoryName.join(","));
-        
-        // Other filters unchanged...
-        if (newState.color.length) searchParams.set("color", newState.color.join(","));
-        // ... rest unchanged
+        if (newState.color.length)
+            searchParams.set("color", newState.color.join(","));
+
+        if (newState.material.length)
+            searchParams.set("material", newState.material.join(","));
+
+        if (newState.designer.length)
+            searchParams.set("designer", newState.designer.join(","));
+
+        // ✅🔥 ADD THIS (MOST IMPORTANT)
+        if (newState.plusSize.length)
+            searchParams.set("plusSize", newState.plusSize.join(","));
+        else
+            searchParams.delete("plusSize");
+
+        if (newState.occasion.length)
+            searchParams.set("occasion", newState.occasion.join(","));
+
+        if (newState.size.length)
+            searchParams.set("size", newState.size.join(","));
+
+        if (newState.celebrity.length)
+            searchParams.set("celebrity", newState.celebrity.join(","));
+
+        if (newState.shippingTime.length)
+            searchParams.set("shippingTime", newState.shippingTime.join(","));
 
         navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
     }
+
 
 
     // function restoreFiltersFromURL() {
@@ -98,33 +126,37 @@ export const FilterProvider = ({ children }) => {
 
 
     function restoreFiltersFromURL() {
-    const params = new URLSearchParams(location.search);
+        const params = new URLSearchParams(location.search);
 
-    const getArray = (key) => {
-        const value = params.get(key);
-        return value ? value.split(",").filter(Boolean) : [];
-    };
+        const plusSizeFromUrl = params.get("plusSize")
+            ? params.get("plusSize").split(",").filter(v => v.trim() !== "")
+            : [];
 
-    dispatch({
-        type: "RESTORE_FROM_URL",
-        payload: {
-            mainCategory: params.get("main") || null,
-            subCategory: params.get("subpaths") || null,
+        const getArray = (key) => {
+            const value = params.get(key);
+            return value ? value.split(",").filter(Boolean) : [];
+        };
 
-            filterCategory: getArray("filterpaths"),
-            filterCategoryName: getArray("filter"),
+        dispatch({
+            type: "RESTORE_FROM_URL",
+            payload: {
+                mainCategory: params.get("main") || null,
+                subCategory: params.get("subpaths") || null,
 
-            color: getArray("color"),
-            material: getArray("material"),
-            designer: getArray("designer"),
-            plusSize: getArray("plusSize"),   // ✅ FIXED
-            occasion: getArray("occasion"),
-            size: getArray("size"),
-            celebrity: getArray("celebrity"),
-            shippingTime: getArray("shippingTime"),
-        }
-    });
-}
+                filterCategory: params.get("filterpaths") || null,
+                filterCategoryName: getArray("filter"),
+
+                color: getArray("color"),
+                material: getArray("material"),
+                designer: getArray("designer"),
+                plusSize: plusSizeFromUrl,   // ✅ FIXED
+                occasion: getArray("occasion"),
+                size: getArray("size"),
+                celebrity: getArray("celebrity"),
+                shippingTime: getArray("shippingTime"),
+            }
+        });
+    }
 
 
     useEffect(() => {
@@ -183,16 +215,21 @@ export const FilterProvider = ({ children }) => {
     function setMainCategory(mainCategory) {
         if (!mainCategory) return;
 
+        const value =
+            state.mainCategory === mainCategory
+                ? null              // 🔥 UNCHECK
+                : mainCategory;
+
         const newState = {
             ...state,
-            mainCategory,
-            subCategory: null,      // 🔥 auto clear subcategory
-            filterCategory: []      // optional but recommended
+            mainCategory: value,
+            subCategory: null,      // clear child
+            filterCategory: null    // ✅ MUST be null (not array)
         };
 
         dispatch({
             type: "MAIN_CATEGORY",
-            payload: { mainCategory }
+            payload: { mainCategory: value }
         });
 
         updateURLWithFilters(newState);
@@ -246,15 +283,20 @@ export const FilterProvider = ({ children }) => {
             .toLowerCase()
             .replace(/ /g, "-");
 
+        const value =
+            state.subCategory === subPath
+                ? null              // 🔥 UNCHECK
+                : subPath;
+
         const newState = {
             ...state,
-            subCategory: subPath,
-            filterCategory: []   // clear deeper filters
+            subCategory: value,
+            filterCategory: null    // ✅ MUST be null
         };
 
         dispatch({
             type: "SUB_CATEGORY",
-            payload: { subPath }
+            payload: { subPath: value }
         });
 
         updateURLWithFilters(newState);
@@ -293,22 +335,24 @@ export const FilterProvider = ({ children }) => {
     function setFilterCategory(mainCategory, subCategoryName, filterCategoryName) {
         if (!mainCategory || !subCategoryName || !filterCategoryName) return;
 
-        // BUILD FULL PATH: "women/kurta-sets/printed-kurta-sets"
-        const filterPath = `${mainCategory}/${subCategoryName}/${filterCategoryName}`.toLowerCase().replace(/ /g, '-');
-        
+        const filterPath = `${mainCategory}/${subCategoryName}/${filterCategoryName}`
+            .toLowerCase()
+            .replace(/ /g, "-");
+
+        const value =
+            state.filterCategory === filterPath
+                ? null               // 🔥 UNCHECK
+                : filterPath;
+
         dispatch({
             type: "FILTER_CATEGORY",
-            payload: { filterPath }  // Pass full path to reducer
+            payload: { filterPath: value }
         });
-        
-        // Update URL after dispatch
-        const newState = {
+
+        updateURLWithFilters({
             ...state,
-            filterCategory: state.filterCategory.includes(filterPath)
-                ? state.filterCategory.filter(v => v !== filterPath)
-                : [...state.filterCategory, filterPath]
-        };
-        updateURLWithFilters(newState);
+            filterCategory: value
+        });
     }
 
     function filterFilterCategory(products) {

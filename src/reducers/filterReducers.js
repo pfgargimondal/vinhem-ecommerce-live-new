@@ -32,7 +32,8 @@ export const filterReducer = (state, action) => {
                 ...state,
                 mainCategory: action.payload.mainCategory, // single value
                 subCategory: null,
-                filterCategory: []
+                // filterCategory: [],
+                filterCategory: null
             };
 
         // case "REMOVE_MAIN_CATEGORY":
@@ -48,7 +49,8 @@ export const filterReducer = (state, action) => {
                 ...state,
                 mainCategory: null,
                 subCategory: null,
-                filterCategory: []
+                filterCategory: null
+                // filterCategory: []
             };
 
         /* ---------------- SUB CATEGORY (HIERARCHICAL PATH) ---------------- */
@@ -67,7 +69,8 @@ export const filterReducer = (state, action) => {
             return {
                 ...state,
                 subCategory: action.payload.subPath, // single value
-                filterCategory: []
+                // filterCategory: []
+                filterCategory: null
             };
 
         // case "REMOVE_SUB_CATEGORY":
@@ -82,17 +85,24 @@ export const filterReducer = (state, action) => {
             return {
                 ...state,
                 subCategory: null,
-                filterCategory: []
+                filterCategory: null
+                // filterCategory: []
             };
 
         /* ---------------- FILTER CATEGORY (FULL PATH: main/sub/filter) ---------------- */
+        // case "FILTER_CATEGORY":
+        //     const filterPath = action.payload.filterPath; // "women/kurta-sets/printed"
+        //     return {
+        //         ...state,
+        //         filterCategory: state.filterCategory.includes(filterPath)
+        //             ? state.filterCategory.filter(v => v !== filterPath)
+        //             : [...state.filterCategory, filterPath]
+        //     };
+
         case "FILTER_CATEGORY":
-            const filterPath = action.payload.filterPath; // "women/kurta-sets/printed"
             return {
                 ...state,
-                filterCategory: state.filterCategory.includes(filterPath)
-                    ? state.filterCategory.filter(v => v !== filterPath)
-                    : [...state.filterCategory, filterPath]
+                filterCategory: action.payload.filterPath
             };
 
         case "REMOVE_FILTER_CATEGORY":
@@ -180,9 +190,10 @@ export const filterReducer = (state, action) => {
                 maxPrice: 1000000,
                 // mainCategory: [],
                 // subCategory: [],
+                // filterCategory: [],
                 mainCategory: null,
                 subCategory: null,
-                filterCategory: [],
+                filterCategory: null,
                 filterCategoryName: [],
                 color: [],
                 material: [],

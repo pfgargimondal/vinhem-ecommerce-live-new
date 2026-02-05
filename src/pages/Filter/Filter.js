@@ -133,10 +133,16 @@ export const Filter = () => {
       searchParams.set("subpaths", subCategory);
     }
 
-    // FILTER CATEGORY (multi)
-    if (filterCategoryCntxt?.length) {
-      searchParams.set("filterpaths", filterCategoryCntxt.join(","));
+    // FILTER CATEGORY (single)
+
+    if (filterCategoryCntxt) {
+      searchParams.set("filterpaths", filterCategoryCntxt);
     }
+
+    // // FILTER CATEGORY (multi)
+    // if (filterCategoryCntxt?.length) {
+    //   searchParams.set("filterpaths", filterCategoryCntxt.join(","));
+    // }
 
     // OTHER FILTERS (multi)
     if (color?.length) searchParams.set("color", color.join(","));
@@ -485,28 +491,45 @@ export const Filter = () => {
               <div className="dweihrihwerwerwer pb-4">
                 <div className="doeihrmwerwer d-flex flex-wrap">
                   {filterOptionsItems.slice(0, selectedFilterOptions).map(item => {
-                    let displayValue = '';
-                    
-                    if (item.type === 'sub' || item.type === 'filter') {
-                      const pathParts = item.value.split('/');
-                      const mainCategory = pathParts[0]?.replace(/-/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-                      const lastPart = pathParts[pathParts.length - 1]?.replace(/-/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-                      displayValue = `${mainCategory} - ${lastPart}`;
-                    } else {
-                      // Other filters (color, size, etc.)
-                      displayValue = item.value.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-                    }
-                    
-                    return (
-                      <button 
-                        key={`${item.type}-${item.value}`} 
-                        onClick={() => handleFilterOptionRemove(item)} 
-                        className="btn btn-filter-tag p-2 bg-transparent rounded-0 text-dark btn-main"
-                      >
-                        <i className="fa-solid fa-xmark"></i> {displayValue}
-                      </button>
-                    );
-                  })}
+                      if (typeof item?.value !== "string") return null;
+
+                      let displayValue = "";
+
+                      if (item.type === "sub" || item.type === "filter") {
+                        const pathParts = item.value.split("/");
+
+                        const mainCategory = pathParts[0]
+                          ?.replace(/-/g, " ")
+                          ?.split(" ")
+                          ?.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                          ?.join(" ");
+
+                        const lastPart = pathParts[pathParts.length - 1]
+                          ?.replace(/-/g, " ")
+                          ?.split(" ")
+                          ?.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                          ?.join(" ");
+
+                        // displayValue = `${mainCategory} - ${lastPart}`;
+                        displayValue = `${lastPart}`;
+                      } else {
+                        displayValue = item.value
+                          .split(" ")
+                          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                          .join(" ");
+                      }
+
+                      return (
+                        <button
+                          key={`${item.type}-${item.value}`}
+                          onClick={() => handleFilterOptionRemove(item)}
+                          className="btn btn-filter-tag p-2 bg-transparent rounded-0 text-dark btn-main"
+                        >
+                          <i className="fa-solid fa-xmark"></i> {displayValue}
+                        </button>
+                      );
+                    })}
+
                 </div>
 
                 {filterOptionsItems.length > DEFAULT_VISIBLE && (

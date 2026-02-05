@@ -432,7 +432,8 @@ export default function FilterSection({ setResFltrMenu, allFilterMappingdata, fi
                                                             sub_category.subCategories_name.toLowerCase(),
                                                             filter_category.filterCategories_name.toLowerCase()
                                                           )}
-                                                          checked={filterCategoryCntxt?.includes(filterPath)}
+                                                          // checked={filterCategoryCntxt?.includes(filterPath)}
+                                                          checked={filterCategoryCntxt === filterPath}
                                                           value={filter_category.filterCategories_name.toLowerCase()}
                                                           id={`insd-sb-ctgry-${filter_category.id}`}
                                                           className="checkbox__trigger visuallyhidden"
