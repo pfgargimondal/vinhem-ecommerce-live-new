@@ -2834,7 +2834,7 @@ export const ProductDetail = () => {
           <Tab.Container activeKey={activeKey} onSelect={setActiveKey}>
             <Row className="sdgdffwesfdf">
               {/* ================= SMALL THUMBNAILS ================= */}
-              <Col lg={2} className="small-image-tabs pt-1 pe-0">
+              <Col xs={2} className="small-image-tabs pt-1 pe-0">
                 <div className="position-relative">
                   {productDetails?.data?.product_image?.encoded_image_url_5 && (
                     <div
@@ -2888,7 +2888,7 @@ export const ProductDetail = () => {
               </Col>
 
               {/* ================= LARGE ZOOM IMAGE ================= */}
-              <Col lg={10} className="large-image-tab">
+              <Col xs={10} className="large-image-tab">
                 <Tab.Content className="ps-2">
                   {[
                     "encoded_image_url_1",
