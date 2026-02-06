@@ -568,6 +568,7 @@ p.sidifsdiyhr{
 
 .zoom-gallery-modal .large-image-tab .tab-content > .active img{
   max-height: initial;
+  pointer-events: none;
 }
 
 

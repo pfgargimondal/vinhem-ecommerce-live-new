@@ -738,11 +738,13 @@ export const FilterProvider = ({ children }) => {
     }
 
     function filterShippingTime(products) {
+
+        console.log(products, 'productssergdrg');
         const selectedShippingTimes = state.shippingTime || [];
         if (!selectedShippingTimes.length) return products;
 
         return products.filter(product => {
-            const productShippingTime = product.shippingTime?.toLowerCase();
+            const productShippingTime = product.shipping_time?.toLowerCase();
             return selectedShippingTimes.includes(productShippingTime);
         });
     }

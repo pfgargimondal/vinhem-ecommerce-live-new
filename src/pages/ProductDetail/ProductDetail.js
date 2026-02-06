@@ -1920,7 +1920,7 @@ export const ProductDetail = () => {
 
                       <div className="diwenjrbwebrwehgrwer mt-5">
                         <p className="sidifsdiyhr pb-2 me-2 mb-0">
-                          <b style={{ fontSize: "20px" }}>Offers - </b> Coupon
+                          <span>Offers - </span> Coupon
                           are visible on checkout page do not forget "Tap To
                           Apply"
                         </p>
@@ -2573,18 +2573,16 @@ export const ProductDetail = () => {
           {productDetails?.data?.product_category?.toLowerCase() ===
             "accessories" && (
             <h4 className="mb-1">
-              Size Chart for &nbsp;
-              {productDetails?.data?.product_sub_category?.toLowerCase() ===
-              "foot wear"
-                ? productDetails?.data?.product_sub_category
-                : productDetails?.data?.product_category}
+              {`Size Chart for ${productDetails?.data?.product_sub_category?.toLowerCase() ===
+                "foot wear"
+                  ? productDetails?.data?.product_sub_category
+                  : productDetails?.data?.product_category}`}
             </h4>
           )}
           {productDetails?.data?.product_category?.toLowerCase() !==
             "accessories" && (
               <h4 className="mb-1">
-                Size Chart for &nbsp;
-                {productDetails?.data?.product_category}
+                {`Size Chart for ${productDetails?.data?.product_category}`}
               </h4>
           )}
 
