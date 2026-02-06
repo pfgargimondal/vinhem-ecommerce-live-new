@@ -595,7 +595,8 @@
 }
 
 .pagination_ff button.active{
-  background: var(--pink-main-color);
+  /* background: var(--pink-main-color); */
+  background: #bf71a1;
   border-color: var(--pink-main-color) !important;
   color: #fff;
   border-style: dotted;

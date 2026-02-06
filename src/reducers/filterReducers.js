@@ -111,6 +111,12 @@ export const filterReducer = (state, action) => {
                 filterCategory: state.filterCategory.filter(v => v !== action.payload.filterPath)
             };
 
+        case "PAGE":
+            return {
+                ...state,
+                page: action.payload.page
+            };
+
         /* ---------------- OTHER FILTERS (unchanged) ---------------- */
         case "FILTER_CATEGORY_NAME":
         case "COLOR":

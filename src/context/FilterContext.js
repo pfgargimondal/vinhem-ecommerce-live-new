@@ -27,7 +27,8 @@ const filterInitialState = {
     newIn: false,
     readyToShip: null,
     onSale: false,
-    cstmFit: false
+    cstmFit: false,
+    page: 1
 }
 
 
@@ -41,7 +42,9 @@ export const FilterProvider = ({ children }) => {
 
 
     function updateURLWithFilters(newState) {
-        const searchParams = new URLSearchParams();
+        // const searchParams = new URLSearchParams();
+
+        const searchParams = new URLSearchParams(location.search);
 
         if (newState.mainCategory)
             searchParams.set("main", newState.mainCategory);
@@ -87,6 +90,14 @@ export const FilterProvider = ({ children }) => {
 
         if (newState.shippingTime.length)
             searchParams.set("shippingTime", newState.shippingTime.join(","));
+
+        if (typeof newState.page === "number") {
+            if (newState.page > 1) {
+                searchParams.set("page", newState.page);
+            } else {
+                searchParams.delete("page");
+            }
+        }
 
 
         navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
@@ -142,6 +153,7 @@ export const FilterProvider = ({ children }) => {
             const value = params.get(key);
             return value ? value.split(",").filter(Boolean) : [];
         };
+        const pageFromUrl = Number(params.get("page")) || 1;
 
         dispatch({
             type: "RESTORE_FROM_URL",
@@ -161,6 +173,7 @@ export const FilterProvider = ({ children }) => {
                 celebrity: getArray("celebrity"),
                 discount: getArray("discount"),
                 shippingTime: getArray("shippingTime"),
+                page: pageFromUrl,
             }
         });
     }
@@ -286,7 +299,8 @@ export const FilterProvider = ({ children }) => {
     function setSubCategory(mainCategory, subCategoryName) {
         if (!mainCategory || !subCategoryName) return;
 
-        const subPath = `${mainCategory}/${subCategoryName}`
+        // const subPath = `${mainCategory}/${subCategoryName}`
+        const subPath = `${subCategoryName}`
             .toLowerCase()
             .replace(/ /g, "-");
 
@@ -329,7 +343,8 @@ export const FilterProvider = ({ children }) => {
             const subCat = product.product_sub_category?.toLowerCase();
             if (!mainCat || !subCat) return false;
 
-            return `${mainCat}/${subCat}` === state.subCategory;
+            // return `${mainCat}/${subCat}` === state.subCategory;
+            return `${subCat}` === state.subCategory;
         });
     }
 
@@ -426,21 +441,41 @@ export const FilterProvider = ({ children }) => {
             ...state,
             discount: state.discount.includes(discount)
                 ? state.discount.filter(v => v !== discount)
-                : [...state.discount, discount]
+                : [...state.discount, discount],
+
+            page: 1 
         };
 
         dispatch({
             type: "DISCOUNT",
             payload: { discount }
         });
+        dispatch({ type: "PAGE", payload: { page: 1 } });
 
         updateURLWithFilters(newState);
     }
 
     function filterDiscount(products) {
-        const selectedDiscount = state.discount || [];
-        return selectedDiscount.length ? products.filter(product => selectedDiscount.includes(product.filter_discount?.toLowerCase())) : products;
+        const selectedDiscounts = state.discount || [];
+
+        if (!selectedDiscounts.length) return products;
+
+        return products.filter(product => {
+            const productDiscount = Number(product.discount); // "20" → 20
+            if (isNaN(productDiscount)) return false;
+
+            return selectedDiscounts.some(range => {
+                // Remove % and spaces → split
+                const [min, max] = range
+                    .replace(/%/g, "")
+                    .split("-")
+                    .map(v => Number(v.trim()));
+
+                return productDiscount >= min && productDiscount <= max;
+            });
+        });
     }
+
 
     //color
 
@@ -451,7 +486,9 @@ export const FilterProvider = ({ children }) => {
             ...state,
             color: state.color.includes(color)
                 ? state.color.filter(v => v !== color)
-                : [...state.color, color]
+                : [...state.color, color],
+            
+            page: 1 
         };
 
         dispatch({
@@ -459,13 +496,32 @@ export const FilterProvider = ({ children }) => {
             payload: { color }
         });
 
+        dispatch({ type: "PAGE", payload: { page: 1 } });
+
         updateURLWithFilters(newState);
     }
 
     function filterColor(products) {
         const selectedColors = state.color || [];
-        return selectedColors.length ? products.filter(product => selectedColors.includes(product.color?.toLowerCase())) : products;
+
+        if (!selectedColors.length) return products;
+
+        return products.filter(product => {
+            const productColors = product.filter_color
+                ?.toLowerCase()
+                .split(",")
+                .map(c => c.trim());
+
+            if (!productColors?.length) return false;
+
+            return selectedColors.some(selected =>
+                productColors.some(productColor =>
+                    productColor.includes(selected)
+                )
+            );
+        });
     }
+
 
 
     //material
@@ -477,16 +533,35 @@ export const FilterProvider = ({ children }) => {
             ...state,
             material: state.material.includes(material)
                 ? state.material.filter(v => v !== material)
-                : [...state.material, material]
+                : [...state.material, material],
+
+            page: 1 
         };
 
         dispatch({ type: "MATERIAL", payload: { material } });
+        dispatch({ type: "PAGE", payload: { page: 1 } });
+
         updateURLWithFilters(newState);
     }
 
     function filterMaterial(products) {
         const selectedMaterials = state.material || [];
-        return selectedMaterials.length ? products.filter(product => selectedMaterials.includes(product.fabric?.toLowerCase().trim())) : products;
+        if (!selectedMaterials.length) return products;
+
+        return products.filter(product => {
+            const productMaterials = product.filter_material
+                ?.toLowerCase()
+                .split(",")
+                .map(m => m.trim());
+
+            if (!productMaterials?.length) return false;
+
+            return selectedMaterials.some(selected =>
+                productMaterials.some(material =>
+                    material.includes(selected)
+                )
+            );
+        });
     }
 
 
@@ -500,10 +575,14 @@ export const FilterProvider = ({ children }) => {
             ...state,
             designer: state.designer.includes(designer)
                 ? state.designer.filter(v => v !== designer)
-                : [...state.designer, designer]
+                : [...state.designer, designer],
+
+            page: 1 
         };
 
         dispatch({ type: "DESIGNER", payload: { designer } });
+        dispatch({ type: "PAGE", payload: { page: 1 } });
+
         updateURLWithFilters(newState);
     }
 
@@ -553,10 +632,14 @@ export const FilterProvider = ({ children }) => {
             ...state,
             plusSize: state.plusSize.includes(plusSize)
                 ? state.plusSize.filter(v => v !== plusSize)
-                : [...state.plusSize, plusSize]
+                : [...state.plusSize, plusSize],
+
+            page: 1 
         };
 
         dispatch({ type: "PLUS_SIZE", payload: { plusSize } });
+        dispatch({ type: "PAGE", payload: { page: 1 } });
+
         updateURLWithFilters(newState);
     }
 
@@ -631,10 +714,13 @@ export const FilterProvider = ({ children }) => {
             ...state,
             occasion: state.occasion.includes(occasion)
                 ? state.occasion.filter(v => v !== occasion)
-                : [...state.occasion, occasion]
+                : [...state.occasion, occasion],
+            page: 1 
         };
 
         dispatch({ type: "OCCASION", payload: { occasion } });
+        dispatch({ type: "PAGE", payload: { page: 1 } });
+
         updateURLWithFilters(newState);
     }
 
@@ -644,8 +730,18 @@ export const FilterProvider = ({ children }) => {
         if (!selectedOccasions.length) return products;
 
         return products.filter(product => {
-            const productOccasion = product.occasion?.toLowerCase();
-            return selectedOccasions.includes(productOccasion);
+            const productOccasions = product.filter_occasion
+                ?.toLowerCase()
+                .split(",")
+                .map(o => o.trim());
+
+            if (!productOccasions?.length) return false;
+
+            return selectedOccasions.some(selected =>
+                productOccasions.some(productOccasion =>
+                    productOccasion.includes(selected)
+                )
+            );
         });
     }
 
@@ -660,10 +756,12 @@ export const FilterProvider = ({ children }) => {
             ...state,
             size: state.size.includes(size)
                 ? state.size.filter(v => v !== size)
-                : [...state.size, size]
+                : [...state.size, size],
+            page: 1 
         };
 
         dispatch({ type: "SIZE", payload: { size } });
+        dispatch({ type: "PAGE", payload: { page: 1 } });
         updateURLWithFilters(newState);
     }
 
@@ -702,10 +800,13 @@ export const FilterProvider = ({ children }) => {
             ...state,
             celebrity: state.celebrity.includes(celebrity)
                 ? state.celebrity.filter(v => v !== celebrity)
-                : [...state.celebrity, celebrity]
+                : [...state.celebrity, celebrity],
+
+            page: 1 
         };
 
         dispatch({ type: "CELEBRITY", payload: { celebrity } });
+        dispatch({ type: "PAGE", payload: { page: 1 } });
         updateURLWithFilters(newState);
     }
 
@@ -730,16 +831,18 @@ export const FilterProvider = ({ children }) => {
             ...state,
             shippingTime: state.shippingTime.includes(shippingTime)
                 ? state.shippingTime.filter(v => v !== shippingTime)
-                : [...state.shippingTime, shippingTime]
+                : [...state.shippingTime, shippingTime],
+
+            page: 1 
         };
 
         dispatch({ type: "SHIPPING_TIME", payload: { shippingTime } });
+        dispatch({ type: "PAGE", payload: { page: 1 } });
         updateURLWithFilters(newState);
     }
 
     function filterShippingTime(products) {
 
-        console.log(products, 'productssergdrg');
         const selectedShippingTimes = state.shippingTime || [];
         if (!selectedShippingTimes.length) return products;
 
@@ -749,6 +852,17 @@ export const FilterProvider = ({ children }) => {
         });
     }
 
+
+    function setPage(page) {
+        const newState = { ...state, page };
+
+        dispatch({
+            type: "PAGE",
+            payload: { page }
+        });
+
+        updateURLWithFilters(newState);
+    }
 
 
     //sortby
@@ -981,6 +1095,9 @@ export const FilterProvider = ({ children }) => {
 
         shippingTime: state.shippingTime,
         setShippingTime,
+
+        page: state.page,
+        setPage,
 
         sortBy: state.sortBy,
         setSortBy,

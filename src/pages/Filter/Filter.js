@@ -21,7 +21,7 @@ export const Filter = () => {
   // eslint-disable-next-line
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const { products, initialProductList, mainCategory, subCategory, filterCategory, filterCategoryCntxt, color, material, designer, plusSize, occasion, size, celebrity, discount,  shippingTime, sortBy, setSortBy, setNewArrival, setReadyToShip, setCstmFit, setOnSale, resetFilter, onSale, newIn, readyToShip, removeMainCategory, removeSubCategory, removeFilterCategory, removeColor, removeMaterial, removeDesigner, removePlusSize, removeOccasion, removeSize, removeCelebrity, removeDiscount, removeShippingTime, cstmFit } = useFilter();
+  const { products, initialProductList, mainCategory, subCategory, filterCategory, filterCategoryCntxt, color, material, designer, plusSize, occasion, size, celebrity, discount,  shippingTime, sortBy, setSortBy, setNewArrival, setReadyToShip, setCstmFit, setOnSale, resetFilter, onSale, newIn, readyToShip, removeMainCategory, removeSubCategory, removeFilterCategory, removeColor, removeMaterial, removeDesigner, removePlusSize, removeOccasion, removeSize, removeCelebrity, removeDiscount, removeShippingTime, cstmFit, page: currentPage, setPage } = useFilter();
   // eslint-disable-next-line
   const [viewType, setViewType] = useState(false);
   const [resFltrMenu, setResFltrMenu] = useState(false);
@@ -39,7 +39,7 @@ export const Filter = () => {
 
   const [mainCatgry, setMainCatgry] = useState([]);
 
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
   const [pageWindowStart, setPageWindowStart] = useState(1);
 
 
@@ -93,7 +93,7 @@ export const Filter = () => {
 
     // 2. Update the URL after a tiny delay (to make sure state is updated)
     setTimeout(() => {
-      const searchParams = new URLSearchParams(location.search);
+      const searchParams = new URLSearchParams();
 
       // main
       if (mainCategory.length > 0) searchParams.set("main", mainCategory.join(","));
@@ -123,7 +123,7 @@ export const Filter = () => {
   };
 
   useEffect(() => {
-    const searchParams = new URLSearchParams();
+    const searchParams = new URLSearchParams(location.search);
 
     // MAIN CATEGORY (single)
     if (mainCategory) {
@@ -178,6 +178,7 @@ export const Filter = () => {
     discount,
     shippingTime,
     location.pathname,
+    location.search,
     navigate
   ]);
 
@@ -201,13 +202,13 @@ export const Filter = () => {
   };
 
   const handlePageClick = (page) => {
-    setCurrentPage(page);
+    setPage(page);
   };
 
   const handlePrev = () => {
     if (currentPage > 1) {
       const newPage = currentPage - 1;
-      setCurrentPage(newPage);
+      setPage(newPage);
 
       if (newPage < pageWindowStart) {
         setPageWindowStart(prev => Math.max(1, prev - 1));
@@ -218,7 +219,7 @@ export const Filter = () => {
   const handleNext = () => {
     if (currentPage < totalPages) {
       const newPage = currentPage + 1;
-      setCurrentPage(newPage);
+      setPage(newPage);
 
       if (newPage >= pageWindowStart + visibleCount) {
         setPageWindowStart(prev => prev + 1);
@@ -271,6 +272,21 @@ export const Filter = () => {
   // const handleFilterChange = (value) => {
   //   navigate(`/${value}`);
   // };
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+
+    if (currentPage > 1) {
+      params.set("page", currentPage);
+    } else {
+      params.delete("page");
+    }
+
+    navigate(
+      { pathname: location.pathname, search: params.toString() },
+      { replace: true }
+    );
+  }, [currentPage, location.search, location.pathname, navigate]);
 
 
   const segments = location.pathname.split("/").filter(Boolean);
