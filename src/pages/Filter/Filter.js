@@ -21,7 +21,7 @@ export const Filter = () => {
   // eslint-disable-next-line
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const { products, initialProductList, mainCategory, subCategory, filterCategory, filterCategoryCntxt, color, material, designer, plusSize, occasion, size, celebrity, discount,  shippingTime, sortBy, setSortBy, setNewArrival, setReadyToShip, setCstmFit, setOnSale, resetFilter, onSale, newIn, readyToShip, removeMainCategory, removeSubCategory, removeFilterCategory, removeColor, removeMaterial, removeDesigner, removePlusSize, removeOccasion, removeSize, removeCelebrity, removeDiscount, removeShippingTime, cstmFit, page: currentPage, setPage } = useFilter();
+  const { products, initialProductList, mainCategory, subCategory, filterCategory, filterCategoryCntxt, color, material, designer, plusSize, occasion, size, celebrity, discount, shippingTime, minPrice, maxPrice, sortBy, setSortBy, setNewArrival, setReadyToShip, setCstmFit, setOnSale, resetFilter, onSale, newIn, readyToShip, removeMainCategory, removeSubCategory, removeFilterCategory, removeColor, removeMaterial, removeDesigner, removePlusSize, removeOccasion, removeSize, removeCelebrity, removeDiscount, removeShippingTime, cstmFit, page: currentPage, setPage } = useFilter();
   // eslint-disable-next-line
   const [viewType, setViewType] = useState(false);
   const [resFltrMenu, setResFltrMenu] = useState(false);
@@ -156,6 +156,11 @@ export const Filter = () => {
     if (celebrity?.length) searchParams.set("celebrity", celebrity.join(","));
     if (discount?.length) searchParams.set("discount", discount.join(","));
     if (shippingTime?.length) searchParams.set("shippingTime", shippingTime.join(","));
+    if (minPrice > 0 || maxPrice < 1000000) {
+      searchParams.set("price", `${minPrice}-${maxPrice}`);
+    } else {
+      searchParams.delete("price");
+    }
 
     navigate(
       {
@@ -177,6 +182,8 @@ export const Filter = () => {
     celebrity,
     discount,
     shippingTime,
+    minPrice,
+    maxPrice,
     location.pathname,
     location.search,
     navigate

@@ -155,6 +155,8 @@ export const FilterProvider = ({ children }) => {
         };
         const pageFromUrl = Number(params.get("page")) || 1;
 
+        const price = params.get("price");
+
         dispatch({
             type: "RESTORE_FROM_URL",
             payload: {
@@ -176,6 +178,18 @@ export const FilterProvider = ({ children }) => {
                 page: pageFromUrl,
             }
         });
+
+        if (price) {
+            const [min, max] = price.split("-").map(Number);
+
+            dispatch({
+                type: "PRICE",
+                payload: {
+                minPrice: min || 0,
+                maxPrice: max || 1000000
+                }
+            });
+        }
     }
 
 
@@ -357,7 +371,8 @@ export const FilterProvider = ({ children }) => {
     function setFilterCategory(mainCategory, subCategoryName, filterCategoryName) {
         if (!mainCategory || !subCategoryName || !filterCategoryName) return;
 
-        const filterPath = `${mainCategory}/${subCategoryName}/${filterCategoryName}`
+        // const filterPath = `${mainCategory}/${subCategoryName}/${filterCategoryName}`
+        const filterPath = `${filterCategoryName}`
             .toLowerCase()
             .replace(/ /g, "-");
 
@@ -388,7 +403,8 @@ export const FilterProvider = ({ children }) => {
             
             if (!mainCat || !subCat || !filterCat) return false;
             
-            const productFilterPath = `${mainCat}/${subCat}/${filterCat}`;
+            // const productFilterPath = `${mainCat}/${subCat}/${filterCat}`;
+            const productFilterPath = `${filterCat}`;
             return selectedFilters.includes(productFilterPath);
         });
     }

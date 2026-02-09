@@ -356,7 +356,8 @@ export default function FilterSection({ setResFltrMenu, allFilterMappingdata, fi
                                     .toLowerCase()
                                     .replace(/\s+/g, "-");
 
-                                  const exactPath = `${mainSlug}/${subSlug}`;
+                                  // const exactPath = `${mainSlug}/${subSlug}`;
+                                  const exactPath = `${subSlug}`;
 
                                   // const isChecked = subCategory?.includes(exactPath);
                                   const isChecked = subCategory === exactPath;
@@ -408,10 +409,11 @@ export default function FilterSection({ setResFltrMenu, allFilterMappingdata, fi
                                       {(insdSbctgry === sub_category.id || sub_category?.subCategories_slug === urlSub) && (
                                         <div className={`inside-sub-catgry-filter ${!isSubCategoryURL && sub_category?.filter_categories?.length > 0 ? "ps-3" : ""}`}>
                                           {sub_category.filter_categories.map(filter_category => {
+                                            // eslint-disable-next-line
                                             const mainSlug = filterCategory.mainCategory_name
                                                 .toLowerCase()
                                                 .replace(/\s+/g, "-");
-
+                                            // eslint-disable-next-line
                                               const subSlug = sub_category.subCategories_name
                                                 .toLowerCase()
                                                 .replace(/\s+/g, "-");
@@ -420,7 +422,8 @@ export default function FilterSection({ setResFltrMenu, allFilterMappingdata, fi
                                                 .toLowerCase()
                                                 .replace(/\s+/g, "-");
 
-                                              const filterPath = `${mainSlug}/${subSlug}/${filterSlug}`;
+                                              // const filterPath = `${mainSlug}/${subSlug}/${filterSlug}`;
+                                              const filterPath = `${filterSlug}`;
 
                                             return (
                                               <div key={filter_category.id} className={`radio-wrapper-5 ${!isSubCategoryURL && sub_category.filter_categories.length > 0 ? "ps-3" : ""} mb-3 justify-content-between align-items-center`}>
